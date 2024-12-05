@@ -74,6 +74,16 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
             <a href="../admin_dashboard.php" class="home-admin">
                 <img src="../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
+            <div class="menu-container" id="menu-container">
+                <div class="menu-link" onclick="toggleDropdown()">Cuenta
+                    <span>▼</span>
+                </div>
+                <div class="submenu" id="submenu">
+                    <a href="../create_account.php">Crear Cuenta</a>
+                    <a href="añadir_estudiantes.php">Añadir Estudiantes</a>
+                    <a href="../vista_cuentas.php">cuentas </a>
+                </div>
+            </div>
         </div>
         <div class="container-form_register_config">
             <h2>Información de cuenta</h2>
@@ -101,5 +111,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
         </div>
     </main>
     <script src="../assets/js/button_update.js"></script>
+    <script src="../assets/js/script_menu.js"></script>
 </body>
+
 </html>

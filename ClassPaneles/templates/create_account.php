@@ -26,7 +26,7 @@ include 'php/admin_session.php';
             <a href="admin_dashboard.php" class="home-admin">
                 <img src="assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
-            
+
             <div class="menu-container" id="menu-container">
                 <div class="menu-link" onclick="toggleDropdown()">Cuenta
                     <span>▼</span>
@@ -34,6 +34,7 @@ include 'php/admin_session.php';
                 <div class="submenu" id="submenu">
                     <a href="create_account.php">Crear Cuenta</a>
                     <a href="añadir_estudiantes.php">Añadir Estudiantes</a>
+                    <a href="vista_cuentas.php">cuentas </a>
                 </div>
             </div>
         </div>
