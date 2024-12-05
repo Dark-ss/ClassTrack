@@ -198,3 +198,104 @@ menu-container {
 .submenu a:hover {
     text-decoration: underline;
 }
+
+/*config update*/
+
+input:disabled,
+select:disabled {
+    background-color: #f0f0f0;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.save-button {
+    background-color: #4CAF50;
+    color: white;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.update-button {
+    background-color: #007BFF;
+    color: white;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#update-form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#update-form input{
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    border-radius: 5px;
+}
+
+/*Vista cuentas*/
+.title-table{
+    position: absolute;
+    top: 50px;
+    left: 500px;
+}
+
+table {
+    position: absolute;
+    top: 200px;
+    left: 500px;
+    width: 50%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    float: right;
+    text-align: left;
+}
+        
+th,
+td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+        
+th {
+    background-color: #f4f4f4;
+}
+img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+/*busqueda vista_cuentas*/
+.search-form {
+    position: absolute;
+    top: 150px;
+    left: 500px;
+    margin-bottom: 20px;
+}
+
+.search-form input {
+    padding: 8px;
+    width: 200px;
+}
+
+.search-form button {
+    padding: 8px;
+    background-color: #46A2FD;
+    color: white;
+    border: none;
+    cursor: pointer;
+}

@@ -4,5 +4,9 @@
     "version": "1.0.0",
     "require": {
         "phpmailer/phpmailer": "^6.0"
+    },
+    "config": {
+        "cafile": "C:/xampp/apache/bin/cacert-2024-11-26.pem",
+        "secure-http": true
     }
 }
