@@ -16,7 +16,7 @@ include 'php/admin_session.php';
     <main>
         <div class="profile-container">
             <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-            <h3 class="profile-name"><?php echo htmlspecialchars($nombre_completo); ?></h3>
+            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
             <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
             <a href="php/cerrar_sesion.php" class="logout">
                 <img src="assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
@@ -29,8 +29,7 @@ include 'php/admin_session.php';
             </a>
 
             <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Cuenta
-                    <span>▼</span>
+                <div class="menu-link" onclick="toggleDropdown()">Cuenta <span>▼</span>
                 </div>
                 <div class="submenu" id="submenu">
                     <a href="create_account.php">Crear Cuenta</a>

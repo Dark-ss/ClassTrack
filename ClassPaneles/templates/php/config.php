@@ -5,30 +5,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
     exit();
 }
 include 'conexion_be.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $correo_original = mysqli_real_escape_string($conexion, $_POST['correo_original']);
-    $nombre_completo = mysqli_real_escape_string($conexion, $_POST['nombre_completo']);
-    $correo = mysqli_real_escape_string($conexion, $_POST['correo']);
-    $usuario = mysqli_real_escape_string($conexion, $_POST['usuario']);
-    $rol = mysqli_real_escape_string($conexion, $_POST['rol']);
-
-    $query_update = "UPDATE usuarios SET 
-                nombre_completo='$nombre_completo',
-                correo='$correo',
-                usuario='$usuario',
-                rol='$rol'
-              WHERE correo='$correo_original'";
-
-    if (mysqli_query($conexion, $query_update)) {
-        // Actualización exitosa: Refrescar datos de la sesión
-        $_SESSION['usuario'] = $correo;
-        echo "<script>alert('Información actualizada con éxito.');</script>";
-        header("Refresh:0"); // Recarga la página para reflejar los cambios
-    } else {
-        echo "<script>alert('Error al actualizar la información: " . mysqli_error($conexion) . "');</script>";
-    }
-}
+include 'update_table.php';
 
 // Obtener los datos del usuario
 $correo = $_SESSION['usuario']; // Correo desde la sesión
@@ -63,7 +40,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
     <main>
         <div class="profile-container">
             <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-            <h3 class="profile-name"><?php echo htmlspecialchars($nombre_completo); ?></h3>
+            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
             <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
             <a href="cerrar_sesion.php" class="logout">
                 <img src="../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">

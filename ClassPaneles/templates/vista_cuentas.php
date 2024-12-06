@@ -38,6 +38,8 @@ if (isset($_GET['id'])) {
         echo "<script>alert('No puedes eliminar tu propia cuenta.');</script>";
     }
 }
+include 'php/update_table.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +56,7 @@ if (isset($_GET['id'])) {
     <main>
         <div class="profile-container">
             <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-            <h3 class="profile-name"><?php echo htmlspecialchars($nombre_completo); ?></h3>
+            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
             <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
             <a href="php/cerrar_sesion.php" class="logout">
                 <img src="assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
@@ -106,6 +108,7 @@ if (isset($_GET['id'])) {
                         <td><?php echo htmlspecialchars($fila['rol']); ?></td>
                         <td>
                             <a href="?id=<?php echo $fila['id']; ?>" class="delete-button" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</a>
+                            <a href="update_user.php?id=<?php echo $fila['id']; ?>" class="delete-button">Actualizar</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>

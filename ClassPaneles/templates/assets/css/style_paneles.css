@@ -8,16 +8,24 @@ main {
     width: 100%;    
     margin: auto;
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 22%;
 }
 
 .profile-container {
-    margin-top: 10px;
-    display: flex;/* Usamos flexbox para alinea los elementos horizontalmente */
-    align-items: center;/* Centra verticalmente los elementos */
-    gap: 15px;/* Espacio entre los elementos */
-    max-width: 30%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    display: flex;/*elementos horizontal */
+    align-items: center;
+    gap: 15px;/* Espacio*/
+    max-width: 22%;
+    max-height: 100%;
     margin-bottom: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 10px;
+    background-color: #46fd71;
 }
 
 .profile-img {
@@ -30,8 +38,16 @@ main {
 }
 
 .profile-name{
-    margin-bottom: 40px;
+    margin-bottom: 40px;   
+    margin: 0;  
 }
+
+.profile-name_user{
+    margin: 0px;
+    width: 100px;
+    top: 10px;
+}
+
 
 .logout{
     margin-left: 5px;
@@ -49,7 +65,7 @@ main {
     width: 25px;
     height: 25px;
     margin-top: 60px;
-    left: 40px; 
+    left: 20px; 
     cursor: pointer;
 }
 
@@ -62,8 +78,8 @@ main {
     position: absolute;
     width: 25px;
     height: 25px;
-    margin-top: 120px;
-    left: 40px;
+    margin-top: 100px;
+    left: 20px;
     cursor: pointer;
 }
 
@@ -77,8 +93,8 @@ main {
     align-items: center;
     width: 100%;
     max-width: 380px;
-    position: relative;
-    top: -500px;
+    position: absolute;
+    top: 900px;
     left: 500px;
     transition: left 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
 }
@@ -88,8 +104,8 @@ main {
     align-items: center;
     width: 100%;
     max-width: 380px;
-    position: relative;
-    top: -1350px;
+    position: absolute;
+    top: 50px;
     left: 500px;
     background: #46A2FD;
     border-radius: 5px;
@@ -163,13 +179,12 @@ main {
     outline: none;
 }
 
-menu-container {
+.menu-container {
     position: absolute;
-    top: 80px;/* Coloca el menú justo debajo de la rueda */
-    left: 0px;
-    margin-top: 150px;
-    display: none;/* Oculto por defecto */
+    left: 12px;
+    margin-top: 140px;
     flex-direction: column;
+    text-decoration: none;
 }
 
 .menu-link {
@@ -177,26 +192,19 @@ menu-container {
     font-size: 14px;
     color: #000;
     cursor: pointer;
-}
-
-.menu-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .submenu {
-    display: none;
-    /* Submenú oculto por defecto */
+    display: none;/* Submenú oculto */
     margin-left: 20px;
+    flex-direction: column;
 }
 
 .submenu a {
     padding: 5px 10px;
     font-size: 14px;
     color: #000;
-}
-
-.submenu a:hover {
-    text-decoration: underline;
 }
 
 /*config update*/
@@ -248,14 +256,14 @@ select:disabled {
 /*Vista cuentas*/
 .title-table{
     position: absolute;
-    top: 50px;
-    left: 500px;
+    top: 20px;
+    left: 350px;
 }
 
 table {
     position: absolute;
-    top: 200px;
-    left: 500px;
+    top: 150px;
+    left: 350px;
     width: 50%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -282,8 +290,8 @@ img {
 /*busqueda vista_cuentas*/
 .search-form {
     position: absolute;
-    top: 150px;
-    left: 500px;
+    top: 100px;
+    left: 350px;
     margin-bottom: 20px;
 }
 
