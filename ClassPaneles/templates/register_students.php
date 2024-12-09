@@ -50,22 +50,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <h1>Registrar Estudiante</h1>
-    <form method="POST" enctype="multipart/form-data">
-        <label for="nombre_completo">Nombre Completo:</label>
-        <input type="text" id="nombre_completo" name="nombre_completo" required>
+    <main>
+        <div class="profile-container">
+            <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
+            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
+            <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
+            <a href="php/cerrar_sesion.php" class="logout">
+                <img src="assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
+            </a>
+            <a href="php/config.php" class="config">
+                <img src="assets/images/config.png" alt="Configuracion" class="icons-image">
+            </a>
+            <a href="admin_dashboard.php" class="home-admin">
+                <img src="assets/images/inicio.png" alt="inicio" class="icons-image">
+            </a>
 
-        <label for="correo">Correo Electrónico:</label>
-        <input type="email" id="correo" name="correo" required>
+            <div class="menu-container" id="menu-container">
+                <div class="menu-link" onclick="toggleDropdown()">Cuenta
+                    <span>▼</span>
+                </div>
+                <div class="submenu" id="submenu">
+                    <a href="create_account.php">Crear Cuenta</a>
+                    <a href="vista_cuentas.php">cuentas </a>
+                    <a href="register_students.php">Añadir Estudiantes</a>
+                    <a href="vista_students.php">Estudiantes</a>
+                </div>
+            </div>
+        </div>
+        <h1 class="title-register_students">Registrar Estudiante</h1>
+        <div class="container-form_register_students">
+            <form method="POST" enctype="multipart/form-data" class="formulario_register">
+                <input type="text" placeholder="Nombres y apellidos completos" id="nombre_completo" name="nombre_completo" required>
 
-        <label for="identificacion">Identificación:</label>
-        <input type="text" id="identificacion" name="identificacion" required>
+                <input type="email" placeholder="ej: ejemplo@gmail.com" id="correo" name="correo" required>
 
-        <label for="imagen">Imagen:</label>
-        <input type="file" id="imagen" name="imagen" accept="image/*">
+                <input type="text" placeholder="Cedula o documento de identidad" id="identificacion" name="identificacion" required>
 
-        <button type="submit">Registrar Estudiante</button>
-    </form>
+                <input type="file" id="imagen" name="imagen" accept="image/*">
+
+                <button type="submit">Registrar Estudiante</button>
+            </form>
+        </div>
+    </main>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/script_menu.js"></script>
 </body>
 
 </html>
