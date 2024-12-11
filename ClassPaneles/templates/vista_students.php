@@ -1,6 +1,11 @@
 <?php
-require_once 'php/conexion_be.php';
 include 'php/admin_session.php'; // Verifica que el admin esté autenticado
+
+if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
+    header("Location: ../templates/index.php"); // Redirige a no admin
+    exit();
+}
+include 'php/conexion_be.php';
 
 $query = "SELECT * FROM estudiantes ORDER BY fecha_registro DESC";
 $resultado = mysqli_query($conexion, $query);
@@ -14,6 +19,21 @@ $resultado = mysqli_query($conexion, $query);
 if (!$resultado) {
     die("Error al obtener los datos: " . mysqli_error($conexion));
 }
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    if ($id != $_SESSION['id']) {
+        $query_delete = "DELETE FROM estudiantes WHERE id = '$id'";
+        mysqli_query($conexion, $query_delete);
+        header("Location: vista_students.php");
+        exit();
+    } else {
+        echo "<script>alert('No puedes eliminar tu propia cuenta.');</script>";
+    }
+}
+
+include 'php/update_table_students.php';
 
 ?>
 <!DOCTYPE html>
@@ -68,6 +88,7 @@ if (!$resultado) {
                     <th>Correo</th>
                     <th>Identificación</th>
                     <th>Fecha de Registro</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,6 +102,13 @@ if (!$resultado) {
                         <td><?php echo htmlspecialchars($fila['correo']); ?></td>
                         <td><?php echo htmlspecialchars($fila['identificacion']); ?></td>
                         <td><?php echo htmlspecialchars($fila['fecha_registro']); ?></td>
+                                                <td>
+                            <a href="?id=<?php echo $fila['id']; ?>" class="delete-button" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                                <img src="assets/images/delete.png" alt="Configuracion" class="icons-image"></a>
+                            <a href="update_students.php?id=<?php echo $fila['id']; ?>" class="delete-button">
+                            <img src="assets/images/update.png" alt="Configuracion" class="icons-image">
+                            </a>    
+                        </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

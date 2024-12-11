@@ -44,7 +44,7 @@
         ';
         exit();
     } 
-    //verficiar usuarios repetidos
+    //verficar usuarios repetidos
     $verificar_usuario = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario='$usuario'");
 
     if (mysqli_num_rows($verificar_usuario) > 0) {
@@ -64,14 +64,14 @@
         echo '
             <script>
                 alert("El usuario ha sido registrado exitosamente");
-                window.location = "../index.php";
+                window.location = "../create_account.php";
             </script>
         ';
     }else{
         echo '
             <script>
                 alert("El usuario no se pudo registrar, intentalo de nuevamente");
-                window.location = "../index.php";
+                window.location = "../create_account.php";
             </script>
         ';
     }

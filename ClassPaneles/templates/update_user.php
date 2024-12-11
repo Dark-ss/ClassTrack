@@ -1,6 +1,6 @@
 <?php
 require_once 'php/conexion_be.php';
-include 'php/admin_session.php'; // Ahora tiene variables específicas para el admin
+include 'php/admin_session.php';
 
 // Verificar si se recibió un ID válido
 if (!isset($_GET['id'])) {
@@ -41,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('Error al actualizar el usuario: " . mysqli_error($conexion) . "');</script>";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -74,9 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span>▼</span>
                 </div>
                 <div class="submenu" id="submenu">
-                    <a href="php/create_account.php">Crear Cuenta</a>
-                    <a href="añadir_estudiantes.php">Añadir Estudiantes</a>
+                    <a href="create_account.php">Crear Cuenta</a>
                     <a href="vista_cuentas.php">cuentas </a>
+                    <a href="register_students.php">Añadir Estudiantes</a>
+                    <a href="vista_students.php">Estudiantes</a>
                 </div>
             </div>
         </div>

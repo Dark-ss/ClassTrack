@@ -113,7 +113,7 @@ main {
 .container-form_register_students form {
     width: 100%;
     padding: 10px 50px 20px 20px;
-    background: #46A2FD;
+    background: #40e066;
     position: absolute;
     border-radius: 20px;
     margin-top: 450px;
@@ -127,7 +127,7 @@ main {
     position: absolute;
     top: 50px;
     left: 500px;
-    background: #46A2FD;
+    background: #40e066;
     border-radius: 5px;
     padding: 10px;
     transition: left 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
@@ -148,7 +148,7 @@ main {
 .container-form_register form {
     width: 100%;
     padding: 10px 50px 20px 20px;
-    background: #46A2FD;
+    background: #40e066;
     position: absolute;
     border-radius: 20px;
     margin-top: 450px;
@@ -171,7 +171,7 @@ main {
 }
 
 #imagen{
-    background-color: #535beb;
+    background-color: #40e066;
     color: white;
 }
 
@@ -193,7 +193,7 @@ main {
     border: none;
     border-radius: 5px;
     font-size: 14px;
-    background: #535beb;
+    background: #2b9744;
     color: white;
     cursor: pointer;
     outline: none;
@@ -247,7 +247,7 @@ select:disabled {
 }
 
 .update-button {
-    background-color: #007BFF;
+    background-color: #2b9744;
     color: white;
     margin-top: 20px;
     padding: 10px 20px;
@@ -277,13 +277,17 @@ select:disabled {
 .title-table{
     position: absolute;
     top: 20px;
-    left: 350px;
+    left: 400px;
+    margin: 40px auto;
+    max-width: 80%;
+    overflow-x:auto;
+    text-align: left;
 }
 
 table {
     position: absolute;
     top: 150px;
-    left: 350px;
+    left: 400px;
     width: 50%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -295,11 +299,11 @@ table {
 th,
 td {
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #015114;
 }
         
 th {
-    background-color: #f4f4f4;
+    background-color: #46fd71;
 }
 img {
     width: 50px;
@@ -310,9 +314,10 @@ img {
 /*busqueda vista_cuentas*/
 .search-form {
     position: absolute;
-    top: 100px;
-    left: 350px;
+    top: 110px;
+    left: 400px;
     margin-bottom: 20px;
+    overflow-x: auto;
 }
 
 .search-form input {
@@ -322,7 +327,7 @@ img {
 
 .search-form button {
     padding: 8px;
-    background-color: #46A2FD;
+    background-color: #40e066;
     color: white;
     border: none;
     cursor: pointer;
@@ -332,4 +337,35 @@ img {
     position: absolute;
     top: 20px;
     left: 540px;
+}
+
+/* Paginación */
+.pagination {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 105px;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+    border-color: #aaa;
+}
+
+.pagination a.active {
+    background-color: #40e066;
+    color: white;
+    border-color: #40e066;
+    pointer-events: none;
 }

@@ -33,8 +33,9 @@ include 'php/admin_session.php';
                 </div>
                 <div class="submenu" id="submenu">
                     <a href="create_account.php">Crear Cuenta</a>
-                    <a href="register_students.php">Añadir Estudiantes</a>
                     <a href="vista_cuentas.php">cuentas </a>
+                    <a href="register_students.php">Añadir Estudiantes</a>
+                    <a href="vista_students.php">Estudiantes</a>
                 </div>
             </div>
         </div>
