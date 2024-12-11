@@ -369,3 +369,41 @@ img {
     border-color: #40e066;
     pointer-events: none;
 }
+
+/*Dashboard Admin*/
+
+.dashboard {
+    display: flex;
+    justify-content: center;
+    gap: 120px;
+    padding: 40px;
+    background-color: #40e066;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    margin-left: 10px;
+    border-radius: 10px;
+    max-width: 75%;
+    left: 200px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 20px;
+    width: 200px;
+    border: 1px solid #32ac4f;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #e6e6e6, #ffffff);
+    box-shadow: 2px 2px 5px #d1d1d1, -2px -2px 5px #ffffff;
+}
+
+.stat-card h3 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.stat-card p {
+    margin: 5px 0 0;
+    font-size: 1.2em;
+    color: #555;
+}

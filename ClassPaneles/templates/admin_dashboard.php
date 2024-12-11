@@ -1,5 +1,16 @@
 <?php
-include 'php/admin_session.php';
+include 'php/admin_session.php';    
+include 'php/conexion_be.php'; // Importa la conexión
+
+// Consulta para obtener el total de usuarios
+$queryUsuarios = "SELECT COUNT(*) AS total_usuarios FROM usuarios WHERE rol = 'docente'";
+$resultUsuarios = mysqli_query($conexion, $queryUsuarios);
+$totalUsuarios = mysqli_fetch_assoc($resultUsuarios)['total_usuarios'];
+
+// Consulta para obtener el total de estudiantes
+$queryEstudiantes = "SELECT COUNT(*) AS total_estudiantes FROM estudiantes";
+$resultEstudiantes = mysqli_query($conexion, $queryEstudiantes);
+$totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +50,34 @@ include 'php/admin_session.php';
                 </div>
             </div>
         </div>
+
+        <div class="dashboard">
+            <div class="stat-card" id="totalUsers">
+                <h3>Docentes registrados</h3>
+                <p><?php echo $totalUsuarios; ?></p>
+            </div>
+            <div class="stat-card" id="totalStudents">
+                <h3>Estudiantes registrados</h3>
+                <p><?php echo $totalEstudiantes; ?></p>
+            </div>
+        </div>
+        <script>
+            async function fetchStats() {
+                try {
+                    const response = await fetch('get_stats.php'); // Un archivo PHP que devuelva datos JSON
+                    const data = await response.json();
+
+                    document.getElementById('totalUsers').querySelector('p').textContent = data.totalUsuarios;
+                    document.getElementById('totalStudents').querySelector('p').textContent = data.totalEstudiantes;
+                } catch (error) {
+                    console.error("Error al obtener estadísticas:", error);
+                }
+            }
+
+            // Actualiza las estadísticas cada 30 segundos
+            setInterval(fetchStats, 30000);
+        </script>
+
     </main>
     <script src="assets/js/script.js"></script>
     <script src="assets/js/script_menu.js"></script>

@@ -7,6 +7,17 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
 }
 include 'php/conexion_be.php';
 
+//paginación
+$registros_por_pagina = 5;
+$pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$offset = ($pagina_actual - 1) * $registros_por_pagina;
+
+//Calcular paginas 
+$query_total = "SELECT COUNT(*) as total FROM estudiantes";
+$resultado_total = mysqli_query($conexion, $query_total);
+$total_usuarios = mysqli_fetch_assoc($resultado_total)['total'];
+$total_paginas = ceil($total_usuarios / $registros_por_pagina);
+
 $query = "SELECT * FROM estudiantes ORDER BY fecha_registro DESC";
 $resultado = mysqli_query($conexion, $query);
 
@@ -102,17 +113,35 @@ include 'php/update_table_students.php';
                         <td><?php echo htmlspecialchars($fila['correo']); ?></td>
                         <td><?php echo htmlspecialchars($fila['identificacion']); ?></td>
                         <td><?php echo htmlspecialchars($fila['fecha_registro']); ?></td>
-                                                <td>
+                        <td>
                             <a href="?id=<?php echo $fila['id']; ?>" class="delete-button" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                 <img src="assets/images/delete.png" alt="Configuracion" class="icons-image"></a>
                             <a href="update_students.php?id=<?php echo $fila['id']; ?>" class="delete-button">
-                            <img src="assets/images/update.png" alt="Configuracion" class="icons-image">
-                            </a>    
+                                <img src="assets/images/update.png" alt="Configuracion" class="icons-image">
+                            </a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
+
+        <!--Paginación-->
+        <div class="pagination">
+            <?php if ($pagina_actual > 1): ?>
+                <a href="?pagina=<?php echo $pagina_actual - 1; ?>&buscar=<?php echo htmlspecialchars($search); ?>">Anterior</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
+                <a href="?pagina=<?php echo $i; ?>&buscar=<?php echo htmlspecialchars($search); ?>"
+                    class="<?php echo $i === $pagina_actual ? 'active' : ''; ?>">
+                    <?php echo $i; ?>
+                </a>
+            <?php endfor; ?>
+
+            <?php if ($pagina_actual < $total_paginas): ?>
+                <a href="?pagina=<?php echo $pagina_actual + 1; ?>&buscar=<?php echo htmlspecialchars($search); ?>">Siguiente</a>
+            <?php endif; ?>
+        </div>
     </main>
     <script src="assets/js/script.js"></script>
     <script src="assets/js/script_menu.js"></script>
