@@ -52,14 +52,23 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                 <img src="../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
             <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Cuenta
-                    <span>▼</span>
+                <div class="menu-link" onclick="toggleDropdown()">Cuenta<span>▼</span>
                 </div>
                 <div class="submenu" id="submenu">
                     <a href="../create_account.php">Crear Cuenta</a>
                     <a href="../vista_cuentas.php">cuentas </a>
                     <a href="../register_students.php">Añadir Estudiantes</a>
                     <a href="../vista_students.php">Estudiantes</a>
+                </div>
+            </div>
+            <div class="menu-container_espacios" id="menu-container_espacios">
+                <div class="menu-link" onclick="toggleDropdown_space()">Espacios<span>▼</span>
+                </div>
+                <div class="submenu" id="submenu_espacios">
+                    <a href="create_account.php">Añadir Edificios</a>
+                    <a href="vista_cuentas.php">Edificios</a>
+                    <a href="register_students.php">Añadir Salones</a>
+                    <a href="vista_students.php">Salones</a>
                 </div>
             </div>
         </div>

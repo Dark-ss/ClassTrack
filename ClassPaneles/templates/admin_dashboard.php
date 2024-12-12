@@ -74,7 +74,6 @@ $totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
         </div>
 
     </main>
-    <script src="assets/js/script_stats.js"></script>
     <script src="assets/js/script.js"></script>
     <script src="assets/js/script_menu.js"></script>
 </body>

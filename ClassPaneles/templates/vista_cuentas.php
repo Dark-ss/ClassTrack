@@ -81,14 +81,23 @@ include 'php/update_table.php';
             </a>
 
             <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Cuenta
-                    <span>▼</span>
+                <div class="menu-link" onclick="toggleDropdown()">Cuenta<span>▼</span>
                 </div>
                 <div class="submenu" id="submenu">
                     <a href="create_account.php">Crear Cuenta</a>
                     <a href="vista_cuentas.php">cuentas </a>
                     <a href="register_students.php">Añadir Estudiantes</a>
                     <a href="vista_students.php">Estudiantes</a>
+                </div>
+            </div>
+            <div class="menu-container_espacios" id="menu-container_espacios">
+                <div class="menu-link" onclick="toggleDropdown_space()">Espacios<span>▼</span>
+                </div>
+                <div class="submenu" id="submenu_espacios">
+                    <a href="create_account.php">Añadir Edificios</a>
+                    <a href="vista_cuentas.php">Edificios</a>
+                    <a href="register_students.php">Añadir Salones</a>
+                    <a href="vista_students.php">Salones</a>
                 </div>
             </div>
         </div>
@@ -123,8 +132,8 @@ include 'php/update_table.php';
                             <a href="?id=<?php echo $fila['id']; ?>" class="delete-button" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                 <img src="assets/images/delete.png" alt="Configuracion" class="icons-image"></a>
                             <a href="update_user.php?id=<?php echo $fila['id']; ?>" class="delete-button">
-                            <img src="assets/images/update.png" alt="Configuracion" class="icons-image">
-                            </a>    
+                                <img src="assets/images/update.png" alt="Configuracion" class="icons-image">
+                            </a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
