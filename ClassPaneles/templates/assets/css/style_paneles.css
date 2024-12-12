@@ -200,10 +200,11 @@ main {
 }
 
 .menu-container {
-    position: absolute;
-    left: 12px;
-    margin-top: 140px;
+    position: relative;
+    display: flex;
     flex-direction: column;
+    margin-top: 140px;
+    right: 270px;
     text-decoration: none;
 }
 
@@ -216,15 +217,38 @@ main {
 }
 
 .submenu {
-    display: none;/* Submenú oculto */
+    display: none; /* Submenú oculto por defecto */
     margin-left: 20px;
     flex-direction: column;
+    position: absolute; /* Para que se coloque justo debajo del enlace */
+    top: 100%; /* Coloca el submenú justo debajo del menú principal */
+    left: 0;
+    width: 200px; /* Ajusta el tamaño del submenú */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .submenu a {
     padding: 5px 10px;
     font-size: 14px;
     color: #000;
+    text-decoration: none;
+    display: block;
+}
+
+.submenu a+a {
+    margin-top: 5px;
+}
+
+/*Menu espacios academicos*/
+.menu-container_espacios{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 180px;
+    right: 362px;
+    text-decoration: none;
 }
 
 /*config update*/

@@ -1,5 +1,5 @@
 <?php
-include 'php/admin_session.php';    
+include 'php/admin_session.php';
 include 'php/conexion_be.php'; // Importa la conexión
 
 // Consulta para obtener el total de usuarios
@@ -40,13 +40,24 @@ $totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
             </a>
 
             <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Cuenta <span>▼</span>
+                <div class="menu-link" onclick="toggleDropdown()">Cuenta<span>▼</span>
                 </div>
                 <div class="submenu" id="submenu">
                     <a href="create_account.php">Crear Cuenta</a>
                     <a href="vista_cuentas.php">cuentas </a>
                     <a href="register_students.php">Añadir Estudiantes</a>
                     <a href="vista_students.php">Estudiantes</a>
+                </div>
+            </div>
+
+            <div class="menu-container_espacios" id="menu-container_espacios">
+                <div class="menu-link" onclick="toggleDropdown_space()">Espacios<span>▼</span>
+                </div>
+                <div class="submenu" id="submenu_espacios">
+                    <a href="create_account.php">Añadir Edificios</a>
+                    <a href="vista_cuentas.php">Edificios</a>
+                    <a href="register_students.php">Añadir Salones</a>
+                    <a href="vista_students.php">Salones</a>
                 </div>
             </div>
         </div>
@@ -61,24 +72,9 @@ $totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
                 <p><?php echo $totalEstudiantes; ?></p>
             </div>
         </div>
-        <script>
-            async function fetchStats() {
-                try {
-                    const response = await fetch('get_stats.php'); // Un archivo PHP que devuelva datos JSON
-                    const data = await response.json();
-
-                    document.getElementById('totalUsers').querySelector('p').textContent = data.totalUsuarios;
-                    document.getElementById('totalStudents').querySelector('p').textContent = data.totalEstudiantes;
-                } catch (error) {
-                    console.error("Error al obtener estadísticas:", error);
-                }
-            }
-
-            // Actualiza las estadísticas cada 30 segundos
-            setInterval(fetchStats, 30000);
-        </script>
 
     </main>
+    <script src="assets/js/script_stats.js"></script>
     <script src="assets/js/script.js"></script>
     <script src="assets/js/script_menu.js"></script>
 </body>
