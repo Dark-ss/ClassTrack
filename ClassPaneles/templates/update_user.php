@@ -108,13 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="docente" <?php if ($rol == 'docente') echo 'selected'; ?>>Docente</option>
                 </select>
 
-                <button type="button" id="edit-button" class="update-button">Actualizar</button>
-                <button type="submit" id="save-button" class="save-button" style="display: none;">Guardar Cambios</button>
+                <button type="button" id="edit-button-users" class="update-button" onclick="enableEditingUsers()">Actualizar</button>
+                <button type=" submit" id="save-button-users" class="save-button" style="display: none;">Guardar Cambios</button>
             </form>
         </div>
     </main>
 </body>
-<script src="assets/js/script_stats.js"></script>
 <script src="assets/js/button_update.js"></script>
 <script src="assets/js/script_menu.js"></script>
 

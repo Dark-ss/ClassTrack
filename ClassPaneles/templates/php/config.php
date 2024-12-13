@@ -92,8 +92,8 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                     <option value="docente" <?php if ($rol == 'docente') echo 'selected'; ?>>Docente</option>
                 </select>
 
-                <button type="button" id="edit-button" class="update-button">Actualizar</button>
-                <button type="submit" id="save-button" class="save-button" style="display: none;">Guardar Cambios</button>
+                <button type="button" id="edit-button-users" class="update-button" onclick="enableEditingUsers()">Actualizar</button>
+                <button type=" submit" id="save-button-users" class="save-button" style="display: none;">Guardar Cambios</button>
             </form>
         </div>
     </main>

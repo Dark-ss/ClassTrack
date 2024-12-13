@@ -99,14 +99,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="usuario">identificacion:</label>
                 <input type="text" id="identificacion" name="usuario" value="<?php echo htmlspecialchars($usuario['identificacion']); ?>" disabled>
 
-                <button type="button" id="edit-button" class="update-button">Actualizar</button>
-                <button type="submit" id="save-button" class="save-button" style="display: none;">Guardar Cambios</button>
+                <button type="button" id="edit-button-students" class="update-button" onclick="enableEditingStudents()">Actualizar</button>
+                <button type=" submit" id="save-button-students" class="save-button" style="display: none;">Guardar Cambios</button>
             </form>
         </div>
     </main>
 </body>
-<script src="assets/js/script_stats.js"></script>
-<script src="assets/js/button_update_students.js"></script>
+<script src="assets/js/button_update.js"></script>
 <script src="assets/js/script_menu.js"></script>
 
 </html>
