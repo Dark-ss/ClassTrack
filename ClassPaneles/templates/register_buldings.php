@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo = mysqli_real_escape_string($conexion, $_POST['tipo']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
 
+    $imagen = null;
+
     if ($imagen === null) {
         $imagen = "./assets/images/default_building.png";
     }
@@ -61,6 +63,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel administrador</title>
     <link rel="stylesheet" href="../templates/assets/css/style_paneles.css">
+    <link rel="stylesheet" href="../templates/assets/css/style_building.css">
 </head>
 
 <body>
@@ -108,7 +111,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 echo '
                 <div class="add-box">
                 <a href="update_building.php?id=' . $edificio['id'] . '">
-                    <img src="' . $edificio['imagen'] .'" alt="Edificio" class="building-img">
+                    <img src="' . $edificio['imagen'] . '" alt="Edificio" class="building-img">
                 </a>
                 </div>';
             }
@@ -119,21 +122,27 @@ while ($row = mysqli_fetch_assoc($result)) {
         <div class=" modal" id="modal">
             <div class="modal-content">
                 <form action="" method="POST" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="nombre">Nombre del edificio:</label>
-                        <input type="text" id="nombre" name="nombre" required>
+
+                    <div class="form-group-container">
+                        <div class="form-group">
+                            <label for="nombre">Nombre del edificio:</label>
+                            <input type="text" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="codigo">Código:</label>
+                            <input type="text" id="codigo" name="codigo" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="codigo">Código:</label>
-                        <input type="text" id="codigo" name="codigo" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="pisos">Cantidad de pisos:</label>
-                        <input type="number" id="pisos" name="pisos" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="cupo">Cupo:</label>
-                        <input type="number" id="cupo" name="cupo" required>
+
+                    <div class="form-group-container">
+                        <div class="form-group">
+                            <label for="pisos">Cantidad de pisos:</label>
+                            <input type="number" id="pisos" name="pisos" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cupo">Cupo:</label>
+                            <input type="number" id="cupo" name="cupo" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="direccion">Dirección:</label>
@@ -156,7 +165,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <label for="imagen">Imagen:</label>
                         <input type="file" id="imagen" name="imagen" accept="image/*">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group button_build">
                         <button type="submit">Añadir Edificio</button>
                     </div>
                 </form>

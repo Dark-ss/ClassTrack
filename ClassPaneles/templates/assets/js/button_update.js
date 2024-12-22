@@ -17,6 +17,7 @@ function enableEditingBuilding () {
     document.getElementById('pisos').disabled = false;
     document.getElementById('cupo').disabled = false;
     document.getElementById('direccion').disabled = false;
+    document.getElementById('imagen').disabled = false;
     // Mostrar el botón "Guardar cambios"
     document.getElementById('save-button-building').style.display = 'inline-block';
     // Ocultar el botón "Actualizar"
@@ -36,3 +37,9 @@ function enableEditingUsers() {
     event.target.style.display = 'none';
 };
 document.getElementById('edit-button-users').addEventListener('click', enableEditingUsers);
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('edit-button-building').addEventListener('click', enableEditingBuilding);
+    document.getElementById('edit-button-students').addEventListener('click', enableEditingStudents);
+    document.getElementById('edit-button-users').addEventListener('click', enableEditingUsers);
+});

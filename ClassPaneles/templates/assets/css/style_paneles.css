@@ -137,13 +137,6 @@ main {
     text-align: center;
 }
 
-.container-form_register form h2{
-    text-align: center;
-}
-
-.container-form_register_config form h2 {
-    text-align: center;
-}
 
 .container-form_register form {
     width: 100%;
@@ -259,7 +252,7 @@ select:disabled {
     color: #aaa;
     cursor: not-allowed;
 }
-
+/*Butones update y save*/
 .save-button {
     background-color: #4CAF50;
     color: white;
@@ -430,120 +423,4 @@ table img {
     margin: 5px 0 0;
     font-size: 1.2em;
     color: #555;
-}
-
-/* Registro de edificios */
-.add-box {
-    flex-direction: column;
-    position: relative;
-    background-color: #28a745;
-    color: white;
-    font-size: 20px;
-    display: flex;
-    grid-gap: 5px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    cursor: pointer;
-    height: 150px;
-    width: 50%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    text-align: center;
-    margin-bottom: 10px;
-    padding: 10px;
-    margin-top: 10px;
-}
-
-.add-box img{
-    width: 100%;
-    height: 150px;
-    border-radius: 10%;
-}
-
-/* Efecto al pasar el mouse */
-.add-box:hover {
-    transform: scale(1.1);
-}
-
-/* Contenedor del modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    align-items: center;
-    justify-content: center;
-}
-
-/* Activar el modal */
-.modal.active {
-    display: flex;
-}
-
-/* Contenido del modal */
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-}
-
-/* Estilo para el formulario */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.form-group button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-/* Contenedor de edificios */
-.container-edificios {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 4 columnas */
-    grid-gap: 5px; /* Espacio entre las celdas */
-    padding: 10px;
-    justify-items: center; /* Centra los elementos */
-    position: relative;
-    left: 250px; /* Ajuste para evitar que se superponga con el nav */
-}
-/*boton salones*/
-.add-rooms-button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-.add-rooms-button:hover {
-    background-color: #45a049;
 }

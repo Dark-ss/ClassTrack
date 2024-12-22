@@ -1,0 +1,227 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+/*contenedor formulario*/
+.container-form_register_build {
+    display: block;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    position: absolute;  /* Posiciona el formulario en la parte inferior */
+    left: 46%;
+    transform: translateX(-50%);
+    background: #40e066;
+    border-radius: 5px;
+    padding: 20px;
+    transition: left 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+
+.container-form_register_build h2 {
+    text-align: center;
+}
+
+/* Registro de edificios */
+.add-box {
+    margin: 0;
+    flex-direction: column;
+    position: relative;
+    background-color: #28a745;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    grid-gap: 5px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 150px;
+    width: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.add-box img {
+    width: 100%;
+    height: 150px;
+    border-radius: 10%;
+}
+
+/* Efecto al pasar el mouse */
+.add-box:hover {
+    transform: scale(1.1);
+}
+
+/* Contenedor del modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+/* Activar el modal */
+.modal.active {
+    display: flex;
+}
+
+/* Contenido del modal */
+.modal-content {
+    background: white;
+    padding: 30px;
+    padding-right: 0px;
+    border-radius: 10px;
+    width: 370px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form.group:last-child{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-group input[type="file"] {
+    width: 65%; /* Ajusta el tamaño de la imagen */
+}
+
+/* Estilo para el formulario register building*/
+.form-group-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    flex: 1;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+/*boton añadir edificio*/
+.form-group button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Contenedor de edificios */
+.container-edificios {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);/* 3 columnas */
+    grid-gap: 10px;
+    padding: 10px;
+    justify-items: center;
+    position: relative;
+    left: 250px;
+}
+
+/*boton salones*/
+.add-rooms-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.add-rooms-button:hover {
+    background-color: #45a049;
+}
+/*Imagen edificio*/
+.profile-img-build{
+    width: 500px;
+    height: 300px;
+    margin-left: 14px;
+    border-radius: 2px;
+
+}
+/*Butones update y save*/
+.save-button-build{
+    background-color: #4CAF50;
+    color: white;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.update-button-build{
+    background-color: #2b9744;
+    color: white;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#update-form-build {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);/* 3 columnas */
+    grid-gap: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#update-form-build label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#update-form-build input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-group-build {
+    display: flex;
+    flex-direction: column;
+    /* Coloca label encima del input */
+}
+
+#codigo, #cupo, #tipo, #pisos {
+    width: 50%;  /* Ajusta el valor según tus necesidades, por ejemplo, 50% del contenedor */
+}
+#direccion, #descripcion{
+    width: 76%;
+}
