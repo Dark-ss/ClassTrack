@@ -5,22 +5,25 @@ body{
 
 /*contenedor formulario*/
 .container-form_register_build {
+    padding-top: 0px;
     display: block;
     align-items: center;
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     position: absolute;  /* Posiciona el formulario en la parte inferior */
-    left: 46%;
+    left: 42%;
     transform: translateX(-50%);
     background: #40e066;
     border-radius: 5px;
-    padding: 20px;
+    padding: 0px 20px;
+    padding-bottom: 15px;
     transition: left 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
 }
 
-
 .container-form_register_build h2 {
     text-align: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 /* Registro de edificios */
@@ -77,13 +80,18 @@ body{
 
 /* Contenido del modal */
 .modal-content {
-    background: white;
+    background: #40e066;
     padding: 30px;
     padding-right: 0px;
     border-radius: 10px;
     width: 370px;
     flex-direction: column;
     align-items: center;
+}
+
+.description-register{
+    outline: none;
+    resize: none;
 }
 
 .form.group:last-child{
@@ -93,7 +101,7 @@ body{
 }
 
 .form-group input[type="file"] {
-    width: 65%; /* Ajusta el tamaño de la imagen */
+    width: 77%; /* Ajusta el tamaño de la imagen */
 }
 
 /* Estilo para el formulario register building*/
@@ -127,7 +135,7 @@ body{
 }
 /*boton añadir edificio*/
 .form-group button {
-    background-color: #007bff;
+    background-color: #1f6b31;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -164,17 +172,18 @@ body{
 }
 /*Imagen edificio*/
 .profile-img-build{
-    width: 500px;
     height: 300px;
     margin-left: 14px;
     border-radius: 2px;
-
+    max-width: 500px; /* Ajusta el ancho máximo de la imagen */
+    border-radius: 10px; /* Opcional: bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 /*Butones update y save*/
 .save-button-build{
     background-color: #4CAF50;
     color: white;
-    margin-top: 10px;
+    margin-top: 80px;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -182,21 +191,22 @@ body{
 }
 
 .update-button-build{
-    background-color: #2b9744;
+    background-color: #1f6b31;
     color: white;
-    margin-top: 20px;
+    margin-top: 80px;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    width: 140px;
 }
 
 #update-form-build {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);/* 3 columnas */
-    grid-gap: 15px;
+    grid-template-columns: repeat(2, 1fr);/* 2 columnas */
+    grid-gap: 5px 70px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items:flex-start;
     width: 100%;
 }
 
@@ -211,17 +221,86 @@ body{
     font-size: 16px;
     border-radius: 5px;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.form-group-build {
-    display: flex;
-    flex-direction: column;
-    /* Coloca label encima del input */
+.form-group-build input[type="file"] {
+    width: 100%;
 }
+
 
 #codigo, #cupo, #tipo, #pisos {
     width: 50%;  /* Ajusta el valor según tus necesidades, por ejemplo, 50% del contenedor */
 }
 #direccion, #descripcion{
-    width: 76%;
+    width: 70%;
+}
+/*Descripción edificio e imagen*/
+.container-description-imagen{
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin: 20px;
+}
+
+.image-container{
+    flex-shrink: 0; /* Evita que la imagen cambie de tamaño */
+}
+
+.description-form{
+    flex-grow: 1; /* Permite que el formulario ocupe el espacio disponible */
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+}
+
+.description-textarea{
+    width: 100%; /* Asegura que el textarea ocupe todo el ancho del formulario */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    outline: none;
+    background: transparent;
+    resize: none;/*evita cambiar el tamaño del textarea*/
+}
+
+.save-button-description{
+    background-color: #4CAF50; /* Color del botón */
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 20%;
+    margin-left: 30%;
+}
+
+.update-button-description{
+    background-color: #1f6b31; /* Color del botón */
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 20%;
+    margin-left: 30%;
+}
+
+.build-description{
+    display: flex;
+    left: 550px;
+    width: 50%;
+}
+
+.build-description label{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }

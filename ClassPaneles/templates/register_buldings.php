@@ -159,13 +159,13 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </div>
                     <div class="form-group">
                         <label for="descripcion">Descripción General:</label>
-                        <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+                        <textarea id="descripcion" name="descripcion" class="description-register" rows="4" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="imagen">Imagen:</label>
                         <input type="file" id="imagen" name="imagen" accept="image/*">
                     </div>
-                    <div class="form-group button_build">
+                    <div class="form-group">
                         <button type="submit">Añadir Edificio</button>
                     </div>
                 </form>

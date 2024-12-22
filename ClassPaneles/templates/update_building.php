@@ -20,13 +20,29 @@ if (mysqli_num_rows($resultado_edificio) == 0) {
 
 $usuario = mysqli_fetch_assoc($resultado_edificio);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Si se envió el formulario de descripción
+    if (isset($_POST['update_description'])) {
+        $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+
+        // Actualiza solo la descripción
+        $query_update = "UPDATE edificios SET descripcion='$descripcion' WHERE id='$id'";
+        if (mysqli_query($conexion, $query_update)) {
+            echo "<script>alert('Descripción actualizada con éxito.'); window.location.href='register_buldings.php';</script>";
+        } else {
+            echo "<script>alert('Error al actualizar la descripción: " . mysqli_error($conexion) . "');</script>";
+        }
+    }
+}
 // Procesar formulario de actualización
-if ($_SERVER['REQUEST_METHOD'] === 'POST') { //Solicitud HTTP
+if (isset($_POST['update_building'])) { //Solicitud HTTP
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']); //acceso a datos y envio
     $pisos = mysqli_real_escape_string($conexion, $_POST['pisos']); //'escape' para seguridad de la consulta SQL
     $cupo = mysqli_real_escape_string($conexion, $_POST['cupo']);
     $direccion = mysqli_real_escape_string($conexion, $_POST['direccion']);
     $usuario_id = mysqli_real_escape_string($conexion, $_POST['usuario']);
+
+    $descripcion = isset($_POST['descripcion']) ? mysqli_real_escape_string($conexion, $_POST['descripcion']) : $usuario['descripcion'];
 
     $imagen = $usuario['imagen'];
 
@@ -53,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //Solicitud HTTP
         pisos='$pisos',
         cupo='$cupo',
         direccion='$direccion',
+        descripcion='$descripcion',
         imagen='$imagen'
         WHERE id='$id'";
     if (mysqli_query($conexion, $query_update)) {
@@ -71,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //Solicitud HTTP
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actualizar Edificio</title>
     <link rel="stylesheet" href="../templates/assets/css/style_paneles.css">
-    <link rel="stylesheet" href="../templates/assets/css/style_building.css">
+    <link rel="stylesheet" href="../templates/assets/css/style_building.css?v=1.0">
 </head>
 
 <body>
@@ -110,10 +127,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //Solicitud HTTP
                 </div>
             </div>
         </div>
-        <img src="<?php echo  htmlspecialchars($usuario['imagen']); ?>" alt="Edificio" class="profile-img-build">
+
+        <div class="container-description-image" style="display: flex">
+            <div class="image-container">
+                <img src="<?php echo  htmlspecialchars($usuario['imagen']); ?>" alt="Edificio" class="profile-img-build">
+            </div>
+            
+            <form method="POST" enctype="multipart/form-data" class="description-form" sytle="flex-direction: column">
+                <input type="hidden" name="update_description" value="true"><!--Campo oculto-->
+                <div class="build-description">
+                    <label for="descripcion">Descripción General:</label>
+                    <textarea id="descripcion" name="descripcion" class="description-textarea" rows="10" cols="5" disabled><?php echo htmlspecialchars($usuario['descripcion']); ?></textarea>
+                </div>
+                <button type="button" id="edit-button-description" class="update-button-description" onclick="enableEditingDescription()" >Actualizar</button>
+                <button type="submit" id="save-button-description" class="save-button-description" style="display: none;">Guardar Cambios</button>
+            </form>
+        </div>
         <div class="container-form_register_build">
             <h2>Información de edificio</h2>
             <form id="update-form-build" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="update_building" value="true">
                 <div class="container-group-build">
                     <div class="form-group-build">
                         <label for="nombre">Nombre:</label>
@@ -121,14 +154,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //Solicitud HTTP
                     </div>
 
                     <div class="form-group-build">
-                        <label for="usuario">Código:</label>
-                        <input type="text" id="codigo" name="usuario" value="<?php echo htmlspecialchars($usuario['codigo']); ?>" disabled>
-                    </div>
-                </div>
-                <div class="container-group-build">
-                    <div class="form-group-build">
                         <label for="pisos">Cantidad de pisos:</label>
                         <input type="number" id="pisos" name="pisos" value="<?php echo htmlspecialchars($usuario['pisos']); ?>" disabled>
+                    </div>
+                </div>
+                <div class="container-group-build">                
+                    <div class="form-group-build">
+                        <label for="usuario">Código:</label>
+                        <input type="text" id="codigo" name="usuario" value="<?php echo htmlspecialchars($usuario['codigo']); ?>" disabled>
                     </div>
 
                     <div class="form-group-build">
@@ -149,10 +182,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //Solicitud HTTP
                     </div>
                 </div>
 
-                <button type="button" id="edit-button-building" class="update-button-build" onclick="enableEditingBuilding()">Actualizar</button>
+                <button type="button" id="edit-button-building" class="update-button-build" onclick="enableEditingBuilding()" >Actualizar</button>
                 <button type="submit" id="save-button-building" class="save-button-build" style="display: none;">Guardar Cambios</button>
             </form>
         </div>
+
     </main>
 </body>
 <script src="assets/js/button_update.js"></script>

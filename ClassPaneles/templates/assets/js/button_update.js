@@ -19,11 +19,20 @@ function enableEditingBuilding () {
     document.getElementById('direccion').disabled = false;
     document.getElementById('imagen').disabled = false;
     // Mostrar el botón "Guardar cambios"
-    document.getElementById('save-button-building').style.display = 'inline-block';
+    document.getElementById('save-button-building').style.display = 'inline-block'; 
     // Ocultar el botón "Actualizar"
     event.target.style.display = 'none';
 };
 document.getElementById('edit-button-building').addEventListener('click', enableEditingBuilding);
+
+function enableEditingDescription() {
+    // Habilitar los campos
+    document.getElementById('descripcion').disabled = false;
+    document.getElementById('save-button-description').style.display = 'inline-block';
+    // Ocultar el botón "Actualizar"
+    event.target.style.display = 'none';
+};
+document.getElementById('edit-button-description').addEventListener('click', enableEditingDescription);
 
 function enableEditingUsers() {
     // Habilitar los campos
@@ -38,8 +47,10 @@ function enableEditingUsers() {
 };
 document.getElementById('edit-button-users').addEventListener('click', enableEditingUsers);
 
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-building').addEventListener('click', enableEditingBuilding);
     document.getElementById('edit-button-students').addEventListener('click', enableEditingStudents);
     document.getElementById('edit-button-users').addEventListener('click', enableEditingUsers);
+    document.getElementById('edit-button-description').addEventListener('click', enableEditingDescription);
 });
