@@ -11,6 +11,10 @@ main {
     margin-left: 22%;
 }
 
+.build{
+    margin-left: 0%;
+}
+
 .profile-container {
     position: fixed;
     left: 0;
@@ -35,6 +39,7 @@ main {
     object-fit: contain;/* Asegura que la imagen se vea completa dentro del círculo */
     border: 3px solid #333;/* Borde de la imagen (opcional) */
     margin-bottom: 20px;/* Espacio debajo de la imagen */
+    
 }
 
 .profile-name{
@@ -46,6 +51,8 @@ main {
     margin: 0px;
     width: 100px;
     top: 10px;
+    word-wrap: break-word; /* Ajusta la línea cuando sea necesario */
+    max-width: 150px;
 }
 
 

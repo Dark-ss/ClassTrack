@@ -1,0 +1,50 @@
+.description-textarea_docente:disabled{
+    width: 100%; /* Asegura que el textarea ocupe todo el ancho del formulario */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    color: #000000;
+    outline: none;
+    background: transparent;
+    resize: none;/*evita cambiar el tamaño del textarea*/
+}
+
+input:disabled{
+    color: #000000;
+    background-color: transparent;
+    cursor: default;
+}
+
+#update-form-build_teacher {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);/* 2 columnas */
+    grid-gap: 5px 70px;
+    flex-direction: column;
+    align-items:flex-start;
+    width: 100%;
+}
+
+#update-form-build_teacher label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#update-form-build_teacher input {
+    padding: 10px;
+    border: 1px solid transparent;
+    font-size: 16px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.address{
+    width: 160%;
+}
+
+#nombre{
+    width: 130%;
+}

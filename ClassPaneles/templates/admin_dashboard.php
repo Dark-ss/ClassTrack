@@ -32,6 +32,7 @@ $totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
             <a href="php/cerrar_sesion.php" class="logout">
                 <img src="assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
             </a>
+            
             <a href="php/config.php" class="config">
                 <img src="assets/images/config.png" alt="Configuracion" class="icons-image">
             </a>

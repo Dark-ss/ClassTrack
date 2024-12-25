@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $query = "INSERT INTO edificios (nombre, codigo, pisos, cupo, direccion, tipo, descripcion, imagen)
-        VALUES ('$nombre', '$codigo', '$pisos', '$cupo', '$direccion', '$tipo', '$descripcion', '$imagen')";
+              VALUES ('$nombre', '$codigo', '$pisos', '$cupo', '$direccion', '$tipo', '$descripcion', '$imagen')";
 
     if (mysqli_query($conexion, $query)) {
         echo "<script>alert('Edificio registrado con éxito.'); window.location.href='register_buldings.php';</script>";
@@ -116,8 +116,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>';
             }
             ?>
-            <div class="add-box" onclick="openModal()">+</p>
-            </div>
         </div>
         <div class=" modal" id="modal">
             <div class="modal-content">
@@ -164,9 +162,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <div class="form-group">
                         <label for="imagen">Imagen:</label>
                         <input type="file" id="imagen" name="imagen" accept="image/*">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit">Añadir Edificio</button>
                     </div>
                 </form>
             </div>

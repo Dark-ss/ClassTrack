@@ -1,5 +1,5 @@
 <?php
-include 'php/admin_session.php';
+include 'php/docente_session.php';
 include 'php/conexion_be.php';
 //formulario envio
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -75,31 +75,17 @@ while ($row = mysqli_fetch_assoc($result)) {
             <a href="php/cerrar_sesion.php" class="logout">
                 <img src="assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
             </a>
-            <a href="php/config.php" class="config">
+            <a href="php/config_docente.php" class="config">
                 <img src="assets/images/config.png" alt="Configuracion" class="icons-image">
             </a>
-            <a href="admin_dashboard.php" class="home-admin">
+            <a href="docente_dashboard.php" class="home-admin">
                 <img src="assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
-
             <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Cuenta<span>▼</span>
+                <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
                 </div>
                 <div class="submenu" id="submenu">
-                    <a href="create_account.php">Crear Cuenta</a>
-                    <a href="vista_cuentas.php">cuentas </a>
-                    <a href="register_students.php">Añadir Estudiantes</a>
-                    <a href="vista_students.php">Estudiantes</a>
-                </div>
-            </div>
-
-            <div class="menu-container_espacios" id="menu-container_espacios">
-                <div class="menu-link" onclick="toggleDropdown_space()">Espacios<span>▼</span>
-                </div>
-                <div class="submenu" id="submenu_espacios">
-                    <a href="create_account.php">Añadir Edificios</a>
-                    <a href="vista_cuentas.php">Edificios</a>
-                    <a href="register_students.php">Añadir Salones</a>
+                    <a href="vista_buildings.php">Edificios</a>
                     <a href="vista_students.php">Salones</a>
                 </div>
             </div>
@@ -110,14 +96,12 @@ while ($row = mysqli_fetch_assoc($result)) {
             foreach ($edificios as $edificio) {
                 echo '
                 <div class="add-box">
-                <a href="update_building.php?id=' . $edificio['id'] . '">
+                <a href="update_building_docente.php?id=' . $edificio['id'] . '">
                     <img src="' . $edificio['imagen'] . '" alt="Edificio" class="building-img">
                 </a>
                 </div>';
             }
             ?>
-            <div class="add-box" onclick="openModal()">+</p>
-            </div>
         </div>
         <div class=" modal" id="modal">
             <div class="modal-content">
