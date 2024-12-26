@@ -106,19 +106,22 @@ while ($row = mysqli_fetch_assoc($result)) {
         </div>
 
         <div class="container-edificios">
-            <?php
-            foreach ($edificios as $edificio) {
-                echo '
-                <div class="add-box">
-                <a href="update_building.php?id=' . $edificio['id'] . '">
-                    <img src="' . $edificio['imagen'] . '" alt="Edificio" class="building-img">
-                </a>
-                </div>';
-            }
+        <?php
+        foreach ($edificios as $edificio) {
             ?>
+            <div class="add-box">
+            <h1 class="title_build"><?php echo htmlspecialchars($edificio['nombre']); ?></h1>
+            <a href="update_building.php?id=<?php echo htmlspecialchars($edificio['id']); ?>">
+                <img src="<?php echo htmlspecialchars($edificio['imagen']); ?>" alt="Edificio" class="building-img">
+            </a>
+        </div>
+        <?php
+        }
+        ?>
             <div class="add-box" onclick="openModal()">+</p>
             </div>
         </div>
+
         <div class=" modal" id="modal">
             <div class="modal-content">
                 <form action="" method="POST" enctype="multipart/form-data">

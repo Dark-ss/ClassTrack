@@ -41,7 +41,7 @@ body{
     border-radius: 10px;
     cursor: pointer;
     height: 150px;
-    width: 50%;
+    width: 90%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     text-align: center;
@@ -151,7 +151,8 @@ body{
     padding: 10px;
     justify-items: center;
     position: relative;
-    left: 250px;
+    left: 300px;
+    width: 900px;
 }
 
 /*boton salones*/
@@ -250,14 +251,23 @@ body{
 }
 
 .description-form{
-    flex-grow: 1; /* Permite que el formulario ocupe el espacio disponible */
-    display: flex;
-    flex-direction: column;
-    gap: 5px; 
+    display: block;
+    position: absolute;
+    left: 70%;
+    width: 60%;
+    top: 5%;
+}
+
+.title_description{
+    display: block;
+    position: absolute;
+    left: 1.5%;
+    bottom: 97%;
 }
 
 .description-textarea{
     width: 100%; /* Asegura que el textarea ocupe todo el ancho del formulario */
+    height: 100%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ffffff;
@@ -277,7 +287,7 @@ body{
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 20%;
-    margin-left: 30%;
+    margin-left: 12%;
 }
 
 .update-button-description{
@@ -290,13 +300,14 @@ body{
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 20%;
-    margin-left: 30%;
+    margin-left: 12%;
 }
 
 .build-description{
     display: flex;
     left: 550px;
     width: 50%;
+    height: 290px;
 }
 
 .build-description label{
@@ -304,3 +315,15 @@ body{
     font-weight: bold;
     margin-bottom: 5px;
 }
+
+.title_build{
+    display: block;
+    position: absolute;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    text-align: center;
+    left: 35%;
+    color:#f0f5f1;
+    text-shadow: 2px 2px 5px black;
+}
+

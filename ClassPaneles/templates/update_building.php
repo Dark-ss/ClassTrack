@@ -130,13 +130,14 @@ if (isset($_POST['update_building'])) { //Solicitud HTTP
 
         <div class="container-description-image" style="display: flex">
             <div class="image-container">
+                <h1 class="title_build"><?php echo htmlspecialchars($usuario['nombre']); ?></h1>
                 <img src="<?php echo  htmlspecialchars($usuario['imagen']); ?>" alt="Edificio" class="profile-img-build">
             </div>
             
             <form method="POST" enctype="multipart/form-data" class="description-form" sytle="flex-direction: column">
                 <input type="hidden" name="update_description" value="true"><!--Campo oculto-->
                 <div class="build-description">
-                    <label for="descripcion">Descripción General:</label>
+                    <label for="descripcion" class="title_description">Descripción General</label>
                     <textarea id="descripcion" name="descripcion" class="description-textarea" rows="10" cols="5" disabled><?php echo htmlspecialchars($usuario['descripcion']); ?></textarea>
                 </div>
                 <button type="button" id="edit-button-description" class="update-button-description" onclick="enableEditingDescription()" >Actualizar</button>
