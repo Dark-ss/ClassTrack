@@ -176,8 +176,9 @@ body{
     height: 300px;
     margin-left: 14px;
     border-radius: 2px;
+    width: 500px;
     max-width: 500px; /* Ajusta el ancho máximo de la imagen */
-    border-radius: 10px; /* Opcional: bordes redondeados */
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 /*Butones update y save*/
@@ -325,5 +326,20 @@ body{
     left: 35%;
     color:#f0f5f1;
     text-shadow: 2px 2px 5px black;
+}
+
+/*boton añadir espacio académico*/
+.button-space{
+    display: block;
+    position: absolute;
+    background-color: #1f6b31;
+    bottom: 55%;
+    left: 50%;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 140px;
 }
 

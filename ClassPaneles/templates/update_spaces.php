@@ -3,30 +3,30 @@ require_once 'php/conexion_be.php';
 include 'php/admin_session.php';
 // Verificar si se recibió un ID válido
 if (!isset($_GET['id'])) {
-    echo "<script>alert('No se especificó un edificio válido.'); window.location.href='register_buldings.php';</script>";
+    echo "<script>alert('No se especificó un espacio válido.'); window.location.href='register_buldings.php';</script>";
     exit;
 }
 
 $id = mysqli_real_escape_string($conexion, $_GET['id']);
 
-// Consultar datos del edificio
-$query_usuario = "SELECT * FROM edificios WHERE id = '$id'";
-$resultado_edificio = mysqli_query($conexion, $query_usuario);
+// Consultar datos del espacio
+$query_espacio = "SELECT * FROM espacios_academicos WHERE edificio_id = '$id'";
+$resultado_espacio = mysqli_query($conexion, $query_espacio);
 
-if (mysqli_num_rows($resultado_edificio) == 0) {
-    echo "<script>alert('Edificio no encontrado.'); window.location.href='register_buldings.php';</script>";
+if (mysqli_num_rows($resultado_espacio) == 0) {
+    echo "<script>alert('Espacio no encontrado.'); window.location.href='register_buldings.php';</script>";
     exit;
 }
 
-$usuario = mysqli_fetch_assoc($resultado_edificio);
+$usuario = mysqli_fetch_assoc($resultado_espacio);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si se envió el formulario de descripción
     if (isset($_POST['update_description'])) {
-        $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+        $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion_general']);
 
         // Actualiza solo la descripción
-        $query_update = "UPDATE edificios SET descripcion='$descripcion' WHERE id='$id'";
+        $query_update = "UPDATE espacios_academicos SET descripcion_general='$descripcion_general' WHERE id='$id'";
         if (mysqli_query($conexion, $query_update)) {
             echo "<script>alert('Descripción actualizada con éxito.'); window.location.href='register_buldings.php';</script>";
         } else {
@@ -35,21 +35,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 // Procesar formulario de actualización
-if (isset($_POST['update_building'])) { //Solicitud HTTP
-    $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']); //acceso a datos y envio
-    $pisos = mysqli_real_escape_string($conexion, $_POST['pisos']); //'escape' para seguridad de la consulta SQL
-    $cupo = mysqli_real_escape_string($conexion, $_POST['cupo']);
-    $direccion = mysqli_real_escape_string($conexion, $_POST['direccion']);
-    $usuario_id = mysqli_real_escape_string($conexion, $_POST['usuario']);
+if (isset($_POST['update_spaces'])) { //Solicitud HTTP
+    $codigo = mysqli_real_escape_string($conexion, $_POST['codigo']);
+    $capacidad = mysqli_real_escape_string($conexion, $_POST['capacidad']);
+    $tipo_espacio = mysqli_real_escape_string($conexion, $_POST['tipo_espacio']);
+    $building_id = mysqli_real_escape_string($conexion, $_POST['edificio_id']);
 
-    $descripcion = isset($_POST['descripcion']) ? mysqli_real_escape_string($conexion, $_POST['descripcion']) : $usuario['descripcion'];
+    $descripcion_general = isset($_POST['descripcion_general']) ? mysqli_real_escape_string($conexion, $_POST['descripcion_general']) : $usuario['descripcion_general'];
 
     $imagen = $usuario['imagen'];
 
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $nombre_imagen = $_FILES['imagen']['name'];
         $ruta_temp = $_FILES['imagen']['tmp_name'];
-        $directorio_destino = "uploads/edificio/";
+        $directorio_destino = "uploads/espacio/";
 
         if (!file_exists($directorio_destino)) {
             mkdir($directorio_destino, 0777, true);
@@ -63,30 +62,42 @@ if (isset($_POST['update_building'])) { //Solicitud HTTP
         }
     }
 
-    $query_update = "UPDATE edificios SET
-        nombre='$nombre',
-        codigo='$usuario_id',
-        pisos='$pisos',
-        cupo='$cupo',
-        direccion='$direccion',
-        descripcion='$descripcion',
+    $query_update = "UPDATE espacios_academicos SET
+        codigo='$codigo',
+        capacidad='$capacidad',
+        tipo_espacio='$tipo_espacio',
+        edificio_id='$building_id',
+        descripcion_general='$descripcion_general'
         imagen='$imagen'
         WHERE id='$id'";
     if (mysqli_query($conexion, $query_update)) {
-        echo "<script>alert('Edificio actualizado con éxito.'); window.location.href='register_buldings.php';</script>";
+        echo "<script>alert('Espacio actualizado con éxito.'); window.location.href='register_buldings.php';</script>";
     } else {
-        echo "<script>alert('Error al actualizar el edificio: " . mysqli_error($conexion) . "');</script>";
+        echo "<script>alert('Error al actualizar el espacio: " . mysqli_error($conexion) . "');</script>";
     }
 }
 
 // Consultar espacios
-$query = "SELECT id, codigo, imagen, edificio_id FROM espacios_academicos";
+$query = "SELECT id, codigo, imagen FROM espacios_academicos";
 $result = mysqli_query($conexion, $query);
 $espacios = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
     $espacios[] = $row;
-}   
+} 
+
+//obteniendo id del edificio
+$building_id = isset($_GET['id']) ? intval($_GET['id']):0;
+// Validar si el ID corresponde a un edificio existente
+$query = "SELECT nombre FROM edificios WHERE id = $building_id";
+$result = mysqli_query($conexion, $query);
+
+if ($result && mysqli_num_rows($result) > 0) {
+    $edificio = mysqli_fetch_assoc($result);
+}   else {
+    echo "<script>alert('Edificio no encontrado. ID: $building_id'); window.location.href='vista_edificios.php';</script>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -139,57 +150,45 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         <div class="container-description-image" style="display: flex">
             <div class="image-container">
-                <h1 class="title_build"><?php echo htmlspecialchars($usuario['nombre']); ?></h1>
+                <h1 class="title_build"><?php echo htmlspecialchars($usuario['codigo']); ?></h1>
                 <img src="<?php echo  htmlspecialchars($usuario['imagen']); ?>" alt="Edificio" class="profile-img-build">
-                <a href="vista_spaces.php?edificio_id=<?php echo $id; ?>" class="button-space">Ver Espacios</a>
             </div>
             
             <form method="POST" enctype="multipart/form-data" class="description-form" sytle="flex-direction: column">
                 <input type="hidden" name="update_description" value="true"><!--Campo oculto-->
                 <div class="build-description">
-                    <label for="descripcion" class="title_description">Descripción General</label>
-                    <textarea id="descripcion" name="descripcion" class="description-textarea" rows="10" cols="5" disabled><?php echo htmlspecialchars($usuario['descripcion']); ?></textarea>
+                    <label for="descripcion_general" class="title_description">Descripción General</label>
+                    <textarea id="descripcion" name="descripcion" class="description-textarea" rows="10" cols="5" disabled><?php echo htmlspecialchars($usuario['descripcion_general']); ?></textarea>
                 </div>
                 <button type="button" id="edit-button-description" class="update-button-description" onclick="enableEditingDescription()" >Actualizar</button>
                 <button type="submit" id="save-button-description" class="save-button-description" style="display: none;">Guardar Cambios</button>
             </form>
         </div>
         <div class="container-form_register_build">
-            <h2>Información de edificio</h2>
+            <h2>Información de espacio</h2>
             <form id="update-form-build" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="update_building" value="true">
+                <input type="hidden" name="update_spaces" value="true">
                 <div class="container-group-build">
-                    <div class="form-group-build">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" disabled>
-                    </div>
-
-                    <div class="form-group-build">
-                        <label for="pisos">Cantidad de pisos:</label>
-                        <input type="number" id="pisos" name="pisos" value="<?php echo htmlspecialchars($usuario['pisos']); ?>" disabled>
-                    </div>
-                </div>
-                <div class="container-group-build">                
                     <div class="form-group-build">
                         <label for="usuario">Código:</label>
-                        <input type="text" id="codigo" name="usuario" value="<?php echo htmlspecialchars($usuario['codigo']); ?>" disabled>
+                        <input type="text" id="codigo" name="codigo" value="<?php echo htmlspecialchars($usuario['codigo']); ?>" disabled>
                     </div>
 
                     <div class="form-group-build">
-                        <label for="cupo">Cupo:</label>
-                        <input type="number" id="cupo" name="cupo" value="<?php echo htmlspecialchars($usuario['cupo']); ?>" disabled>
+                        <label for="capacidad">Capacidad:</label>
+                        <input type="number" id="capacidad" name="capacidad" value="<?php echo htmlspecialchars($usuario['capacidad']); ?>" disabled>
                     </div>
                 </div>
 
                 <div class="container-group-build">
-                    <div class="form-group-build">
-                        <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" name="direccion" value="<?php echo htmlspecialchars($usuario['direccion']); ?>" disabled>
-                    </div>
-
                     <div class="form-group-build">
                         <label for="imagen">Imagen</label>
                         <input type="file" id="imagen" name="imagen" accept="image/*" value="<?php echo htmlspecialchars($usuario['imagen']); ?>" disabled>
+                    </div>
+
+                    <div class="form-group-build">
+                        <label>Edificio seleccionado:</label>
+                        <input type="text" value="<?php echo htmlspecialchars($edificio['nombre']); ?>" disabled>
                     </div>
                 </div>
 
