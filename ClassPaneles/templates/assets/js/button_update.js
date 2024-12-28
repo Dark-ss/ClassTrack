@@ -34,6 +34,25 @@ function enableEditingDescription() {
 };
 document.getElementById('edit-button-description').addEventListener('click', enableEditingDescription);
 
+function enableEditingSpace(){
+        document.getElementById('codigo').disabled = false;
+        document.getElementById('capacidad').disabled = false;
+        document.getElementById('imagen').disabled = false;
+
+        document.getElementById('save-button-Space').style.display = 'inline-block'; 
+        event.target.style.display = 'none';
+}
+document.getElementById('edit-button-Space').addEventListener('click', enableEditingSpace);
+
+function enableEditingDescriptionSpace() {
+    // Habilitar los campos
+    document.getElementById('descripcion_general').disabled = false;
+    document.getElementById('save-button-description_space').style.display = 'inline-block';
+    // Ocultar el botón "Actualizar"
+    event.target.style.display = 'none';
+};
+document.getElementById('edit-button-description_space').addEventListener('click', enableEditingDescriptionSpace);
+
 function enableEditingUsers() {
     // Habilitar los campos
     document.getElementById('nombre_completo').disabled = false;

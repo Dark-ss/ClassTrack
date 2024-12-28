@@ -3,6 +3,7 @@ include 'php/admin_session.php';
 include 'php/conexion_be.php';
 //formulario envio
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = mysqli_real_escape_string($conexion, $_POST['id']);
     $codigo = mysqli_real_escape_string($conexion, $_POST['codigo']);
     $capacidad = mysqli_real_escape_string($conexion, $_POST['capacidad']);
     $tipo_espacio = mysqli_real_escape_string($conexion, $_POST['tipo_espacio']);
@@ -76,7 +77,7 @@ if (isset($_GET['edificio_id'])) {
     echo "<script>alert('ID de edificio no especificado.'); window.location.href='vista_edificios.php';</script>";
     exit;
 }
-//consulta edificio, separación de espacios por edificios
+//consulta edificio, separación de espacios
 $edificio_id = isset($_GET['edificio_id']) ? intval($_GET['edificio_id']) : 0;
 
 if ($edificio_id > 0) {
@@ -145,7 +146,7 @@ if ($edificio_id > 0) {
             ?>
             <div class="add-box">
             <h1 class="title_build"><?php echo htmlspecialchars($espacio['codigo']); ?></h1>
-            <a href="update_spaces.php?id=<?php echo htmlspecialchars($espacio['edificio_id']); ?>">
+            <a href="update_spaces.php?id=<?php echo htmlspecialchars($espacio['id']); ?>">
                 <img src="<?php echo htmlspecialchars($espacio['imagen']); ?>" alt="Espacio" class="building-img">
             </a>
         </div>
@@ -160,6 +161,7 @@ if ($edificio_id > 0) {
             <div class="modal-content">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="edificio_id" value="<?php echo htmlspecialchars($building_id); ?>">
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
                     <div class="form-group-container">
                         <div class="form-group">
                             <label for="codigo">Código:</label>
