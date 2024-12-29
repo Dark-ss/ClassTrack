@@ -53,6 +53,30 @@ $edificios = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $edificios[] = $row;
 }
+
+// Consultar edificios junto con el conteo de espacios académicos
+$query_spaces_count = "
+    SELECT 
+        e.id, 
+        e.nombre, 
+        e.imagen, 
+        COUNT(s.id) AS espacios_asociados
+    FROM 
+        edificios e
+    LEFT JOIN 
+        espacios_academicos s 
+    ON 
+        e.id = s.edificio_id
+    GROUP BY 
+        e.id
+";
+$result = mysqli_query($conexion, $query_spaces_count);
+$edificios = [];
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $edificios[] = $row;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -110,11 +134,14 @@ while ($row = mysqli_fetch_assoc($result)) {
         foreach ($edificios as $edificio) {
             ?>
             <div class="add-box">
-            <h1 class="title_build"><?php echo htmlspecialchars($edificio['nombre']); ?></h1>
-            <a href="update_building.php?id=<?php echo htmlspecialchars($edificio['id']); ?>">
-                <img src="<?php echo htmlspecialchars($edificio['imagen']); ?>" alt="Edificio" class="building-img">
-            </a>
-        </div>
+                <h1 class="title_build"><?php echo htmlspecialchars($edificio['nombre']); ?></h1>
+                <img src="./assets/images/espacio_academico.png" alt="espacios" class="icons_space_count">
+                <p class="info_build">Espacios: <?php echo htmlspecialchars($edificio['espacios_asociados']); ?>
+                </p>
+                <a href="update_building.php?id=<?php echo htmlspecialchars($edificio['id']); ?>">
+                    <img src="<?php echo htmlspecialchars($edificio['imagen']); ?>" alt="Edificio" class="building-img">
+                </a>
+            </div>
         <?php
         }
         ?>

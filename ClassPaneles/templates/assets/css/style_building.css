@@ -55,6 +55,12 @@ body{
     border-radius: 10%;
 }
 
+.add-box .icons_space_count {
+    width: 16%;
+    height: 18%;
+    border-radius: 10%;
+}
+
 /* Efecto al pasar el mouse */
 .add-box:hover {
     transform: scale(1.1);
@@ -326,6 +332,25 @@ body{
     left: 35%;
     color:#f0f5f1;
     text-shadow: 2px 2px 5px black;
+}
+/*Cantidad espacios*/
+.info_build{
+    display: block;
+    position: absolute;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    text-align: center;
+    top: 60%;
+    left: 58%;
+    color:#f0f5f1;
+    text-shadow: 2px 2px 5px black;
+}
+
+.icons_space_count{
+    display: block;
+    position: absolute;
+    top: 70%;
+    left: 38%;
 }
 
 /*boton añadir espacio académico*/
