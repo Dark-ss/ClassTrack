@@ -1,6 +1,6 @@
 <?php
 require_once 'php/conexion_be.php';
-include 'php/admin_session.php';
+include 'php/docente_session.php';
 
 // Verificar si se recibió un ID válido
 if (!isset($_GET['id'])) {
@@ -111,6 +111,7 @@ if ($result_edificio && mysqli_num_rows($result_edificio) > 0) {
     <title>Actualizar Edificio</title>
     <link rel="stylesheet" href="../templates/assets/css/style_paneles.css">
     <link rel="stylesheet" href="../templates/assets/css/style_building.css?v=1.0">
+    <link rel="stylesheet" href="../templates/assets/css/style_teacher.css?v=1.0">
 </head>
 <body>
 <main>
@@ -159,14 +160,12 @@ if ($result_edificio && mysqli_num_rows($result_edificio) > 0) {
                 <label for="descripcion_general" class="title_description">Descripción General</label>
                 <textarea id="descripcion_general" name="descripcion_general" class="description-textarea" rows="10" cols="5" disabled><?php echo htmlspecialchars($id['descripcion_general']); ?></textarea>
             </div>
-            <button type="button" id="edit-button-description_space" class="update-button-description" onclick="enableEditingDescriptionSpace()">Actualizar</button>
-            <button type="submit" id="save-button-description_space" class="save-button-description" style="display: none;">Guardar Cambios</button>
         </form>
     </div>
 
     <div class="container-form_register_build">
         <h2>Información de espacio</h2>
-        <form id="update-form-build_spaces" method="POST" enctype="multipart/form-data">
+        <form id="update-form-spaces_teacher" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="update_spaces" value="true">
             <input type="hidden" name="id" value="<?php echo $id['id']; ?>">
             <input type="hidden" name="edificio_id" value="<?php echo htmlspecialchars($building_id)?>">
@@ -186,16 +185,6 @@ if ($result_edificio && mysqli_num_rows($result_edificio) > 0) {
                     <label>Edificio seleccionado:</label>
                     <input type="text" value="<?php echo htmlspecialchars($edificio['nombre']); ?>" disabled>
                 </div>
-
-                <div class="form-group-build">
-                    <label for="imagen">Imagen:</label>
-                    <input type="file" id="imagen" name="imagen">
-                </div>
-            </div>
-
-            <div class="buttons-form-container">
-                <button type="button" id="edit-button-Space" class="update-button" onclick="enableEditingSpace()">Actualizar</button>
-                <button type="submit" id="save-button-Space" class="save-button" style="display: none;">Guardar Cambios</button>
             </div>
         </form>
     </div>

@@ -53,6 +53,30 @@ $edificios = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $edificios[] = $row;
 }
+
+// Consultar edificios junto con el conteo de espacios académicos
+$query_spaces_count = "
+    SELECT 
+        e.id, 
+        e.nombre, 
+        e.imagen, 
+        COUNT(s.id) AS espacios_asociados
+    FROM 
+        edificios e
+    LEFT JOIN 
+        espacios_academicos s 
+    ON 
+        e.id = s.edificio_id
+    GROUP BY 
+        e.id
+";
+$result = mysqli_query($conexion, $query_spaces_count);
+$edificios = [];
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $edificios[] = $row;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -96,66 +120,16 @@ while ($row = mysqli_fetch_assoc($result)) {
         foreach ($edificios as $edificio) {
             ?>
             <div class="add-box">
-            <h1 class="title_build"><?php echo htmlspecialchars($edificio['nombre']); ?></h1>
-            <a href="update_building_docente.php?id=<?php echo htmlspecialchars($edificio['id']); ?>">
-                <img src="<?php echo htmlspecialchars($edificio['imagen']); ?>" alt="Edificio" class="building-img">
-            </a>
-        </div>
+                <h1 class="title_build"><?php echo htmlspecialchars($edificio['nombre']); ?></h1>
+                <img src="./assets/images/espacio_academico.png" alt="espacios" class="icons_space_count">
+                <p class="info_build">Espacios: <?php echo htmlspecialchars($edificio['espacios_asociados']); ?></p>
+                <a href="update_building_docente.php?id=<?php echo htmlspecialchars($edificio['id']); ?>">
+                    <img src="<?php echo htmlspecialchars($edificio['imagen']); ?>" alt="Edificio" class="building-img">
+                </a>
+            </div>
         <?php
         }
         ?>
-        </div>
-        <div class=" modal" id="modal">
-            <div class="modal-content">
-                <form action="" method="POST" enctype="multipart/form-data">
-
-                    <div class="form-group-container">
-                        <div class="form-group">
-                            <label for="nombre">Nombre del edificio:</label>
-                            <input type="text" id="nombre" name="nombre" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="codigo">Código:</label>
-                            <input type="text" id="codigo" name="codigo" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group-container">
-                        <div class="form-group">
-                            <label for="pisos">Cantidad de pisos:</label>
-                            <input type="number" id="pisos" name="pisos" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cupo">Cupo:</label>
-                            <input type="number" id="cupo" name="cupo" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="direccion">Dirección:</label>
-                        <input type="text" id="direccion" name="direccion" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="tipo">Tipo:</label>
-                        <select id="tipo" name="tipo" required>
-                            <option value="">Seleccione un tipo</option>
-                            <option value="Laboratorio">Laboratorio</option>
-                            <option value="Espacio Académico">Espacio Académico</option>
-                            <option value="Auditorio">Auditorio</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Descripción General:</label>
-                        <textarea id="descripcion" name="descripcion" class="description-register" rows="4" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="imagen">Imagen:</label>
-                        <input type="file" id="imagen" name="imagen" accept="image/*">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit">Añadir Edificio</button>
-                    </div>
-                </form>
-            </div>
         </div>
 
         <!-- Mostrar edificios existentes con su imagen y nombre en recuadros con "+" -->

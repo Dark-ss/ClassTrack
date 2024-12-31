@@ -119,9 +119,10 @@ if (isset($_POST['update_building'])) { //Solicitud HTTP
 
         <div class="container-description-image" style="display: flex">
 
-            <h1 class="title_build"><?php echo htmlspecialchars($usuario['nombre']); ?></h1>
             <div class="image-container">
+                <h1 class="title_build"><?php echo htmlspecialchars($usuario['nombre']); ?></h1>
                 <img src="<?php echo  htmlspecialchars($usuario['imagen']); ?>" alt="Edificio" class="profile-img-build">
+                <a href="vista_spaces_docente.php?edificio_id=<?php echo $id; ?>" class="button-space">Ver Espacios</a>
             </div>
             
             <form method="POST" enctype="multipart/form-data" class="description-form" sytle="flex-direction: column">

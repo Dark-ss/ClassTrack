@@ -136,8 +136,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="add-box">
                 <h1 class="title_build"><?php echo htmlspecialchars($edificio['nombre']); ?></h1>
                 <img src="./assets/images/espacio_academico.png" alt="espacios" class="icons_space_count">
-                <p class="info_build">Espacios: <?php echo htmlspecialchars($edificio['espacios_asociados']); ?>
-                </p>
+                <p class="info_build">Espacios: <?php echo htmlspecialchars($edificio['espacios_asociados']); ?></p>
                 <a href="update_building.php?id=<?php echo htmlspecialchars($edificio['id']); ?>">
                     <img src="<?php echo htmlspecialchars($edificio['imagen']); ?>" alt="Edificio" class="building-img">
                 </a>

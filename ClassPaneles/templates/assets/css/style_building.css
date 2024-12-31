@@ -208,7 +208,7 @@ body{
     border-radius: 5px;
     width: 140px;
 }
-
+/*actualizar edificios*/
 #update-form-build {
     display: grid;
     grid-template-columns: repeat(2, 1fr);/* 2 columnas */
@@ -242,9 +242,35 @@ body{
 #codigo, #cupo, #tipo, #pisos {
     width: 50%;  /* Ajusta el valor según tus necesidades, por ejemplo, 50% del contenedor */
 }
-#direccion, #descripcion{
+#direccion, #descripcion, #descripcion_general{
     width: 70%;
 }
+/*actualizar espacios*/
+#update-form-build_spaces{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);/* 2 columnas */
+    grid-gap: 5px 25px;
+    flex-direction: column;
+    align-items:flex-start;
+    width: 100%;
+}
+
+#update-form-build_spaces label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#update-form-build_spaces input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 /*Descripción edificio e imagen*/
 .container-description-imagen{
     display: flex;
