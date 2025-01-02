@@ -18,10 +18,10 @@ if (isset($_POST['correo']) && isset($_POST['contrasena'])) {
 
         // Redirige según el rol
         if ($usuario['rol'] === 'admin') {
-            header("Location: ../admin_dashboard.php"); // Página para el administrador
+            header("Location: ../views/Admin/admin_dashboard.php"); // Página para el administrador
             exit;
         } elseif ($usuario['rol'] === 'docente') {
-            header("Location: ../docente_dashboard.php"); // Página para el docente
+            header("Location: ../views/Docente/docente_dashboard.php"); // Página para el docente
             exit;
         }
     } else {

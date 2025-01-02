@@ -22,7 +22,7 @@
             echo '
                 <script>
                     alert("Hubo un problema al subir la imagen. Inténtalo nuevamente.");
-                    window.location = "../index.php";
+                    window.location = "../views/Admin/create_account.php";
                 </script>
             ';
             exit();
@@ -39,7 +39,7 @@
         echo '
             <script>
                 alert("El correo que acabas de ingresar ya esta registrado, intenta con otro nuevo");
-                window.location = "../index.php";
+                window.location = "../views/Admin/create_account.php";
             </script>
         ';
         exit();
@@ -51,7 +51,7 @@
         echo '
             <script>
                 alert("El usuario que acabas de ingresar ya esta en uso, intenta con otro nuevo");
-                window.location = "../index.php";
+                window.location = "../views/Admin/create_account.php";
             </script>
             ';
         exit();
@@ -64,14 +64,14 @@
         echo '
             <script>
                 alert("El usuario ha sido registrado exitosamente");
-                window.location = "../create_account.php";
+                window.location = "../views/Admin/create_account.php";
             </script>
         ';
     }else{
         echo '
             <script>
                 alert("El usuario no se pudo registrar, intentalo de nuevamente");
-                window.location = "../create_account.php";
+                window.location = "../views/Admin/create_account.php";
             </script>
         ';
     }

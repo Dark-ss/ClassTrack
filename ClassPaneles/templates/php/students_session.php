@@ -6,7 +6,7 @@ $resultado = mysqli_query($conexion, $query);
 if ($resultado && mysqli_num_rows($resultado) > 0) {
     $usuario_data = mysqli_fetch_assoc($resultado);
     // Si el usuario tiene imagen, se carga, sino se asigna una imagen predeterminada
-    $imagen = $usuario_data['imagen'] ? "uploads/" . $usuario_data['imagen'] : "uploads/usuario.png";
+    $imagen = $usuario_data['imagen'] ? "../../uploads/" . $usuario_data['imagen'] : "../../uploads/usuario.png";
     $nombre_completo = $usuario_data['nombre_completo'];
     $rol = $usuario_data['rol'];
 } else {
