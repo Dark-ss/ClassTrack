@@ -49,7 +49,7 @@ if (isset($_POST['update_building'])) { //Solicitud HTTP
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $nombre_imagen = $_FILES['imagen']['name'];
         $ruta_temp = $_FILES['imagen']['tmp_name'];
-        $directorio_destino = "uploads/edificio/";
+        $directorio_destino = "../../uploads/edificio/";
 
         if (!file_exists($directorio_destino)) {
             mkdir($directorio_destino, 0777, true);

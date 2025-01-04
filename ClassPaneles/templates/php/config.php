@@ -65,8 +65,8 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                 <div class="menu-link" onclick="toggleDropdown_space()">Espacios<span>▼</span>
                 </div>
                 <div class="submenu" id="submenu_espacios">
-                    <a href="create_account.php">Añadir Edificios</a>
-                    <a href="vista_cuentas.php">Edificios</a>
+                    <a href="../views/Admin/register_buldings.php">Añadir Edificios</a>
+                    <a href="../views/Admin/table_build.php">Edificios</a>
                     <a href="register_students.php">Añadir Salones</a>
                     <a href="vista_students.php">Salones</a>
                 </div>

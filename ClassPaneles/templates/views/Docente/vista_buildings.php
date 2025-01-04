@@ -85,7 +85,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel administrador</title>
+    <title>Edificios</title>
     <link rel="stylesheet" href="../../assets/css/style_paneles.css">
     <link rel="stylesheet" href="../../assets/css/style_building.css">
 </head>
@@ -114,6 +114,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
             </div>
         </div>
+
+        <a href="table_build_docente.php" class="Button-view_Table_build">Vista Tabla Edificios</a>
 
         <div class="container-edificios">
         <?php

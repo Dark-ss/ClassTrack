@@ -96,7 +96,7 @@ if ($edificio_id > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel administrador</title>
+    <title>Espacios</title>
     <link rel="stylesheet" href="../../assets/css/style_paneles.css">
     <link rel="stylesheet" href="../../assets/css/style_building.css">
 </head>
@@ -127,7 +127,7 @@ if ($edificio_id > 0) {
                 </div>
             </div>
         </div>
-
+        <a href="table_spaces_docente.php" class="Button-view_Table_build">Vista Tabla Edificios</a>
         <div class="container-edificios">
         <?php
         foreach ($espacios as $espacio) {

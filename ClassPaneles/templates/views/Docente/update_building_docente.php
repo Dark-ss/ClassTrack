@@ -86,7 +86,7 @@ if (isset($_POST['update_building'])) { //Solicitud HTTP
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actualizar Edificio</title>
+    <title>Información Edificio</title>
     <link rel="stylesheet" href="../../assets/css/style_paneles.css">
     <link rel="stylesheet" href="../../assets/css/style_building.css?v=1.0">
     <link rel="stylesheet" href="../../assets/css/style_teacher.css?v=1.0">

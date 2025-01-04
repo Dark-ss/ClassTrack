@@ -79,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="menu-link" onclick="toggleDropdown_space()">Espacios<span>▼</span>
                 </div>
                 <div class="submenu" id="submenu_espacios">
-                    <a href="create_account.php">Añadir Edificios</a>
-                    <a href="vista_cuentas.php">Edificios</a>
+                    <a href="register_buldings.php">Añadir Edificios</a>
+                    <a href="table_build.php">Edificios</a>
                     <a href="register_students.php">Añadir Salones</a>
                     <a href="vista_students.php">Salones</a>
                 </div>

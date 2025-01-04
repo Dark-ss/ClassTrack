@@ -48,7 +48,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
             <a href="config_docente.php" class="config">
                 <img src="../assets/images/config.png" alt="Configuración" class="incons-image">
             </a>
-            <a href="../docente_dashboard.php" class="home-admin">
+            <a href="../views/Docente/docente_dashboard.php" class="home-admin">
                 <img src="../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
             <div class="menu-container" id="menu-container">

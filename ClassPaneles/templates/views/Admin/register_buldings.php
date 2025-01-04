@@ -85,7 +85,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel administrador</title>
+    <title>Edificios</title>
     <link rel="stylesheet" href="../../assets/css/style_paneles.css">
     <link rel="stylesheet" href="../../assets/css/style_building.css">
 </head>
@@ -94,8 +94,8 @@ while ($row = mysqli_fetch_assoc($result)) {
     <main class="build">
         <div class="profile-container">
             <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-            <h3 class="../../profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
-            <h3 class="../../profile-name"><?php echo htmlspecialchars($rol); ?></h3>
+            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
+            <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
             <a href="../../php/cerrar_sesion.php" class="logout">
                 <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
             </a>
@@ -122,7 +122,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
                 <div class="submenu" id="submenu_espacios">
                     <a href="register_buldings.php">Añadir Edificios</a>
-                    <a href="vista_cuentas.php">Edificios</a>
+                    <a href="table_build.php">Edificios</a>
                     <a href="register_students.php">Añadir Salones</a>
                     <a href="vista_students.php">Salones</a>
                 </div>

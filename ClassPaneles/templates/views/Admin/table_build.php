@@ -13,20 +13,20 @@ $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
 //Calcular paginas 
-$query_total = "SELECT COUNT(*) as total FROM estudiantes";
+$query_total = "SELECT COUNT(*) as total FROM edificios";
 $resultado_total = mysqli_query($conexion, $query_total);
 $total_usuarios = mysqli_fetch_assoc($resultado_total)['total'];
 $total_paginas = ceil($total_usuarios / $registros_por_pagina);
 
-$query = "SELECT * FROM estudiantes ORDER BY fecha_registro DESC";
+$query = "SELECT * FROM edificios ORDER BY id DESC";
 $resultado = mysqli_query($conexion, $query);
 
 //busqueda de cuentas
 $search = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 
-$query = "SELECT id, imagen, nombre_completo, correo, identificacion, fecha_registro FROM 
-        estudiantes WHERE nombre_completo LIKE '%$search%' OR correo LIKE '%$search%' OR 
-        identificacion LIKE '%$search%'";
+$query = "SELECT id, imagen, nombre, codigo, pisos, cupo, direccion, tipo FROM 
+        edificios WHERE nombre LIKE '%$search%' OR codigo LIKE '%$search%' OR 
+        tipo LIKE '%$search%'";
 $resultado = mysqli_query($conexion, $query);
 
 if (!$resultado) {
@@ -37,16 +37,18 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     if ($id != $_SESSION['id']) {
-        $query_delete = "DELETE FROM estudiantes WHERE id = '$id'";
+
+        $query_delete_espacios = "DELETE FROM espacios_academicos WHERE edificio_id = '$id'";
+        mysqli_query($conexion, $query_delete_espacios);
+
+        $query_delete = "DELETE FROM edificios WHERE id = '$id'";
         mysqli_query($conexion, $query_delete);
-        header("Location: vista_students.php");
+        header("Location: table_build.php");
         exit();
     } else {
-        echo "<script>alert('No puedes eliminar tu propia cuenta.');</script>";
+        echo "<script>alert('No puedes eliminarlo.');</script>";
     }
 }
-
-include '../../php/update_table_students.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +56,7 @@ include '../../php/update_table_students.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Estudiantes</title>
+    <title>Ver Lista Edificios</title>
     <link rel="stylesheet" href="../../assets/css/style_paneles.css">
 </head>
 
@@ -95,20 +97,22 @@ include '../../php/update_table_students.php';
                 </div>
             </div>
         </div>
-        <form method="GET" action="vista_students.php" class="search-form">
-            <input type="text" name="buscar" placeholder="Buscar estudiante..." value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
+        <form method="GET" action="table_build.php" class="search-form">
+            <input type="text" name="buscar" placeholder="Buscar edificio..." value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
             <button type="submit">Buscar</button>
         </form>
-        <h1 class="title-table">Lista de Estudiantes</h1>
+        <h1 class="title-table">Lista de Edificios</h1>
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Id</th>
                     <th>Imagen</th>
-                    <th>Nombre Completo</th>
-                    <th>Correo</th>
-                    <th>Identificación</th>
-                    <th>Fecha de Registro</th>
+                    <th>Nombre</th>
+                    <th>Codigo</th>
+                    <th>Pisos</th>
+                    <th>Cupo</th>
+                    <th>Dirección</th>
+                    <th>Tipo</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -116,17 +120,27 @@ include '../../php/update_table_students.php';
                 <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($fila['id']); ?></td>
+                        <td><img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../uploads/usuario.png'; ?>" alt="Imagen de Estudiante" width="50"></td>
+                        <td><?php echo htmlspecialchars($fila['nombre']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['codigo']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['pisos']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['cupo']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['direccion']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['tipo']); ?></td>
                         <td>
-                            <img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../uploads/usuario.png'; ?>" alt="Imagen de Estudiante" width="50">
-                        </td>
-                        <td><?php echo htmlspecialchars($fila['nombre_completo']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['correo']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['identificacion']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['fecha_registro']); ?></td>
-                        <td>
-                            <a href="?id=<?php echo $fila['id']; ?>" class="delete-button" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-                                <img src="../../assets/images/delete.png" alt="Configuracion" class="icons-image"></a>
-                            <a href="update_students.php?id=<?php echo $fila['id']; ?>" class="delete-button">
+                            <?php
+                                $query_espacios = "SELECT COUNT(*) as total FROM espacios_academicos WHERE edificio_id = {$fila['id']}";
+                                $resultado_espacios = mysqli_query($conexion, $query_espacios);
+                                $total_espacios = mysqli_fetch_assoc($resultado_espacios)['total'];
+                                $mensaje_confirmacion = $total_espacios > 0
+                                    ? "¿Estás seguro de que deseas eliminar este edificio? ¡Hay $total_espacios espacios asociados!"
+                                    : "¿Estás seguro de que deseas eliminar este edificio?";
+                                
+                            ?>
+                            <a href="?id=<?php echo $fila['id']; ?>" class="delete-button" onclick="return confirm('<?php echo $mensaje_confirmacion; ?>');">
+                                <img src="../../assets/images/delete.png" alt="Eliminar" class="icons-image">
+                            </a>
+                            <a href="update_building.php?id=<?php echo $fila['id']; ?>" class="delete-button">
                                 <img src="../../assets/images/update.png" alt="Configuracion" class="icons-image">
                             </a>
                         </td>
@@ -153,7 +167,6 @@ include '../../php/update_table_students.php';
             <?php endif; ?>
         </div>
     </main>
-    <script src="../../assets/js/script_stats.js"></script>
     <script src="../../assets/js/script.js"></script>
     <script src="../../assets/js/script_menu.js"></script>
 </body>

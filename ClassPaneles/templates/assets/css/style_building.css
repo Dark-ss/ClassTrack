@@ -159,6 +159,7 @@ body{
     position: relative;
     left: 300px;
     width: 900px;
+    top: 70px;
 }
 
 /*boton salones*/
@@ -394,3 +395,18 @@ body{
     width: 140px;
 }
 
+/*Link vista tabla de edificios docente*/
+
+.Button-view_Table_build{
+    display: block;
+    position: absolute;
+    background-color: #1f6b31;
+    bottom: 88%;
+    left: 25%;
+    color: white;
+    padding: 5px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 140px;
+}
