@@ -127,7 +127,7 @@ if ($edificio_id > 0) {
                 </div>
             </div>
         </div>
-        <a href="table_spaces_docente.php" class="Button-view_Table_build">Vista Tabla Edificios</a>
+        <a href="table_spaces_docente.php" class="Button-view_Table_build">Vista Tabla Espacios</a>
         <div class="container-edificios">
         <?php
         foreach ($espacios as $espacio) {

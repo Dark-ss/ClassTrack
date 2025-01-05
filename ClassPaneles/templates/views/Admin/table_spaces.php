@@ -1,7 +1,7 @@
 <?php
-include '../../php/docente_session.php';
+include '../../php/admin_session.php';
 
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'docente') {
+if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
     header("Location: ../templates/index.php"); 
     exit();
 }
@@ -38,6 +38,23 @@ $resultado = mysqli_query($conexion, $query);
 if (!$resultado) {
     die("Error al obtener los datos: " . mysqli_error($conexion));
 }
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    if ($id != $_SESSION['id']) {
+
+        $query_delete_espacios = "DELETE FROM espacios_academicos WHERE id = '$id'";
+        mysqli_query($conexion, $query_delete_espacios);
+
+        $query_delete = "DELETE FROM espacio_academico WHERE id = '$id'";
+        mysqli_query($conexion, $query_delete);
+        header("Location: table_spaces.php");
+        exit();
+    } else {
+        echo "<script>alert('No puedes eliminarlo.');</script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,14 +78,27 @@ if (!$resultado) {
             <a href="../../php/config_docente.php" class="config">
                 <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
             </a>
-            <a href="docente_dashboard.php" class="home-admin">
+            <a href="admin_dashboard.php" class="home-admin">
                 <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
             <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
-                </div>  
+                <div class="menu-link" onclick="toggleDropdown()">Cuenta<span>▼</span>
+                </div>
                 <div class="submenu" id="submenu">
-                    <a href="vista_buildings.php">Edificios</a>
+                    <a href="create_account.php">Crear Cuenta</a>
+                    <a href="vista_cuentas.php">cuentas </a>
+                    <a href="register_students.php">Añadir Estudiantes</a>
+                    <a href="vista_students.php">Estudiantes</a>
+                </div>
+            </div>
+
+            <div class="menu-container_espacios" id="menu-container_espacios">
+                <div class="menu-link" onclick="toggleDropdown_space()">Espacios<span>▼</span>
+                </div>
+                <div class="submenu" id="submenu_espacios">
+                    <a href="register_buldings.php">Añadir Edificios</a>
+                    <a href="table_build.php">Edificios</a>
+                    <a href="register_students.php">Añadir Salones</a>
                     <a href="vista_students.php">Salones</a>
                 </div>
             </div>
@@ -87,6 +117,7 @@ if (!$resultado) {
                     <th>Capacidad</th>
                     <th>Tipo</th>
                     <th>Edificio</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -98,6 +129,14 @@ if (!$resultado) {
                         <td><?php echo htmlspecialchars($fila['capacidad']); ?></td>
                         <td><?php echo htmlspecialchars($fila['tipo_espacio']); ?></td>
                         <td><?php echo htmlspecialchars($fila['edificio_nombre']); ?></td>
+                        <td>
+                            <a href="?id=<?php echo $fila['id']; ?>" class="delete-button"onclick="return confirm('¿Estás seguro de que deseas eliminar este espacio');">
+                                <img src="../../assets/images/delete.png" alt="Eliminar" class="icons-image">
+                            </a>
+                            <a href="update_spaces.php?id=<?php echo $fila['id']; ?>" class="delete-button">
+                                <img src="../../assets/images/update.png" alt="Configuracion" class="icons-image">
+                            </a>
+                        </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

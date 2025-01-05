@@ -128,7 +128,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
             </div>
         </div>
-
+        <a href="table_build.php" class="Button-view_Table_build">Vista Tabla Edificios</a>
         <div class="container-edificios">
         <?php
         foreach ($edificios as $edificio) {
