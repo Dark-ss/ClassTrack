@@ -66,6 +66,27 @@ function enableEditingUsers() {
 };
 document.getElementById('edit-button-users').addEventListener('click', enableEditingUsers);
 
+function enableEditingEquip() {
+    // Habilitar los campos
+    document.getElementById('nombre').disabled = false;
+    document.getElementById('codigo').disabled = false;
+    document.getElementById('estado').disabled = false;
+    document.getElementById('imagen').disabled = false;
+    // Mostrar el botón "Guardar cambios"
+    document.getElementById('save-button-equip').style.display = 'inline-block';
+    // Ocultar el botón "Actualizar"
+    event.target.style.display = 'none';
+};
+document.getElementById('edit-button-equip').addEventListener('click', enableEditingEquip);
+
+function enableEditingDescriptionEquip() {
+    // Habilitar los campos
+    document.getElementById('descripcion').disabled = false;
+    document.getElementById('save-button-description_equip').style.display = 'inline-block';
+    // Ocultar el botón "Actualizar"
+    event.target.style.display = 'none';
+};
+document.getElementById('edit-button-description_space').addEventListener('click', enableEditingDescriptionEquip);
 
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-building').addEventListener('click', enableEditingBuilding);
