@@ -151,7 +151,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         <div class=" modal" id="modal">
             <div class="modal-content">
                 <form action="" method="POST" enctype="multipart/form-data">
-
                     <div class="form-group-container">
                         <div class="form-group">
                             <label for="nombre">Nombre del edificio:</label>
@@ -201,7 +200,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
 
-        <!-- Mostrar edificios existentes con su imagen y nombre en recuadros con "+" -->
         </main>
         <script>
             function openModal() {

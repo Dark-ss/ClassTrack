@@ -3,6 +3,7 @@ function enableEditingStudents(event) {
     document.getElementById('nombre_completo').disabled = false;
     document.getElementById('correo').disabled = false;
     document.getElementById('identificacion').disabled = false;
+    document.getElementById('imagen').disabled = false;
     // Mostrar el botón "Guardar cambios"
     document.getElementById('save-button-students').style.display = 'inline-block';
     // Ocultar el botón "Actualizar"

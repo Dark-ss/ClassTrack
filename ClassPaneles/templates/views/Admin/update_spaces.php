@@ -2,12 +2,11 @@
 require_once '../../php/conexion_be.php';
 include '../../php/admin_session.php';
 
-// Verificar si se recibió un ID válido
+
 if (!isset($_GET['id'])) {
     echo "<script>alert('No se especificó un espacio válido.'); window.location.href='register_buldings.php';</script>";
     exit;
 }
-
 // Obtener y sanitizar el ID recibido
 $space_id = mysqli_real_escape_string($conexion, $_GET['id']);
 
@@ -17,7 +16,7 @@ $resultado_espacio = mysqli_query($conexion, $query_espacio);
 
 if (mysqli_num_rows($resultado_espacio) > 0) {
     $id = mysqli_fetch_assoc($resultado_espacio);  // Aquí se almacena el array de datos del espacio
-    $building_id = $id['edificio_id'];  // Asignamos el ID del edificio del espacio
+    $building_id = $id['edificio_id']; 
 } else {
     echo "<script>alert('Espacio de edificio no encontrado.'); window.location.href='register_buldings.php';</script>";
     exit;
@@ -50,10 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Imagen
         $imagen = $id['imagen'];
 
+        if ($imagen === null) {
+            $imagen = "../../assets/images/default_building.png";
+        }
+
         if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
             $nombre_imagen = $_FILES['imagen']['name'];
             $ruta_temp = $_FILES['imagen']['tmp_name'];
-            $directorio_destino = "uploads/espacio/";
+            $directorio_destino = "../../uploads/espacio/";
 
             if (!file_exists($directorio_destino)) {
                 mkdir($directorio_destino, 0777, true);
@@ -101,6 +104,27 @@ if ($result_edificio && mysqli_num_rows($result_edificio) > 0) {
     echo "<script>alert('Edificio no encontrado. ID: $building_id'); window.location.href='vista_edificios.php';</script>";
     exit;
 }
+//equipamiento
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['equipment_spaces'])) {
+        $space_equip_id = mysqli_real_escape_string($conexion, $_POST['id']);
+        $cantidades = $_POST['cantidad'];
+        $estados = $_POST['estado'];
+
+        foreach ($cantidades as $equipamiento_id => $cantidad) {
+            if ($cantidad > 0) {
+                $estado_equip = isset($estados[$equipamiento_id]) ? mysqli_real_escape_string($conexion, $estados[$equipamiento_id]) : 'No disponible';
+
+                $query_insert = "INSERT INTO espacios_equipamiento (espacio_id, equipamiento_id, cantidad, estado) 
+                        VALUES ('$space_equip_id', '$equipamiento_id', '$cantidad', '$estado_equip')
+                        ON DUPLICATE KEY UPDATE cantidad = VALUES(cantidad), estado = VALUES(estado)";
+                mysqli_query($conexion, $query_insert) or die("Error: " . mysqli_error($conexion));
+            }
+        }
+    
+        echo "<script>alert('Equipamientos añadidos con éxito.'); window.location.href='register_buldings.php';</script>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -146,11 +170,11 @@ if ($result_edificio && mysqli_num_rows($result_edificio) > 0) {
             </div>
         </div>
     </div>
-
     <div class="container-description-image" style="display: flex">
         <div class="image-container">
             <h1 class="title_build"><?php echo htmlspecialchars($id['codigo']); ?></h1>
-            <img src="<?php echo htmlspecialchars($id['imagen']); ?>" alt="Edificio" class="profile-img-build">
+            <img src="<?php echo htmlspecialchars($id['imagen']); ?>" alt="Espacio" class="profile-img-build">
+            <button type="button" class="button-space" onclick="openModal()">Añadir equipamiento</button>
         </div>
 
         <form method="POST" enctype="multipart/form-data" class="description-form">
@@ -189,7 +213,7 @@ if ($result_edificio && mysqli_num_rows($result_edificio) > 0) {
 
                 <div class="form-group-build">
                     <label for="imagen">Imagen:</label>
-                    <input type="file" id="imagen" name="imagen">
+                    <input type="file" id="imagen" name="imagen" disabled>
                 </div>
             </div>
 
@@ -199,8 +223,95 @@ if ($result_edificio && mysqli_num_rows($result_edificio) > 0) {
             </div>
         </form>
     </div>
+    
+    <div class="modal" id="modal">
+    <div class="modal-content">
+        <h2>Selecciona el equipamiento</h2>
+        <form id="equipamiento-form" method="POST" enctype="multipart/form-data">
+            <div class="equipamiento-grid">
+                <input type="hidden" name="id" value="<?php echo $id['id']; ?>">
+                <input type="hidden" name="equipment_spaces" value="true">
+                <?php
+                $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
+                // Consultar todos los equipamientos
+                $query_equipamientos = "SELECT e.id, e.nombre, e.imagen
+                FROM equipamiento e";
+
+                $resultado_equipamientos = mysqli_query($conexion, $query_equipamientos);
+                
+                while ($equipamiento = mysqli_fetch_assoc($resultado_equipamientos)) {
+                    echo '
+                    <div class="equipamiento-item">
+                    <img src="' . htmlspecialchars($equipamiento['imagen']) . '" alt="' . htmlspecialchars($equipamiento['nombre']) . '" class="equipamiento-img">
+                    <p>' . htmlspecialchars($equipamiento['nombre']) . '</p>
+                    <input type="number" name="cantidad[' . htmlspecialchars($equipamiento['id']) . ']" min="0" placeholder="Cantidad">
+                    <label for="estado">Estado:</label>
+                        <select id="estado" name="estado[' .htmlspecialchars($equipamiento['id']). ']"> 
+                            <option value="">Seleccione el estado</option>
+                            <option value="Disponible" ' . (($equipamiento['id'] === 'Disponible') ? 'selected' : '') . '>Disponible</option>
+                            <option value="En Mantenimiento" ' . (($equipamiento['id'] === 'En Mantenimiento') ? 'selected' : '') . '>En Mantenimiento</option>
+                            <option value="No Disponible" ' . (($equipamiento['id'] === 'No Disponible') ? 'selected' : '') . '>No Disponible</option>
+                        </select>
+                </div>';
+                }
+                ?>
+            </div>
+            <button type="submit" class="modal-button">Añadir</button>
+        </form>
+    </div>
+    </div>
+
+    <div id="equipamientos-seleccionados">
+    <form id="equipamiento-form" method="POST" enctype="multipart/form-data">
+    <h3>Equipamientos Añadidos al Espacio</h3>
+    <div class="grid-container">
+        <input type="hidden" name="id" value="<?php echo $id['id']; ?>">
+        <input type="hidden" name="equipment_spaces" value="true">
+        <?php   
+        $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
+        // Recuperar los equipamientos asignados al espacio
+        $query_show_equip = "SELECT e.id, e.nombre, e.imagen, ee.cantidad, ee.estado
+            FROM equipamiento e
+            JOIN espacios_equipamiento ee ON e.id = ee.equipamiento_id
+            WHERE ee.espacio_id = '$espacio_id'";
+
+        $resultado_equip = mysqli_query($conexion, $query_show_equip);
+
+        if ($resultado_equip === false) {
+            echo "Error en la consulta: " . mysqli_error($conexion);
+        } else {
+            while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
+                echo '
+                <div class="grid-item">
+                    <div class="equipamiento-container">
+                        <img src="' . htmlspecialchars($equipamiento['imagen']) . '" alt="' . htmlspecialchars($equipamiento['nombre']) . '" class="equipamiento-img_select">
+                        <div class="equipamiento-info ' . strtolower(str_replace(' ', '-', $equipamiento['estado'])) . '">
+                            <p>' . htmlspecialchars($equipamiento['nombre']) . '</p>
+                            <p class="cantidad">Cantidad: ' . htmlspecialchars($equipamiento['cantidad']) . '</p>
+                            <p>Estado: ' . htmlspecialchars($equipamiento['estado']) . '</p>
+                        </div>
+                    </div>
+                </div>';
+            }
+        }
+        ?>
+    </div>
+    </form>
+    </div>
 </main>
 
+<script>
+        function openModal() {
+            document.getElementById("modal").style.display = "block";
+        }
+
+        // Cerrar el modal cuando se haga clic fuera del modal
+        window.onclick = function(event) {
+            if (event.target === document.getElementById("modal")) {
+                document.getElementById("modal").style.display = "none";
+            }
+        }
+</script>
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
 </body>

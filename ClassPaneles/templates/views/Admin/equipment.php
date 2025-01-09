@@ -8,10 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
     $estado = mysqli_real_escape_string($conexion, $_POST['estado']);
 
-    $imagen = null;
+    $imagen_equip= null;
 
-    if ($imagen === null) {
-        $imagen = "../../assets/images/default_building.png";
+    if ($imagen_equip === null) {
+        $imagen_equip = "../../assets/images/default_building.png";
     }
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $nombre_imagen = $_FILES['imagen']['name'];
@@ -26,14 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ruta_imagen = $directorio_destino . uniqid() . "_" . basename($nombre_imagen);
 
         if (move_uploaded_file($ruta_temp, $ruta_imagen)) {
-            $imagen = $ruta_imagen;
+            $imagen_equip = $ruta_imagen;
         } else {
             echo "<script>alert('Error al subir la imagen.');</script>";
         }
     }
 
     $query = "INSERT INTO equipamiento (nombre, codigo, descripcion, imagen, estado)
-        VALUES ('$nombre', '$codigo', '$descripcion', '$imagen', '$estado')";
+        VALUES ('$nombre', '$codigo', '$descripcion', '$imagen_equip', '$estado')";
 
     if (mysqli_query($conexion, $query)) {
         echo "<script>alert('Equipamiento registrado con éxito.'); window.location.href='equipment.php';</script>";
@@ -119,7 +119,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
 
-        <div class=" modal" id="modal">
+        <div class="modal" id="modal">
             <div class="modal-content">
                 <form action="equipment.php" method="POST" enctype="multipart/form-data">
 

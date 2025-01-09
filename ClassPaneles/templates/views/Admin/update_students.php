@@ -99,6 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="usuario">identificacion:</label>
                 <input type="text" id="identificacion" name="usuario" value="<?php echo htmlspecialchars($usuario['identificacion']); ?>" disabled>
 
+                <label for="imagen">Imagen:</label>
+                <input type="file" id="imagen" name="imagen" disabled>
+
                 <button type="button" id="edit-button-students" class="update-button" onclick="enableEditingStudents()">Actualizar</button>
                 <button type=" submit" id="save-button-students" class="save-button" style="display: none;">Guardar Cambios</button>
             </form>
