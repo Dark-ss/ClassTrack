@@ -181,6 +181,44 @@ if ($result_edificio && mysqli_num_rows($result_edificio) > 0) {
             </div>
         </form>
     </div>
+
+    <div id="equipamientos-seleccionados">
+    <form id="equipamiento-form" method="POST" enctype="multipart/form-data">
+    <h3>Equipamientos Añadidos al Espacio</h3>
+    <div class="grid-container">
+        <input type="hidden" name="id" value="<?php echo $id['id']; ?>">
+        <input type="hidden" name="equipment_spaces" value="true">
+        <?php   
+        $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
+        // Recuperar los equipamientos asignados al espacio
+        $query_show_equip = "SELECT e.id, e.nombre, e.imagen, ee.cantidad, ee.estado
+            FROM equipamiento e
+            JOIN espacios_equipamiento ee ON e.id = ee.equipamiento_id
+            WHERE ee.espacio_id = '$espacio_id'";
+
+        $resultado_equip = mysqli_query($conexion, $query_show_equip);
+
+        if ($resultado_equip === false) {
+            echo "Error en la consulta: " . mysqli_error($conexion);
+        } else {
+            while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
+                echo '
+                <div class="grid-item">
+                    <div class="equipamiento-container">
+                        <img src="' . htmlspecialchars($equipamiento['imagen']) . '" alt="' . htmlspecialchars($equipamiento['nombre']) . '" class="equipamiento-img_select">
+                        <div class="equipamiento-info ' . strtolower(str_replace(' ', '-', $equipamiento['estado'])) . '">
+                            <p>' . htmlspecialchars($equipamiento['nombre']) . '</p>
+                            <p class="cantidad">Cantidad: ' . htmlspecialchars($equipamiento['cantidad']) . '</p>
+                            <p>Estado: ' . htmlspecialchars($equipamiento['estado']) . '</p>
+                        </div>
+                    </div>
+                </div>';
+            }
+        }
+        ?>
+    </div>
+    </form>
+    </div>
 </main>
 
 <script src="../../assets/js/button_update.js"></script>

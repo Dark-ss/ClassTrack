@@ -131,7 +131,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div class="submenu" id="submenu_espacios">
                     <a href="register_buldings.php">Añadir Edificios</a>
                     <a href="vista_cuentas.php">Edificios</a>
-                    <a href="register_students.php">Añadir Salones</a>
+                    <a href="equipment.php">Equipamientos</a>
                     <a href="vista_students.php">Salones</a>
                 </div>
             </div>
@@ -145,7 +145,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
             
             <form method="POST" enctype="multipart/form-data" class="description-form" sytle="flex-direction: column">
-                <input type="hidden" name="update_description" value="true"><!--Campo oculto-->
+                <input type="hidden" name="update_description" value="true">
                 <div class="build-description">
                     <label for="descripcion" class="title_description">Descripción General</label>
                     <textarea id="descripcion" name="descripcion" class="description-textarea" rows="10" cols="5" disabled><?php echo htmlspecialchars($usuario['descripcion']); ?></textarea>

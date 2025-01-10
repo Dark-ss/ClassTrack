@@ -123,7 +123,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div class="submenu" id="submenu_espacios">
                     <a href="register_buldings.php">Añadir Edificios</a>
                     <a href="table_build.php">Edificios</a>
-                    <a href="register_students.php">Añadir Salones</a>
+                    <a href="equipment.php">Equipamientos</a>
                     <a href="vista_students.php">Salones</a>
                 </div>
             </div>

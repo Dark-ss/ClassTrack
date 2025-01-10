@@ -134,7 +134,7 @@ if ($edificio_id > 0) {
                 <div class="submenu" id="submenu_espacios">
                     <a href="register_buldings.php">Añadir Edificios</a>
                     <a href="vista_cuentas.php">Edificios</a>
-                    <a href="register_students.php">Añadir Salones</a>
+                    <a href="equipment.php">Equipamientos</a>
                     <a href="vista_students.php">Salones</a>
                 </div>
             </div>

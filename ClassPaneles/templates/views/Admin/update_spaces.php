@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="submenu" id="submenu_espacios">
                 <a href="register_buldings.php">Añadir Edificios</a>
                 <a href="vista_cuentas.php">Edificios</a>
-                <a href="register_students.php">Añadir Salones</a>
+                <a href="equipment.php">Equipamientos</a>
                 <a href="vista_students.php">Salones</a>
             </div>
         </div>
@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="button" class="button-space" onclick="openModal()">Añadir equipamiento</button>
         </div>
 
-        <form method="POST" enctype="multipart/form-data" class="description-form">
+        <form method="POST" enctype="multipart/form-data" class="description-form" sytle="flex-direction: column">
             <input type="hidden" name="update_description_space" value="true">
             <div class="build-description">
                 <label for="descripcion_general" class="title_description">Descripción General</label>
