@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!--Aqui se vincula la pagina de iconos de "Font Awesome"-->
     <title>Unispace</title>
-    <link type="text/css" rel="stylesheet" href="ClassPaneles/templates/assets/css/style.css">
-    <link rel="shortcut icon" href="ClassPaneles/templates/assets/images/logo1.png">
+    <link type="text/css" rel="stylesheet" href="../templates/assets/css/style.css">
+    <link rel="shortcut icon" href="../templates/assets/images/logo1.png">
 </head>
 
 <body>
@@ -21,16 +21,16 @@
                         <h1>Bienvenido</h1>
                     </div>
                     <div class="cont_form">
-                        <form action="ClassPaneles/templates/php/login_be.php" method="post">
+                        <form action="php/login_be.php" method="post">
                             <div class="input_field">
                                 <label for="email">Correo electrónico:</label>
-                                <input autocomplete="off" autofocus type="email" id="email" name="email"
+                                <input autocomplete="off" autofocus type="email" id="email" name="correo"
                                     placeholder="ejemplo@mail.com" required>
                             </div>
                             <div class="input_field">
                                 <label for="password">Contraseña:</label>
                                 <div class="input-container">
-                                    <input type="password" id="password" name="password" placeholder="Contraseña"
+                                    <input type="password" id="password" name="contrasena" placeholder="Contraseña"
                                         required>
                                     <i class="fa-solid fa-eye-slash login_eye_closed"></i>
                                 </div>
@@ -43,7 +43,7 @@
             </div>
         </main>
     </div>
-    <script src="ClassPaneles/templates/assets/js/main.js"></script> <!--Conexion a JavaScript-->
+    <script src="../assets/js/main.js"></script> <!--Conexion a JavaScript-->
 </body>
 
 </html>
