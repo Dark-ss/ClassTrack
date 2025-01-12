@@ -34,7 +34,7 @@
                                         required>
                                     <i class="fa-solid fa-eye-slash login_eye_closed"></i>
                                 </div>
-                                <div class="link_change_password"><a href="ClassPaneles/templates/php/forgot_password.php">¿Olvidaste tu contraseña?</a></div>
+                                <div class="link_change_password"><a href="./php/forgot_password.php">¿Olvidaste tu contraseña?</a></div>
                             </div>
                             <button type="submit">Iniciar sesión</button>
                         </form>
@@ -43,7 +43,7 @@
             </div>
         </main>
     </div>
-    <script src="../assets/js/main.js"></script> <!--Conexion a JavaScript-->
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

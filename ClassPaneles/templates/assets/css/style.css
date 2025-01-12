@@ -66,7 +66,7 @@ button:active {
 }
 
 .form_img .ilustracion1 {
-    background: url('ClassPaneles/templates/assets/images/ilustracion1.png') no-repeat center center;
+    background: url('../../assets/images/ilustracion1.png') no-repeat center center;
     background-size: cover;
     width: 55%;
     border-radius: 30px;

@@ -68,6 +68,7 @@ include '../../php/admin_session.php';
     </main>
     <script src="../../assets/js/script.js"></script>
     <script src="../../assets/js/script_menu.js"></script>
+    <script src="../../assets/js/main.js"></script>
 </body>
 
 </html>
