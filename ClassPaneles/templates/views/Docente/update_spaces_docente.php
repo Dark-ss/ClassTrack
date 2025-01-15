@@ -101,25 +101,47 @@ if ($result && mysqli_num_rows($result) > 0) {
     echo "<script>alert('Edificio no encontrado. ID: $building_id'); window.location.href='vista_spaces_docente.php';</script>";
     exit;
 }
-//Reservación
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['reserve_space'])) {
-        $id_usuario = mysqli_real_escape_string($conexion, $_POST['id_usuario']);
-        $fecha_inicio = date('Y-m-d H:i:s', strtotime($_POST['fecha_inicio']));
-        $fecha_final = date('Y-m-d H:i:s', strtotime($_POST['fecha_final']));
-        $tipo_reservacion = mysqli_real_escape_string($conexion, $_POST['tipo_reservacion']);
-        $descripcion_reserva = mysqli_real_escape_string($conexion, $_POST['descripcion']);
-        $space_id = mysqli_real_escape_string($conexion, $_POST['id_espacio']);
-        
-        $query_reserva = "INSERT INTO reservaciones (id_usuario, fecha_inicio, fecha_final, tipo_reservacion, descripcion, id_espacio)
-                VALUES ('$id_usuario', '$fecha_inicio', '$fecha_final', '$tipo_reservacion', '$descripcion_reserva', '$space_id')";
-        if (mysqli_query($conexion, $query_reserva)) {
-            echo "<script>alert('Reserva realizada con éxito.'); window.location.href='update_spaces_docente.php?id=" . $space_id . "';</script>";
-        } else {
-            echo "<script>alert('Error al realizar la reserva: " . mysqli_error($conexion) . "');</script>";
-        }
+
+// Add this at the very top of your PHP file, right after the session and connection includes
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+if (isset($_POST['reserve_space'])) {
+    $id_reservacion = $_POST['id'];  // ID de la reservación
+    $id_usuario = $_POST['id_usuario'];
+    $fecha_inicio = $_POST['fecha_inicio'];
+    $fecha_final = $_POST['fecha_final'];
+    $tipo_reservacion = $_POST['tipo_reservacion'];
+    $descripcion = $_POST['descripcion'];
+    $id_espacio = $_POST['id_espacio'];
+    $estudiantes = $_POST['estudiantes'];
+
+    // Inserción de la reservación
+    $query = "INSERT INTO reservaciones (id_usuario, fecha_inicio, fecha_final, tipo_reservacion, descripcion, id_espacio) 
+            VALUES ('$id_usuario', '$fecha_inicio', '$fecha_final', '$tipo_reservacion', '$descripcion', '$id_espacio')";
+    if (!mysqli_query($conexion, $query)) {
+        die("Error al insertar la reservación: " . mysqli_error($conexion));
     }
+
+    $id_reservacion = mysqli_insert_id($conexion);
+
+    foreach ($estudiantes as $id_estudiante) {
+        $query_validar = "SELECT id FROM estudiantes WHERE id = '$id_estudiante'";
+        $resultado_validar = mysqli_query($conexion, $query_validar);
+        
+        $query_estudiante = "INSERT INTO reservaciones_estudiantes (id_reservacion, id_estudiante) 
+                VALUES ('$id_reservacion', '$id_estudiante')";
+    }
+    
+    if (mysqli_query($conexion, $query_estudiante)) {
+        echo "<script>alert('Reserva realizada con éxito.'); window.location.href='update_spaces_docente.php?id=" . $space_id . "';</script>";
+    } else {
+        echo "<script>alert('Se han producido los siguientes errores.'); window.location.href='update_spaces_docente.php?id=" . $id_espacio . "';</script>";
+    }
+
+    exit();
 }
+
 
 // Validar si el ID corresponde a un edificio existente
 $query_reserva = "SELECT codigo FROM espacios_academicos WHERE id = $space_id";
@@ -305,7 +327,13 @@ if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
                         <textarea id="descripcion" name="descripcion" class="description-register" rows="4" required></textarea>
                 </div>
             </div>
-
+            
+            <div class="form-group">
+                <label for="estudiantes">Añadir Estudiantes:</label>
+                <input type="text" id="estudiantes" name="estudiantes[]" placeholder="Buscar estudiante..." autocomplete="off">
+                <ul id="student-list"></ul>
+                <div id="selected-students"></div>
+            </div>
             <div class="form-group-container">
                 <div class="form-group">
                     <label>Espacio:</label>
@@ -330,6 +358,151 @@ if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
                 document.getElementById("modal").style.display = "none";
             }
         }
+
+document.addEventListener('DOMContentLoaded', function () {
+    function eventQueryStudents() {
+        const query = this.value.trim();
+        const studentList = document.getElementById('student-list');
+        const selectedStudents = document.getElementById('selected-students');
+
+        if (query.length < 3) {
+            studentList.innerHTML = '';
+            return;
+        }
+
+        // Use the new endpoint
+        fetch(`buscar_estudiantes.php?query=${encodeURIComponent(query)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Received data:', data);
+                studentList.innerHTML = '';
+
+        if (Array.isArray(data) && data.length > 0) {
+            const ul = document.createElement('ul');
+            ul.style.listStyle = 'none';
+            ul.style.padding = '0';
+            ul.style.margin = '0';
+            ul.style.border = '1px solid #ddd';
+            ul.style.borderRadius = '4px';
+            ul.style.maxHeight = '200px';
+            ul.style.overflowY = 'auto';
+
+            data.forEach(student => {
+                const li = document.createElement('li');
+                li.textContent = student.nombre_completo;
+                li.dataset.id = student.id;
+                li.style.padding = '8px';
+                li.style.cursor = 'pointer';
+                li.style.borderBottom = '1px solid #eee';
+
+                li.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f0f0f0';
+                });
+                
+                li.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+                
+        li.addEventListener('click', function() {
+        if (!selectedStudents) {
+            console.error("El contenedor 'selected-students' no existe.");
+            return;
+        }
+
+        const existingStudent = selectedStudents.querySelector(`input[value="${student.id}"]`);
+        if (!existingStudent) {
+            console.log("selectedStudents:", selectedStudents);
+            agregarEstudianteSeleccionado(this);
+            studentList.innerHTML = '';
+            document.getElementById('estudiantes').value = '';
+        }
+        });
+
+            ul.appendChild(li);
+        });
+                    
+            studentList.appendChild(ul);
+    } else {
+            const noResults = document.createElement('p');
+            noResults.textContent = 'No se encontraron estudiantes';
+            noResults.style.padding = '8px';
+            noResults.style.color = '#666';
+            studentList.appendChild(noResults);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            studentList.innerHTML = '<p style="color: red; padding: 8px;">Error al buscar estudiantes</p>';
+        });
+    }
+
+function agregarEstudianteSeleccionado(item) {
+    const selectedStudents = document.getElementById('selected-students');
+
+    if (!selectedStudents) {
+        console.error("El contenedor 'selected-students' no está disponible en el DOM.");
+        return;
+    }
+
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.alignItems = 'center';
+    container.style.margin = '5px 0';
+    container.style.padding = '5px';
+    container.style.backgroundColor = '#e9ecef';
+    container.style.borderRadius = '4px';
+
+    const span = document.createElement('span');
+    span.textContent = item.textContent;
+
+    const inputHidden = document.createElement('input');
+    inputHidden.type = 'hidden';
+    inputHidden.name = 'estudiantes[]';
+    inputHidden.value = item.dataset.id;
+
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.textContent = '×';
+    removeButton.style.marginLeft = '10px';
+    removeButton.style.cursor = 'pointer';
+    removeButton.style.border = 'none';
+    removeButton.style.background = 'none';
+    removeButton.style.color = 'red';
+    removeButton.style.fontWeight = 'bold';
+    removeButton.onclick = function () {
+        container.remove();
+    };
+
+    container.appendChild(span);
+    container.appendChild(inputHidden);
+    container.appendChild(removeButton);
+
+    selectedStudents.appendChild(container);
+}
+
+    // Add debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func.apply(this, args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Add event listener with debounce
+    document.getElementById('estudiantes').addEventListener('input', 
+        debounce(eventQueryStudents, 300)
+    );
+});
 </script>
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
