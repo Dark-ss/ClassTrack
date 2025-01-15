@@ -1,4 +1,4 @@
-function enableEditingStudents(event) {
+function enableEditingStudents() {
     document.getElementById('nombre_completo').disabled = false;
     document.getElementById('correo').disabled = false;
     document.getElementById('identificacion').disabled = false;
@@ -77,4 +77,5 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-students').addEventListener('click', enableEditingStudents);
     document.getElementById('edit-button-users').addEventListener('click', enableEditingUsers);
     document.getElementById('edit-button-description').addEventListener('click', enableEditingDescription);
+    document.getElementById('estudiantes').addEventListener('input', eventQueryStudents);
 });
