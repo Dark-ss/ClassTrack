@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
 try {
-    // Reutiliza la conexión y las consultas anteriores
     $data = [
         "totalUsuarios" => $totalUsuarios,
         "totalEstudiantes" => $totalEstudiantes
