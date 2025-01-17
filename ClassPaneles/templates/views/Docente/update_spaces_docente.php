@@ -128,16 +128,17 @@ if (isset($_POST['reserve_space'])) {
     foreach ($estudiantes as $id_estudiante) {
         $query_validar = "SELECT id FROM estudiantes WHERE id = '$id_estudiante'";
         $resultado_validar = mysqli_query($conexion, $query_validar);
-        
-        $query_estudiante = "INSERT INTO reservaciones_estudiantes (id_reservacion, id_estudiante) 
-                VALUES ('$id_reservacion', '$id_estudiante')";
+
+        if (mysqli_num_rows($resultado_validar)) { // Solo insertar si el estudiante existe
+            $query_estudiante = "INSERT INTO reservaciones_estudiantes (id_reservacion, id_estudiante) 
+                    VALUES ('$id_reservacion', '$id_estudiante')";
+            if (!mysqli_query($conexion, $query_estudiante)) {
+                die("Error al insertar estudiante: " . mysqli_error($conexion));
+            }
+        }
     }
-    
-    if (mysqli_query($conexion, $query_estudiante)) {
-        echo "<script>alert('Reserva realizada con éxito.'); window.location.href='update_spaces_docente.php?id=" . $space_id . "';</script>";
-    } else {
-        echo "<script>alert('Se han producido los siguientes errores.'); window.location.href='update_spaces_docente.php?id=" . $id_espacio . "';</script>";
-    }
+
+    echo "<script>alert('Reserva realizada con éxito.'); window.location.href='update_spaces_docente.php?id=" . $space_id . "';</script>";
 
     exit();
 }
