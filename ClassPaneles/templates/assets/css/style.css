@@ -246,6 +246,7 @@ button:active {
     display: none; /* Inicialmente oculto */
 }
 
+
 /*RESPONSIVIDAD*/
 
 @media (max-width: 894px) {

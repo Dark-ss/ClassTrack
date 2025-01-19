@@ -54,7 +54,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     $edificios[] = $row;
 }
 
-// Consultar edificios junto con el conteo de espacios académicos
 $query_spaces_count = "
     SELECT 
         e.id, 

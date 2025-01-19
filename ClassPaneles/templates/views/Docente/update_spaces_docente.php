@@ -116,6 +116,35 @@ if (isset($_POST['reserve_space'])) {
     $id_espacio = $_POST['id_espacio'];
     $estudiantes = $_POST['estudiantes'];
 
+    date_default_timezone_set('America/Bogota');
+
+    $fecha_actual = date('Y-m-d H:i:s');
+
+    if (strtotime($fecha_inicio) < strtotime($fecha_actual)) {
+        echo "<script>alert('La fecha no es la actual, no se puede hacer la reserva.'); window.history.back();</script>";
+        exit;
+    }
+
+    $query_verificar = "
+    SELECT * 
+    FROM reservaciones 
+    WHERE id_espacio = '$id_espacio'
+    AND (
+        ('$fecha_inicio' BETWEEN fecha_inicio AND fecha_final) OR
+        ('$fecha_final' BETWEEN fecha_inicio AND fecha_final) OR
+        (fecha_inicio BETWEEN '$fecha_inicio' AND '$fecha_final') OR
+        (fecha_final BETWEEN '$fecha_inicio' AND '$fecha_final')
+    )AND NOT (
+        '$fecha_inicio' = fecha_final OR '$fecha_final' = fecha_inicio
+    )
+    ";//Intervalos de fechas inicio-final
+
+$resultado_verificar = mysqli_query($conexion, $query_verificar);
+
+if (mysqli_num_rows($resultado_verificar) > 0) {
+    echo "<script>alert('El espacio ya está reservado en el rango de fechas y horas especificado.'); window.history.back();</script>";
+    exit;
+}
     // Inserción de la reservación
     $query = "INSERT INTO reservaciones (id_usuario, fecha_inicio, fecha_final, tipo_reservacion, descripcion, id_espacio) 
             VALUES ('$id_usuario', '$fecha_inicio', '$fecha_final', '$tipo_reservacion', '$descripcion', '$id_espacio')";
@@ -211,6 +240,7 @@ if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
                 <h1 class="title_build"><?php echo htmlspecialchars($id['codigo']); ?></h1>
                 <img src="<?php echo htmlspecialchars($id['imagen']); ?>" alt="Edificio" class="profile-img-build">
                 <button type="button" class="button-space" onclick="openModal()">Reservar</button>
+                <a href="ver_disponibilidad.php?id_espacio=<?php echo urlencode($id['id']); ?>" class="button-avail">Disponibilidad</a>
             </div>
 
         <form method="POST" enctype="multipart/form-data" class="description-form">
@@ -508,5 +538,4 @@ function agregarEstudianteSeleccionado(item) {
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
 </body>
-
 </html>

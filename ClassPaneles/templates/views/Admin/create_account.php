@@ -26,7 +26,7 @@ include '../../php/admin_session.php';
             <a href="admin_dashboard.php" class="home-admin">
                 <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
-
+    
             <div class="menu-container" id="menu-container">
                 <div class="menu-link" onclick="toggleDropdown()">Cuenta<span>▼</span>
                 </div>
