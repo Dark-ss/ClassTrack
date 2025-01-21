@@ -23,8 +23,6 @@ $result = mysqli_query($conexion, $query);
 if (!$result) {
     die("Error al consultar las reservas: " . mysqli_error($conexion));
 }
-
-// Obtener las reservas
 $reservas = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $reservas[] = $row;
@@ -34,25 +32,24 @@ while ($row = mysqli_fetch_assoc($result)) {
 $hora_inicio = "08:00:00";
 $hora_fin = "22:00:00";
 
-// Obtener la fecha actual y el último día del año
 $fecha_actual = date('Y-m-d');
 $ultimo_dia_del_ano = date('Y-12-31');
 
-// Obtener la primera y última fecha de las reservas para calcular el rango completo
 if (empty($reservas)) {
-    // Si no hay reservas, asignamos un valor predeterminado para el rango
-    $primer_dia_reserva = strtotime($fecha_actual);  // Fecha actual
-    $ultimo_dia_reserva = strtotime($fecha_actual);  // Fecha actual
+    //predeterminado no reservas en espacio
+    $primer_dia_reserva = strtotime($fecha_actual); 
+    $ultimo_dia_reserva = strtotime($fecha_actual); 
 } else {
-    // Si hay reservas, usamos min y max para obtener las fechas
+    // obtener rango reservas
+
     $primer_dia_reserva = strtotime(min(array_column($reservas, 'fecha_inicio')));
     $ultimo_dia_reserva = strtotime(max(array_column($reservas, 'fecha_final')));
 }
-// Calcular el inicio y el fin de la semana más temprana y más tardía en las reservas
-$inicio_global = strtotime('mon', $primer_dia_reserva);
-$fin_global = strtotime('next Saturday', $ultimo_dia_reserva);
 
-// Formatear las reservas
+    
+$inicio_global = strtotime($fecha_actual);
+$fin_global = strtotime($ultimo_dia_del_ano);
+
 $reservas_formateadas = array_map(function($reserva) {
     return [
         'inicio' => $reserva['fecha_inicio'],
@@ -60,19 +57,19 @@ $reservas_formateadas = array_map(function($reserva) {
     ];
 }, $reservas);
 
-// Ordenar reservas por hora de inicio
 usort($reservas_formateadas, function ($a, $b) {
     return strtotime($a['inicio']) - strtotime($b['inicio']);
 });
 
-// Bloques libres por semana
 $bloques_libres_por_semana = [];
 
-// Iterar por cada semana en el rango global
-for ($inicio_semana = strtotime($fecha_actual); $inicio_semana <= strtotime($ultimo_dia_del_ano); $inicio_semana = strtotime('+1 week', $inicio_semana)) {
-    $fin_semana = strtotime('next Saturday', $inicio_semana);
+for ($inicio_semana = $inicio_global; $inicio_semana <= $fin_global; $inicio_semana = strtotime('+1 week', $inicio_semana)) {
+    
+    $inicio_semana = strtotime('today', $inicio_semana);
+    
+    // Ajustamos la fecha de fin al viernes de la misma semana
+    $fin_semana = strtotime('Friday this week', $inicio_semana);
 
-    // Bloques libres para la semana actual
     $disponibles = [];
 
     // Iterar por cada día dentro de la semana
@@ -80,25 +77,21 @@ for ($inicio_semana = strtotime($fecha_actual); $inicio_semana <= strtotime($ult
         $fecha_dia = date('Y-m-d', $dia);
         $hora_actual = "$fecha_dia $hora_inicio";
 
-        // Filtrar reservas del día actual
+        // Filtrar reservas
         $reservas_dia = array_filter($reservas_formateadas, function($reserva) use ($fecha_dia) {
             return date('Y-m-d', strtotime($reserva['inicio'])) === $fecha_dia;
         });
 
-        // Procesar las reservas del día
         foreach ($reservas_dia as $reserva) {
             if (strtotime($hora_actual) < strtotime($reserva['inicio'])) {
-                // Agregar bloque disponible
                 $disponibles[] = [
                     'inicio' => $hora_actual,
                     'fin' => $reserva['inicio']
                 ];
             }
-            // Actualizar la hora actual para verificar el siguiente bloque
+            // Actualizar la hora actual
             $hora_actual = max($hora_actual, $reserva['fin']);
         }
-
-        // Verificar si hay un bloque libre al final del día
         if (strtotime($hora_actual) < strtotime("$fecha_dia $hora_fin")) {
             $disponibles[] = [
                 'inicio' => $hora_actual,
@@ -106,8 +99,6 @@ for ($inicio_semana = strtotime($fecha_actual); $inicio_semana <= strtotime($ult
             ];
         }
     }
-
-    // Guardar los bloques libres de la semana actual
     $bloques_libres_por_semana[] = [
         'semana_inicio' => date('Y-m-d', $inicio_semana),
         'semana_fin' => date('Y-m-d', $fin_semana),
@@ -132,9 +123,8 @@ for ($inicio_semana = strtotime($fecha_actual); $inicio_semana <= strtotime($ult
 
         <div id="calendar"></div>
 
-        <a href="update_spaces_docente.php?id_espacio=<?php echo urlencode($id_espacio); ?>">Volver a Reservar</a>
+        <a href="update_spaces_docente.php?id=<?php echo urlencode($id_espacio); ?>">Volver a Reservar</a>
     </main>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const calendarEl = document.getElementById('calendar');

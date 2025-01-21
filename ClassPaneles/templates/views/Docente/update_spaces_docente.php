@@ -230,7 +230,7 @@ if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
                 </div>  
                 <div class="submenu" id="submenu">
                     <a href="vista_buildings.php">Edificios</a>
-                    <a href="vista_students.php">Salones</a>
+                    <a href="table_disponibilidad.php">Reservaciones</a>
                 </div>
             </div>
         </div>

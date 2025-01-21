@@ -109,7 +109,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
                 <div class="submenu" id="submenu">
                     <a href="vista_buildings.php">Edificios</a>
-                    <a href="vista_students.php">Salones</a>
+                    <a href="table_disponibilidad.php">Reservaciones</a>
                 </div>
             </div>
         </div>
