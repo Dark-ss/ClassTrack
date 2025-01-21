@@ -123,7 +123,7 @@ if ($edificio_id > 0) {
                 </div>  
                 <div class="submenu" id="submenu">
                     <a href="vista_buildings.php">Edificios</a>
-                    <a href="table_disponibilidad.php">Reservaciones</a>
+                    <a href="table_disponibilidad.php">Disponibilidad</a>
                 </div>
             </div>
         </div>

@@ -2,54 +2,92 @@
 include '../../php/docente_session.php';
 
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'docente') {
-    header("Location: ../templates/index.php"); 
+    header("Location: ../templates/index.php");
     exit();
 }
 include '../../php/conexion_be.php';
 
-//paginación
+// Paginación
 $registros_por_pagina = 5;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
-//Calcular paginas 
-$query_reserva = "SELECT COUNT(*) as total FROM reservaciones";
-$resultado_reserva = mysqli_query($conexion, $query_reserva);
-$total_reserva = mysqli_fetch_assoc($resultado_reserva)['total'];
-$total_paginas = ceil($total_reserva / $registros_por_pagina);
-
-$query_reservas = "SELECT * FROM reservaciones ORDER BY id DESC";
-$resultado = mysqli_query($conexion, $query_reservas);
-
-//busqueda de espacios
 $search_reserva = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 
-// Consulta con JOIN Tabla edificios y espacios_academicos
+// Consulta para obtener espacios académicos
 $query = "
-    SELECT r.fecha_inicio, r.fecha_final, r.tipo_reservacion, ea.codigo AS codigo_espacio 
-    FROM reservaciones r
-    JOIN espacios_academicos ea ON r.id_espacio = ea.id
-    WHERE r.fecha_inicio LIKE '%$search_reserva%' OR r.fecha_final LIKE '%$search_reserva%' OR r.tipo_reservacion LIKE '%$search_reserva%' OR ea.codigo LIKE '%$search_reserva%'
-    ORDER BY r.fecha_inicio DESC
+    SELECT ea.id, ea.codigo, ea.tipo_espacio, ea.imagen, ed.nombre AS edificio_nombre
+    FROM espacios_academicos ea
+    JOIN edificios ed ON ea.edificio_id = ed.id
+    WHERE ea.codigo LIKE '%$search_reserva%' 
+    OR ea.tipo_espacio LIKE '%$search_reserva%' 
+    OR ed.nombre LIKE '%$search_reserva%' 
+    ORDER BY ed.nombre DESC
     LIMIT $offset, $registros_por_pagina
 ";
+
 $resultado = mysqli_query($conexion, $query);
 
 if (!$resultado) {
     die("Error al obtener los datos: " . mysqli_error($conexion));
 }
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+// Función para calcular bloques de disponibilidad
+function calcularBloquesDisponibilidad($conexion, $idEspacio, $horasDia) {
+    // Consultar reservas para el espacio en el día actual
+    $hoy = date('Y-m-d');
+    $queryReservas = "
+        SELECT fecha_inicio, fecha_final
+        FROM reservaciones
+        WHERE id_espacio = $idEspacio AND DATE(fecha_inicio) = '$hoy'
+    ";
+    $resultadoReservas = mysqli_query($conexion, $queryReservas);
 
-    if ($id != $_SESSION['id']){ 
-        $query_delete = "DELETE FROM reservaciones WHERE id = '$id'";
-        mysqli_query($conexion, $query_delete);
-        header("Location: table_spaces.php");
-        exit();
-    } else {
-        echo "<script>alert('No puedes eliminarlo.');</script>";
+    // Convertir reservas en franjas ocupadas
+    $horasOcupadas = [];
+    while ($reserva = mysqli_fetch_assoc($resultadoReservas)) {
+        $inicioReserva = strtotime($reserva['fecha_inicio']);
+        $finReserva = strtotime($reserva['fecha_final']);
+
+        foreach ($horasDia as $indice => $hora) {
+            $inicioHora = strtotime("$hoy {$hora['inicio']}");
+            $finHora = strtotime("$hoy {$hora['fin']}");
+
+            if (($inicioHora >= $inicioReserva && $inicioHora < $finReserva) ||
+                ($finHora > $inicioReserva && $finHora <= $finReserva)) {
+                $horasOcupadas[] = $indice; // Guardar índice de la hora ocupada
+            }
+        }
     }
+
+    // Crear bloques de disponibilidad
+    $disponibilidad = [];
+    $bloqueInicio = null;
+
+    foreach ($horasDia as $indice => $hora) {
+        if (!in_array($indice, $horasOcupadas)) {
+            if ($bloqueInicio === null) {
+                $bloqueInicio = $hora['inicio'];
+            }
+        } else {
+            if ($bloqueInicio !== null) {
+                $disponibilidad[] = formatearHora($bloqueInicio) . ' - ' . formatearHora($horasDia[$indice - 1]['fin']);
+                $bloqueInicio = null;
+            }
+        }
+    }
+
+    // Agregar el último bloque si termina disponible
+    if ($bloqueInicio !== null) {
+        $disponibilidad[] = formatearHora($bloqueInicio) . ' - ' . formatearHora(end($horasDia)['fin']);
+    }
+
+    return implode(', ', $disponibilidad);
+}
+
+// Función para formatear hora a 12 horas (AM/PM)
+function formatearHora($hora) {
+    return date('h:i A', strtotime($hora));
 }
 ?>
 <!DOCTYPE html>
@@ -58,7 +96,7 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Lista Reservaciones</title>
+    <title>Espacios Académicos</title>
     <link rel="stylesheet" href="../../assets/css/style_paneles.css">
 </head>
 
@@ -71,20 +109,18 @@ if (isset($_GET['id'])) {
             <a href="../../php/cerrar_sesion.php" class="logout">
                 <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
             </a>
-            
             <a href="../../php/config_docente.php" class="config">
                 <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
             </a>
             <a href="docente_dashboard.php" class="home-admin">
                 <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
-
             <div class="menu-container" id="menu-container">
                 <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
-                </div>  
+                </div>
                 <div class="submenu" id="submenu">
                     <a href="vista_buildings.php">Edificios</a>
-                    <a href="table_disponibilidad.php">Reservaciones</a>
+                    <a href="table_disponibilidad.php">Disponibilidad</a>
                 </div>
             </div>
         </div>
@@ -92,45 +128,53 @@ if (isset($_GET['id'])) {
             <input type="text" name="buscar" placeholder="Buscar espacio..." value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
             <button type="submit">Buscar</button>
         </form>
-        <h1 class="title-table">Lista de reservaciones</h1>
+        <h1 class="title-table">Espacios Disponibilidad</h1>
         <table>
             <thead>
                 <tr>
-                    <th>Fecha inicio</th>
-                    <th>Fecha final</th>
-                    <th>Tipo</th>
-                    <th>Espacio</th>
+                    <th>Imagen</th>
+                    <th>Código</th>
+                    <th>Tipo de Espacio</th>
+                    <th>Edificio</th>
+                    <th>Disponibilidad</th>
                 </tr>
             </thead>
             <tbody>
-                <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
+                <?php
+                // Definir horario del día
+                $horarioDia = [
+                    ['inicio' => '08:00', 'fin' => '09:00'],
+                    ['inicio' => '09:00', 'fin' => '10:00'],
+                    ['inicio' => '10:00', 'fin' => '11:00'],
+                    ['inicio' => '11:00', 'fin' => '12:00'],
+                    ['inicio' => '12:00', 'fin' => '13:00'],
+                    ['inicio' => '13:00', 'fin' => '14:00'],
+                    ['inicio' => '14:00', 'fin' => '15:00'],
+                    ['inicio' => '15:00', 'fin' => '16:00'],
+                    ['inicio' => '16:00', 'fin' => '17:00'],
+                    ['inicio' => '17:00', 'fin' => '18:00'],
+                    ['inicio' => '18:00', 'fin' => '19:00'],
+                    ['inicio' => '19:00', 'fin' => '20:00'],
+                    ['inicio' => '21:00', 'fin' => '22:00']
+                ];
+
+                while ($fila = mysqli_fetch_assoc($resultado)): ?>
+                    <?php
+                        // Calcular disponibilidad en bloques
+                        $disponibilidad = calcularBloquesDisponibilidad($conexion, $fila['id'], $horarioDia);
+                    ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($fila['fecha_inicio']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['fecha_final']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['tipo_reservacion']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['codigo_espacio']); ?></td>
+                        <td>
+                            <img src="<?php echo htmlspecialchars($fila['imagen']); ?>" alt="Imagen de <?php echo htmlspecialchars($fila['codigo']); ?>" style="width: 100px; height: auto;">
+                        </td>
+                        <td><?php echo htmlspecialchars($fila['codigo']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['tipo_espacio']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['edificio_nombre']); ?></td>
+                        <td><?php echo htmlspecialchars($disponibilidad); ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
-                    
-        <!--Paginación-->
-        <div class="pagination">
-            <?php if ($pagina_actual > 1): ?>
-                <a href="?pagina=<?php echo $pagina_actual - 1; ?>&buscar=<?php echo htmlspecialchars($search_reserva); ?>">Anterior</a>
-            <?php endif; ?>
-
-            <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
-                <a href="?pagina=<?php echo $i; ?>&buscar=<?php echo htmlspecialchars($search_reserva); ?>"
-                    class="<?php echo $i === $pagina_actual ? 'active' : ''; ?>">
-                    <?php echo $i; ?>
-                </a>
-            <?php endfor; ?>
-
-            <?php if ($pagina_actual < $total_paginas): ?>
-                <a href="?pagina=<?php echo $pagina_actual + 1; ?>&buscar=<?php echo htmlspecialchars($search_reserva); ?>">Siguiente</a>
-            <?php endif; ?>
-        </div>
     </main>
     <script src="../../assets/js/script.js"></script>
     <script src="../../assets/js/script_menu.js"></script>
@@ -138,7 +182,9 @@ if (isset($_GET['id'])) {
 
 </html>
 <?php
-// Liberar resultados y cerrar conexión
+//Cerrar conexión
 mysqli_free_result($resultado);
 mysqli_close($conexion);
 ?>
+
+
