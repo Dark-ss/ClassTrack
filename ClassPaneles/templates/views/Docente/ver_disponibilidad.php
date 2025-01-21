@@ -32,23 +32,18 @@ while ($row = mysqli_fetch_assoc($result)) {
 $hora_inicio = "08:00:00";
 $hora_fin = "22:00:00";
 
+// Obtener la fecha actual y el último día del año
 $fecha_actual = date('Y-m-d');
 $ultimo_dia_del_ano = date('Y-12-31');
 
 if (empty($reservas)) {
-    //predeterminado no reservas en espacio
-    $primer_dia_reserva = strtotime($fecha_actual); 
-    $ultimo_dia_reserva = strtotime($fecha_actual); 
+    // Si no hay reservas
+    $primer_dia_reserva = strtotime($fecha_actual);
+    $ultimo_dia_reserva = strtotime($fecha_actual);
 } else {
-    // obtener rango reservas
-
     $primer_dia_reserva = strtotime(min(array_column($reservas, 'fecha_inicio')));
     $ultimo_dia_reserva = strtotime(max(array_column($reservas, 'fecha_final')));
 }
-
-    
-$inicio_global = strtotime($fecha_actual);
-$fin_global = strtotime($ultimo_dia_del_ano);
 
 $reservas_formateadas = array_map(function($reserva) {
     return [
@@ -63,47 +58,41 @@ usort($reservas_formateadas, function ($a, $b) {
 
 $bloques_libres_por_semana = [];
 
-for ($inicio_semana = $inicio_global; $inicio_semana <= $fin_global; $inicio_semana = strtotime('+1 week', $inicio_semana)) {
-    
-    $inicio_semana = strtotime('today', $inicio_semana);
-    
-    // Ajustamos la fecha de fin al viernes de la misma semana
-    $fin_semana = strtotime('Friday this week', $inicio_semana);
+// Iterar por cada día desde la fecha actual hasta el final del año
+$fecha_iteracion = strtotime($fecha_actual); 
+
+while ($fecha_iteracion <= strtotime($ultimo_dia_del_ano)) {
+    $fecha_dia = date('Y-m-d', $fecha_iteracion);
+    $hora_actual = "$fecha_dia $hora_inicio";
+
+    $reservas_dia = array_filter($reservas_formateadas, function($reserva) use ($fecha_dia) {
+        return date('Y-m-d', strtotime($reserva['inicio'])) === $fecha_dia;
+    });
 
     $disponibles = [];
 
-    // Iterar por cada día dentro de la semana
-    for ($dia = $inicio_semana; $dia <= $fin_semana; $dia = strtotime('+1 day', $dia)) {
-        $fecha_dia = date('Y-m-d', $dia);
-        $hora_actual = "$fecha_dia $hora_inicio";
-
-        // Filtrar reservas
-        $reservas_dia = array_filter($reservas_formateadas, function($reserva) use ($fecha_dia) {
-            return date('Y-m-d', strtotime($reserva['inicio'])) === $fecha_dia;
-        });
-
-        foreach ($reservas_dia as $reserva) {
-            if (strtotime($hora_actual) < strtotime($reserva['inicio'])) {
-                $disponibles[] = [
-                    'inicio' => $hora_actual,
-                    'fin' => $reserva['inicio']
-                ];
-            }
-            // Actualizar la hora actual
-            $hora_actual = max($hora_actual, $reserva['fin']);
-        }
-        if (strtotime($hora_actual) < strtotime("$fecha_dia $hora_fin")) {
+    foreach ($reservas_dia as $reserva) {
+        if (strtotime($hora_actual) < strtotime($reserva['inicio'])) {
             $disponibles[] = [
                 'inicio' => $hora_actual,
-                'fin' => "$fecha_dia $hora_fin"
+                'fin' => $reserva['inicio']
             ];
         }
+        $hora_actual = max($hora_actual, $reserva['fin']);
     }
+
+    if (strtotime($hora_actual) < strtotime("$fecha_dia $hora_fin")) {
+        $disponibles[] = [
+            'inicio' => $hora_actual,
+            'fin' => "$fecha_dia $hora_fin"
+        ];
+    }
+
     $bloques_libres_por_semana[] = [
-        'semana_inicio' => date('Y-m-d', $inicio_semana),
-        'semana_fin' => date('Y-m-d', $fin_semana),
+        'fecha' => $fecha_dia,
         'bloques_libres' => $disponibles
     ];
+    $fecha_iteracion = strtotime('+1 day', $fecha_iteracion);
 }
 ?>
 
@@ -123,7 +112,7 @@ for ($inicio_semana = $inicio_global; $inicio_semana <= $fin_global; $inicio_sem
 
         <div id="calendar"></div>
 
-        <a href="update_spaces_docente.php?id=<?php echo urlencode($id_espacio); ?>">Volver a Reservar</a>
+        <a href="update_spaces_docente.php?id=<?php echo urlencode($id_espacio); ?>">Volver</a>
     </main>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
