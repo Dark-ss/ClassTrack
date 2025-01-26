@@ -28,12 +28,13 @@ while ($row = mysqli_fetch_assoc($result)) {
     $reservas[] = $row;
 }
 
+ini_set('date.timezone', 'America/Bogota');
 // Hora de inicio y fin de las reservas
 $hora_inicio = "08:00:00";
 $hora_fin = "22:00:00";
 
 // Obtener la fecha actual y el último día del año
-$fecha_actual = date('Y-m-d');
+$fecha_actual = date('Y-m-d H:i:s');
 $ultimo_dia_del_ano = date('Y-12-31');
 
 if (empty($reservas)) {
@@ -60,10 +61,18 @@ $bloques_libres_por_semana = [];
 
 // Iterar por cada día desde la fecha actual hasta el final del año
 $fecha_iteracion = strtotime($fecha_actual); 
-
 while ($fecha_iteracion <= strtotime($ultimo_dia_del_ano)) {
     $fecha_dia = date('Y-m-d', $fecha_iteracion);
-    $hora_actual = "$fecha_dia $hora_inicio";
+
+    // Establecer hora inicial según el día (día actual o futuro)
+    if ($fecha_dia == $fecha_actual) {
+        $hora_actual = max(
+            date('Y-m-d H:i:s'),  // Hora actual del sistema
+            "$fecha_dia $hora_inicio" // Hora de inicio del día
+        );
+    } else {
+        $hora_actual = "$fecha_dia $hora_inicio"; // Para otros días, usar hora de inicio
+    }
 
     $reservas_dia = array_filter($reservas_formateadas, function($reserva) use ($fecha_dia) {
         return date('Y-m-d', strtotime($reserva['inicio'])) === $fecha_dia;
@@ -72,16 +81,20 @@ while ($fecha_iteracion <= strtotime($ultimo_dia_del_ano)) {
     $disponibles = [];
 
     foreach ($reservas_dia as $reserva) {
+        // Verificar si hay un bloque libre antes de la reserva actual
         if (strtotime($hora_actual) < strtotime($reserva['inicio'])) {
             $disponibles[] = [
                 'inicio' => $hora_actual,
                 'fin' => $reserva['inicio']
             ];
         }
+
+        // Actualizar la hora actual al final de la reserva
         $hora_actual = max($hora_actual, $reserva['fin']);
     }
 
-    if (strtotime($hora_actual) < strtotime("$fecha_dia $hora_fin")) {
+    // Verificar si hay un bloque libre al final del día
+    if (strtotime($hora_actual) <= strtotime("$fecha_dia $hora_fin")) {
         $disponibles[] = [
             'inicio' => $hora_actual,
             'fin' => "$fecha_dia $hora_fin"
@@ -92,8 +105,16 @@ while ($fecha_iteracion <= strtotime($ultimo_dia_del_ano)) {
         'fecha' => $fecha_dia,
         'bloques_libres' => $disponibles
     ];
+
+    // Incrementar al siguiente día
     $fecha_iteracion = strtotime('+1 day', $fecha_iteracion);
 }
+
+echo "Huso horario configurado: " . date_default_timezone_get() . "<br>";
+
+// Muestra la hora actual según el huso horario configurado
+echo "Fecha actual: " . date('Y-m-d H:i:s');
+
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +129,7 @@ while ($fecha_iteracion <= strtotime($ultimo_dia_del_ano)) {
 </head>
 <body>
     <main>
-        <h1>Disponibilidad del Espacio <?php echo htmlspecialchars($id_espacio); ?></h1>
+        <h1>Disponibilidad del Espaci <?php echo htmlspecialchars($id_espacio); ?></h1>
 
         <div id="calendar"></div>
 
@@ -180,3 +201,6 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 </body>
 </html>
+
+
+

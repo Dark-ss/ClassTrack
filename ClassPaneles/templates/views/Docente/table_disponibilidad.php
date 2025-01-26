@@ -32,6 +32,8 @@ if (!$resultado) {
     die("Error al obtener los datos: " . mysqli_error($conexion));
 }
 
+ini_set('date.timezone', 'America/Bogota');
+
 // Función para calcular bloques de disponibilidad
 function calcularBloquesDisponibilidad($conexion, $idEspacio, $horasDia) {
     // Consultar reservas para el espacio en el día actual
