@@ -14,7 +14,7 @@ if (!$id_espacio) {
 $query = "
     SELECT fecha_inicio, fecha_final, tipo_reservacion, descripcion 
     FROM reservaciones  
-    WHERE id_espacio = '$id_espacio'
+    WHERE id_espacio = '$id_espacio' AND estado = 'aceptada'
     ORDER BY fecha_inicio
 ";
 

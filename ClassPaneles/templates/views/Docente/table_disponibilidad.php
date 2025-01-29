@@ -42,6 +42,7 @@ function calcularBloquesDisponibilidad($conexion, $idEspacio, $horasDia) {
         SELECT fecha_inicio, fecha_final
         FROM reservaciones
         WHERE id_espacio = $idEspacio AND DATE(fecha_inicio) = '$hoy'
+        AND estado = 'aceptada'
     ";
     $resultadoReservas = mysqli_query($conexion, $queryReservas);
 

@@ -92,8 +92,8 @@ if (isset($_GET['id'])) {
                 <div class="submenu" id="submenu_espacios">
                     <a href="register_buldings.php">Añadir Edificios</a>
                     <a href="table_build.php">Edificios</a>
-                    <a href="register_students.php">Añadir Salones</a>
-                    <a href="vista_students.php">Salones</a>
+                    <a href="equipment.php">Equipamientos</a>
+                    <a href="table_reservation.php">Reservas</a>
                 </div>
             </div>
         </div>

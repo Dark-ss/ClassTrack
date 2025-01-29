@@ -27,7 +27,7 @@ $total_reservas = mysqli_fetch_assoc($resultado_total)['total'];
 $total_paginas = ceil($total_reservas / $registros_por_pagina);
 
 // Obtener las reservas del usuario
-$query = "SELECT r.id, r.fecha_inicio, r.fecha_final, r.tipo_reservacion, e.codigo AS espacio
+$query = "SELECT r.id, r.fecha_inicio, r.fecha_final, r.tipo_reservacion, r.estado,e.codigo AS espacio
         FROM reservaciones r 
         JOIN espacios_academicos e ON r.id_espacio = e.id
         WHERE r.id_usuario = '$id_usuario'
@@ -100,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                     <th>Fecha fin</th>
                     <th>Tipo reservación</th>
                     <th>Espacio</th>
+                    <th>Estado</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -111,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                         <td><?php echo htmlspecialchars(date('d/m/Y h:i A', strtotime($fila['fecha_final']))); ?></td>
                         <td><?php echo htmlspecialchars($fila['tipo_reservacion']); ?></td>
                         <td><?php echo htmlspecialchars($fila['espacio']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['estado']); ?></td>
                         <td>
                             <a href="#" class="delete-button" onclick="deleteReservation(<?php echo $fila['id']; ?>); return false;">
                                 <img src="../../assets/images/delete.png" alt="Eliminar" class="icons-image">

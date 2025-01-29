@@ -619,3 +619,9 @@ body{
     padding: 0;
     list-style: none;
 }
+
+/*conflicto entre reservas*/
+.conflict-row {
+    background-color: #f8d7da;
+    color: #721c24;
+}

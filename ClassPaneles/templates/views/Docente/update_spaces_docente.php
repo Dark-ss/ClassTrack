@@ -107,7 +107,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if (isset($_POST['reserve_space'])) {
-    $id_reservacion = $_POST['id'];  // ID de la reservación
+    $id_reservacion = $_POST['id'];  
     $id_usuario = $_POST['id_usuario'];
     $fecha_inicio = $_POST['fecha_inicio'];
     $fecha_final = $_POST['fecha_final'];
@@ -117,7 +117,6 @@ if (isset($_POST['reserve_space'])) {
     $estudiantes = $_POST['estudiantes'];
 
     date_default_timezone_set('America/Bogota');
-
     $fecha_actual = date('Y-m-d H:i:s');
 
     if (strtotime($fecha_inicio) < strtotime($fecha_actual)) {
@@ -125,10 +124,12 @@ if (isset($_POST['reserve_space'])) {
         exit;
     }
 
+    // Verificar conflictos de reserva
     $query_verificar = "
     SELECT * 
     FROM reservaciones 
     WHERE id_espacio = '$id_espacio'
+    AND estado = 'aceptada'
     AND (
         ('$fecha_inicio' BETWEEN fecha_inicio AND fecha_final) OR
         ('$fecha_final' BETWEEN fecha_inicio AND fecha_final) OR
@@ -136,44 +137,42 @@ if (isset($_POST['reserve_space'])) {
         (fecha_final BETWEEN '$fecha_inicio' AND '$fecha_final')
     )AND NOT (
         '$fecha_inicio' = fecha_final OR '$fecha_final' = fecha_inicio
-    )
-    ";//Intervalos de fechas inicio-final
+    )";
 
-$resultado_verificar = mysqli_query($conexion, $query_verificar);
+    $resultado_verificar = mysqli_query($conexion, $query_verificar);
 
-if (mysqli_num_rows($resultado_verificar) > 0) {
-    echo "<script>alert('El espacio ya está reservado en el rango de fechas y horas especificado.'); window.history.back();</script>";
-    exit;
-}
-    // Inserción de la reservación
-    $query = "INSERT INTO reservaciones (id_usuario, fecha_inicio, fecha_final, tipo_reservacion, descripcion, id_espacio) 
-            VALUES ('$id_usuario', '$fecha_inicio', '$fecha_final', '$tipo_reservacion', '$descripcion', '$id_espacio')";
+    if (mysqli_num_rows($resultado_verificar) > 0) {
+        echo "<script>alert('El espacio ya está reservado en el rango de fechas y horas especificado.'); window.history.back();</script>";
+        exit;
+    }
+
+    // Insertar la reserva con estado "Pendiente"
+    $query = "INSERT INTO reservaciones (id_usuario, fecha_inicio, fecha_final, tipo_reservacion, descripcion, id_espacio, estado) 
+        VALUES ('$id_usuario', '$fecha_inicio', '$fecha_final', '$tipo_reservacion', '$descripcion', '$id_espacio', 'Pendiente')";
     if (!mysqli_query($conexion, $query)) {
         die("Error al insertar la reservación: " . mysqli_error($conexion));
     }
 
     $id_reservacion = mysqli_insert_id($conexion);
 
+    // Insertar los estudiantes asociados a la reserva
     foreach ($estudiantes as $id_estudiante) {
         $query_validar = "SELECT id FROM estudiantes WHERE id = '$id_estudiante'";
         $resultado_validar = mysqli_query($conexion, $query_validar);
 
-        if (mysqli_num_rows($resultado_validar)) { // Solo insertar si el estudiante existe
+        if (mysqli_num_rows($resultado_validar)) { 
             $query_estudiante = "INSERT INTO reservaciones_estudiantes (id_reservacion, id_estudiante) 
-                    VALUES ('$id_reservacion', '$id_estudiante')";
+                VALUES ('$id_reservacion', '$id_estudiante')";
             if (!mysqli_query($conexion, $query_estudiante)) {
                 die("Error al insertar estudiante: " . mysqli_error($conexion));
             }
         }
     }
 
-    echo "<script>alert('Reserva realizada con éxito.'); window.location.href='update_spaces_docente.php?id=" . $space_id . "';</script>";
-
+    echo "<script>alert('Solicitud de reserva enviada para aprobación.'); window.location.href='update_spaces_docente.php?id=" . $space_id . "';</script>";
     exit();
 }
 
-
-// Validar si el ID corresponde a un edificio existente
 $query_reserva = "SELECT codigo FROM espacios_academicos WHERE id = $space_id";
 $result_reserva = mysqli_query($conexion, $query_reserva);
 
@@ -328,7 +327,7 @@ if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
             <div class="form-group-container">
                 <div class="form-group">
                     <label for="id_usuario">Nombre Del Solicitante:</label>
-                    <input type="text" name="nombre_usuario" value="<?php echo htmlspecialchars($espacio_usuario['nombre_completo']); ?>">
+                    <input type="text" name="nombre_completo" value="<?php echo htmlspecialchars($espacio_usuario['nombre_completo']); ?>">
                 </div>
                 
                 <div class="form-group">
