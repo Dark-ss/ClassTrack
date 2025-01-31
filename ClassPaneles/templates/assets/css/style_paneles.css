@@ -61,8 +61,30 @@ main {
 }
 
 .icons-image{
-    width: 25px;/* Ajusta el tamaño de la imagen */
+    width: 25px;
     height: 25px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+/*botones tabla reservacion admin*/
+.btn-container {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-approve,
+.btn-reject {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.btn-icons{
+    width: 25px;
+    height: 25px;
+    height: auto;
+    display: block;
     margin-bottom: 10px;
     object-fit: contain;
 }

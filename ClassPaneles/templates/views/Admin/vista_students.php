@@ -1,8 +1,8 @@
 <?php
-include '../../php/admin_session.php'; // Verifica que el admin esté autenticado
+include '../../php/admin_session.php';
 
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: ../templates/index.php"); // Redirige a no admin
+    header("Location: ../templates/index.php");
     exit();
 }
 include '../../php/conexion_be.php';
@@ -45,8 +45,6 @@ if (isset($_GET['id'])) {
         echo "<script>alert('No puedes eliminar tu propia cuenta.');</script>";
     }
 }
-
-include '../../php/update_table_students.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

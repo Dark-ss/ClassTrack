@@ -395,6 +395,20 @@ body{
     width: 140px;
 }
 
+.button-avail{
+    display: block;
+    position: absolute;
+    background-color: #1f6b31;
+    bottom: 55%;
+    left: 25%;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 140px;
+}
+
 /*Link vista tabla de edificios docente*/
 
 .Button-view_Table_build{
@@ -566,4 +580,48 @@ body{
 
 .equipamiento-info.no-disponible {
     background-color: rgba(220, 53, 69, 0.5);
+}
+
+/*Estilo reserva busqueda estudiantes*/
+.student-item {
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 2px 0;
+}
+
+.student-item:hover {
+    background-color: #f0f0f0;
+}
+
+.selected-student {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.remove-student {
+    margin-left: 10px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: red;
+    font-weight: bold;
+}
+
+#student-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin-top: 5px;
+    padding: 0;
+    list-style: none;
+}
+
+/*conflicto entre reservas*/
+.conflict-row {
+    background-color: #f8d7da;
+    color: #721c24;
 }

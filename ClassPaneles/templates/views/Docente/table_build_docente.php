@@ -64,7 +64,7 @@ if (!$resultado) {
                 </div>  
                 <div class="submenu" id="submenu">
                     <a href="vista_buildings.php">Edificios</a>
-                    <a href="vista_students.php">Salones</a>
+                    <a href="table_disponibilidad.php">Disponibilidad</a>
                 </div>
             </div>
         </div>

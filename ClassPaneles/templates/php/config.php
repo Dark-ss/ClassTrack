@@ -1,14 +1,14 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: ../templates/index.php"); // Redirige al loes admin
+    header("Location: ../templates/index.php");
     exit();
 }
 include 'conexion_be.php';
 include 'update_table.php';
 
 // Obtener los datos del usuario
-$correo = $_SESSION['usuario']; // Correo desde la sesión
+$correo = $_SESSION['usuario'];
 $query = "SELECT imagen, nombre_completo, correo, usuario, rol FROM usuarios WHERE correo='$correo'";
 $resultado = mysqli_query($conexion, $query);
 
@@ -20,7 +20,6 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
     $usuario = $usuario_data['usuario'];
     $rol = $usuario_data['rol'];
 } else {
-    // Si no se encuentra al usuario, redirige al login
     header("Location: ../templates/index.php");
     exit();
 }

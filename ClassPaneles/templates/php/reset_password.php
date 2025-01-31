@@ -31,7 +31,7 @@ if (mysqli_num_rows($query) > 0) {
     echo '<script>
             alert("El enlace de recuperación es inválido o ha expirado.");
             window.location = "../index.php";
-          </script>';
+        </script>';
 }
 
 mysqli_close($conexion);

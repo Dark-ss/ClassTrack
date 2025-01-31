@@ -1,4 +1,4 @@
-function enableEditingStudents(event) {
+function enableEditingStudents() {
     document.getElementById('nombre_completo').disabled = false;
     document.getElementById('correo').disabled = false;
     document.getElementById('identificacion').disabled = false;
@@ -72,9 +72,25 @@ function enableEditingDescriptionEquip() {
 };
 document.getElementById('edit-button-description_space').addEventListener('click', enableEditingDescriptionEquip);
 
+function enableEditingReservation() {
+    document.getElementById('fecha_inicio').disabled = false;
+    document.getElementById('fecha_final').disabled = false;
+    document.getElementById('tipo_reservacion').disabled = false;
+    document.getElementById('descripcion').disabled = false;
+    document.getElementById('id_espacio').disabled = false;
+    document.getElementById('estudiantes').disabled = false;
+
+    document.getElementById('save-button-reservation').style.display = 'inline-block';
+    event.target.style.display = 'none';
+};
+document.getElementById('edit-button-reservation').addEventListener('click', enableEditingReservation);
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-building').addEventListener('click', enableEditingBuilding);
     document.getElementById('edit-button-students').addEventListener('click', enableEditingStudents);
     document.getElementById('edit-button-users').addEventListener('click', enableEditingUsers);
     document.getElementById('edit-button-description').addEventListener('click', enableEditingDescription);
+    document.getElementById('estudiantes').addEventListener('input', eventQueryStudents);
 });

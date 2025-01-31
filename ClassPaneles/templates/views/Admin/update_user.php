@@ -22,25 +22,7 @@ if (mysqli_num_rows($resultado_usuario) == 0) {
 $usuario = mysqli_fetch_assoc($resultado_usuario);
 
 // Procesar formulario de actualización
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre_completo = mysqli_real_escape_string($conexion, $_POST['nombre_completo']);
-    $correo = mysqli_real_escape_string($conexion, $_POST['correo']);
-    $usuario_nombre = mysqli_real_escape_string($conexion, $_POST['usuario']);
-    $rol = mysqli_real_escape_string($conexion, $_POST['rol']);
-
-    $query_update = "UPDATE usuarios SET
-        nombre_completo='$nombre_completo',
-        correo='$correo',
-        usuario='$usuario_nombre',
-        rol='$rol'
-        WHERE id='$id'";
-
-    if (mysqli_query($conexion, $query_update)) {
-        echo "<script>alert('Usuario actualizado con éxito.'); window.location.href='vista_cuentas.php';</script>";
-    } else {
-        echo "<script>alert('Error al actualizar el usuario: " . mysqli_error($conexion) . "');</script>";
-    }
-}
+include '../../php/update_table.php'
 ?>
 
 <!DOCTYPE html>

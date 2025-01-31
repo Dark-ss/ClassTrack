@@ -44,10 +44,7 @@ if (isset($_GET['id'])) {
 
     if ($id != $_SESSION['id']) {
 
-        $query_delete_espacios = "DELETE FROM espacios_academicos WHERE id = '$id'";
-        mysqli_query($conexion, $query_delete_espacios);
-
-        $query_delete = "DELETE FROM espacio_academico WHERE id = '$id'";
+        $query_delete = "DELETE FROM espacios_academicos WHERE id = '$id'";
         mysqli_query($conexion, $query_delete);
         header("Location: table_spaces.php");
         exit();
@@ -103,7 +100,7 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         </div>
-        <form method="GET" action="table_spaces_docente.php" class="search-form">
+        <form method="GET" action="table_spaces.php" class="search-form">
             <input type="text" name="buscar" placeholder="Buscar espacio..." value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
             <button type="submit">Buscar</button>
         </form>

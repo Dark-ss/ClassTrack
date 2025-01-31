@@ -1,35 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login y registro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Krona+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../templates/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!--Aqui se vincula la pagina de iconos de "Font Awesome"-->
+    <title>Unispace</title>
+    <link type="text/css" rel="stylesheet" href="../templates/assets/css/style.css">
+    <link rel="shortcut icon" href="../templates/assets/images/logo1.png">
 </head>
 
 <body>
-    <main>
-
-        <div class="contenedor_todo">
-            <!--Formularios de login y registro-->
-            <div class="contenedor_login-register">
-                <!--Login-->
-                <div class="logo-container">
-                    <img src="../templates/assets/images/logo-classtrack.png" alt="Logo de ClassTrack">
+    <div class="fondo3">
+        <main class="contenedor_formulario">
+            <div class="form_img">
+                <div class="ilustracion1"></div>
+                <div class="formulario">
+                    <div class="title">
+                        <h1>Bienvenido</h1>
+                    </div>
+                    <div class="cont_form">
+                        <form action="php/login_be.php" method="post">
+                            <div class="input_field">
+                                <label for="email">Correo electrónico:</label>
+                                <input autocomplete="off" autofocus type="email" id="email" name="correo"
+                                    placeholder="ejemplo@mail.com" required>
+                            </div>
+                            <div class="input_field">
+                                <label for="password">Contraseña:</label>
+                                <div class="input-container">
+                                    <input type="password" id="password" name="contrasena" placeholder="Contraseña"
+                                        required>
+                                    <i class="fa-solid fa-eye-slash login_eye_closed"></i>
+                                </div>
+                                <div class="link_change_password"><a href="./php/forgot_password.php">¿Olvidaste tu contraseña?</a></div>
+                            </div>
+                            <button type="submit">Iniciar sesión</button>
+                        </form>
+                    </div>
                 </div>
-                <form action="php/login_be.php" method="POST" class="formulario_login">
-                    <h2>Iniciar Sesión</h2>
-                    <input type="text" placeholder="Correo Electronico" name="correo" required>
-                    <input type="password" placeholder="Contraseña" name="contrasena" required>
-                    <button>Entrar</button>
-                    <a href="./php/forgot_password.php">Recuperar contraseña</a>
-                </form>
             </div>
-        </div>
-    </main>
-    <script src="../assets/js/script.js"></script>
+        </main>
+    </div>
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>

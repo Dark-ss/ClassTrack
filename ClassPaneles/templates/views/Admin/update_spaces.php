@@ -233,7 +233,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="hidden" name="equipment_spaces" value="true">
                 <?php
                 $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
-                // Consultar todos los equipamientos
                 $query_equipamientos = "SELECT e.id, e.nombre, e.imagen
                 FROM equipamiento e";
 

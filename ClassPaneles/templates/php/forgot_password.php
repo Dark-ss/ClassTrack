@@ -170,7 +170,7 @@
                 <i class="fas fa-envelope"></i>
                 <input 
                     type="email" 
-                    name="email" 
+                    name="correo" 
                     placeholder="correo@ejemplo.com" 
                     required 
                     autocomplete="email">

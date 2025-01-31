@@ -45,10 +45,10 @@ $totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
                 </div>  
                 <div class="submenu" id="submenu">
                     <a href="vista_buildings.php">Edificios</a>
-                    <a href="vista_students.php">Salones</a>
+                    <a href="table_disponibilidad.php">Disponibilidad</a>
+                    <a href="mis_reservas.php">Mis reservas</a>
                 </div>
             </div>
-
         </div>
 
         <div class="dashboard">

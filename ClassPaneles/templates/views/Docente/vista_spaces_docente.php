@@ -63,18 +63,18 @@ $result = mysqli_query($conexion, $query);
 if ($result && mysqli_num_rows($result) > 0) {
     $edificio = mysqli_fetch_assoc($result);
 }   else {
-    echo "<script>alert('Edificio no encontrado. ID: $building_id'); window.location.href='vista_edificios.php';</script>";
+    echo "<script>alert('Edificio no encontrado. ID: $building_id'); window.location.href='vista_buildings.php';</script>";
     exit;
 }
 
 if (isset($_GET['edificio_id'])) {
     $building_id = intval($_GET['edificio_id']);
     if ($building_id <= 0) {
-        echo "<script>alert('ID de edificio no válido.'); window.location.href='vista_edificios.php';</script>";
+        echo "<script>alert('ID de edificio no válido.'); window.location.href='vista_buildings.php';</script>";
         exit;
     }
 } else {
-    echo "<script>alert('ID de edificio no especificado.'); window.location.href='vista_edificios.php';</script>";
+    echo "<script>alert('ID de edificio no especificado.'); window.location.href='vista_buildings.php';</script>";
     exit;
 }
 //consulta edificio, separación de espacios
@@ -123,7 +123,7 @@ if ($edificio_id > 0) {
                 </div>  
                 <div class="submenu" id="submenu">
                     <a href="vista_buildings.php">Edificios</a>
-                    <a href="vista_students.php">Salones</a>
+                    <a href="table_disponibilidad.php">Disponibilidad</a>
                 </div>
             </div>
         </div>

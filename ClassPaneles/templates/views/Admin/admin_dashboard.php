@@ -18,7 +18,7 @@ $totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1 ">
+    <link rel="stylesheet" href="../../assets/css/style_paneles.css?v=1 ">
     <link rel="shortcut icon" href="../../assets/images/logo1.png">
     <title>Panel Administrador</title>
 </head>

@@ -57,7 +57,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                 </div>  
                 <div class="submenu" id="submenu">
                     <a href="../views/Docente/vista_buildings.php">Edificios</a>
-                    <a href="vista_students.php">Salones</a>
+                    <a href="../views/Docente/table_disponibilidad.php">Disponibilidad</a>
                 </div>
             </div>
         </div>
