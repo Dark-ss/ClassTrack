@@ -150,14 +150,22 @@ include '../../php/update_table.php';
         <main class="main-content-cuenta">
             <h1 class="title-table">Lista de Usuarios</h1>
 
-            <!-- Contenedor para la barra de búsqueda y la tabla -->
-            <div class="table-container">
+            <!-- Contenedor para la barra de búsqueda y el botón -->
+            <div class="search-and-create">
                 <form method="GET" action="vista_cuentas.php" class="search-form">
+                    <ion-icon name="search-outline" class="search-icon"></ion-icon>
                     <input type="text" name="buscar" placeholder="Buscar cuenta..."
                         value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
                     <button type="submit">Buscar</button>
                 </form>
+                <a href="#" class="create-user-button" id="openCreateUserModal">
+                    <ion-icon name="person-add-sharp"></ion-icon>
+                    Crear Usuario
+                </a>
+            </div>
 
+            <!-- Contenedor de la tabla -->
+            <div class="table-container">
                 <table class="user-table">
                     <thead>
                         <tr>
@@ -182,13 +190,17 @@ include '../../php/update_table.php';
                             <td><span class="role"><?php echo htmlspecialchars($fila['rol']); ?></span></td>
                             <td>
                                 <div class="dropdown">
-                                    <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"
-                                        style="font-size: 24px; cursor: pointer;"></ion-icon>
+                                    <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>
                                     <div class="dropdown-content">
+                                        <a href="update_user.php?id=<?php echo $fila['id']; ?>" class="update-button">
+                                            <ion-icon name="create-outline"></ion-icon>
+                                            Actualizar
+                                        </a>
                                         <a href="?id=<?php echo $fila['id']; ?>" class="delete-button"
-                                            onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</a>
-                                        <a href="update_user.php?id=<?php echo $fila['id']; ?>"
-                                            class="update-button">Actualizar</a>
+                                            onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                            Eliminar
+                                        </a>
                                     </div>
                                 </div>
                             </td>
@@ -215,13 +227,63 @@ include '../../php/update_table.php';
                     class="pagination-button">Siguiente</a>
                 <?php endif; ?>
             </div>
+
+            <!-- Modal para crear usuario -->
+            <div id="createUserModal" class="modal">
+                <div class="modal-content">
+                    <div class="title_modal"><h2>Crear Nuevo Usuario</h2></div>
+                    <form action="../../php/registro_usuario_be.php" method="POST" enctype="multipart/form-data"
+                        class="formulario_register">
+
+                        <div class="form-group">
+                            <input autocomplete="off" type="text" placeholder="Nombre Completo" name="nombre_completo" required >
+                        </div>
+
+                        <div class="form-group">
+                            <input autocomplete="off" type="text" placeholder="Correo Electrónico" name="correo" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <input autocomplete="off" type="text" placeholder="Usuario" name="usuario" required>
+                            </div>
+                            <div>
+                                <input type="password" placeholder="Contraseña" name="contrasena" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="selection-rol" for="rol">Selecciona el Rol:</label>
+                            <select name="rol" id="rol" required>
+                                <option value="admin">Administrador</option>
+                                <option value="docente">Docente</option>
+                            </select>
+                        </div>
+
+                        <!-- Foto de perfil -->
+                        <div class="profile-photo">
+                            <div class="photo-circle">
+                                <img src="../../assets/images/photo.png" alt="Foto de perfil" id="profileImage">
+                            </div>
+                            <a href="#" class="photo-upload-link" id="uploadPhotoBtn">Seleccionar foto</a>
+                            <input type="file" id="photoInput" name="imagen" hidden accept="image/*">
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="modal-buttons">
+                            <button type="button" class="cancel-button">Cancelar</button>
+                            <button type="submit" class="submit-button">Crear</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </main>
-
     </div>
-
+    <script src="../../assets/js/script_modal.js"></script>
     <script src="../../assets/js/script.js"></script>
     <script src="../../assets/js/script_menu.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
 
 </body>
 

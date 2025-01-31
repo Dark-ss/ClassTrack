@@ -4,7 +4,7 @@
 body {
     margin: 0;
     font-family: 'Inter', sans-serif; 
-    background-color: #f8f9fa;
+    background-color: #e6edee;
 }
 
 .container {
@@ -79,6 +79,10 @@ body {
     background-color: #10646c; /* Azul oscuro */
     color: #ffffff; /* Blanco */
     font-weight: bold;
+}
+
+.menu ion-icon {
+    font-size: 15px;
 }
 
 
@@ -184,48 +188,143 @@ body {
 
 .main-content-cuenta {
     width: calc(100% - 230px);
-    padding: 20px;
+    padding: 30px;
 }
 
 /* Contenedor general para la barra de búsqueda y la tabla */
 .table-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alinea los elementos al lado izquierdo */
-    gap: 10px; /* Espaciado entre la barra de búsqueda y la tabla */
+    align-items: flex-start;
+    gap: 10px; 
 }
 
-/* Estilos para el formulario de búsqueda */
-.search-form {
+/* Contenedor para la barra de búsqueda y el botón */
+.search-and-create {
     display: flex;
-    gap: 10px;
-    width: 100%; /* Asegura que el formulario ocupe todo el ancho disponible */
+    justify-content: space-between; 
+    align-items: center; 
+    width: 100%;
 }
 
-.search-form input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 250px;
-}
-
-.search-form button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
+/* Estilos para el botón "Crear Usuario" */
+.create-user-button {
+    padding: 12px 16px;
+    background-color: #10646c;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
     transition: background-color 0.3s ease;
 }
 
+.create-user-button:hover {
+    background-color: #1f8f7c;
+}
+
+/* Contenedor para búsqueda y botón de crear */
+.search-and-create {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Contenedor del formulario de búsqueda */
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+/* Estilo del input */
+.search-form input {
+    width: 100%;
+    padding: 12px 16px 12px 45px; /* Espacio a la izquierda para el icono */
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+    font-size: 0.875rem;
+    color: #374151;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif; 
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: #1f8f7c;
+    box-shadow: 0 0 0 3px rgba(31, 143, 124, 0.1);
+}
+
+.search-form input::placeholder {
+    color: #9ca3af;
+}
+
+/* Icono de búsqueda */
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+/* Botón de búsqueda */
+.search-form button {
+    padding: 12px 20px;
+    background-color: #1f8f7c;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif; 
+}
+
 .search-form button:hover {
-    background-color: #0056b3;
+    background-color: #1a7a6a;
+}
+
+/* Botón de crear usuario */
+.create-user-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background-color: #1f8f7c;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.create-user-button ion-icon {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.create-user-button:hover {
+    background-color: #1a7a6a;
 }
 
 .title-table {
-    font-size: 20px;
-    color: #333;
+    font-family: 'Inter', sans-serif; 
+    font-size: 25px;
+    color: #000000;
     margin-bottom: 20px;
 }
 
@@ -253,6 +352,15 @@ body {
     border-bottom: 1px solid #e5e7eb;
 }
 
+/* Aplicar border-radius a las esquinas superiores */
+.user-table thead th:first-child {
+    border-top-left-radius: 15px;
+}
+
+.user-table thead th:last-child {
+    border-top-right-radius: 15px;
+}
+
 /* Table Body */
 .user-table tbody td {
     padding: 16px 24px;
@@ -261,14 +369,22 @@ body {
     border-bottom: 1px solid #e5e7eb;
 }
 
-/* Table Row Hover Effect */
 .user-table tbody tr:hover {
-    background-color: #f9fafb;
+    background-color: #eeeeee;
 }
 
 /* Last Row - Remove Border */
 .user-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+/* Aplicar border-radius a las esquinas inferiores */
+.user-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 15px;
+}
+
+.user-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 15px;
 }
 
 /* User Image */
@@ -351,12 +467,12 @@ body {
 }
 
 .pagination-button:hover {
-    background-color: #007bff;
+    background-color: #1f8f7c;
     color: #fff;
 }
 
 .pagination-button.active {
-    background-color: #007bff;
+    background-color: #1f8f7c;
     color: #fff;
 }
 .actions {
@@ -387,40 +503,218 @@ body {
     position: absolute;
     background-color: #f9f9f9;
     border-radius: 10px;
-    min-width: 120px;
+    min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 100; /* Asegúrate de que el menú aparezca sobre otros elementos */
-    right: 0;
-    top: 100%; /* Abre hacia abajo por defecto */
+    z-index: 100;
+    right: 0;  
+    top: 100%;
     transition: all 0.3s ease-in-out;
-}
-
-/* Ajustar hacia arriba si es necesario */
-.dropdown-content.dropup {
-    bottom: 100%;
-    top: auto;
-}
-
-/* Hover para mostrar el dropdown */
-.dropdown:hover .dropdown-content {
-    display: block;
+    text-align: left;
 }
 
 /* Opciones del dropdown */
 .dropdown-content a {
-    color: black;
+    color: #374151;
     padding: 12px 16px;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    justify-content: flex-start; 
+    gap: 12px;
+    font-size: 0.875rem;
+    white-space: nowrap; 
+}
+
+.dropdown-content a ion-icon {
+    font-size: 18px;
+    min-width: 18px;
+    color: #000000;
+}
+
+.dropdown:hover .dropdown-content {
     display: block;
 }
 
 .dropdown-content a:hover {
-    background-color: #f1f1f1;
+    background-color: #f3f4f6;
 }
 
-/* Ícono de los 3 puntos */
+/* Ícono de los tres puntos */
 .dropdown-toggle {
     vertical-align: middle;
     cursor: pointer;
     font-size: 24px;
+    color: #4e5461;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 32px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    font-family: 'Inter', sans-serif;
+    color: #374151;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.title_modal{
+    margin-bottom: 40px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #10646c;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: start;
+}
+
+.formulario_register {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.form-row > div {
+    flex: 1;
+    min-width: 0; /* Previene que los inputs se desborden */
+}
+
+.formulario_register input,
+.formulario_register select {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Asegura que padding no afecte el ancho total */
+}
+
+.formulario_register input:focus,
+.formulario_register select:focus {
+    outline: none;
+    border-color: #1f8f7c;
+    box-shadow: 0 0 0 3px rgba(31, 143, 124, 0.1);
+}
+
+.selection-rol {
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.profile-photo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.photo-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f5f5f5;
+    border: 2px solid #1f8f7c;
+    flex-shrink: 0; /* Previene que la imagen se encoja */
+}
+
+.photo-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-upload-link {
+    font-size: 14px;
+    color: #1f8f7c;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.photo-upload-link:hover {
+    color: #10646c;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    gap: 12px;
+}
+
+.cancel-button,
+.submit-button {
+    padding: 12px 24px; /* Reduce el padding horizontal */
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    width: auto; /* Elimina el flex: 1 anterior */
+    min-width: 100px; /* Establece un ancho mínimo */
+}
+
+.cancel-button {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.cancel-button:hover {
+    background-color: #d1d5db;
+}
+
+.submit-button {
+    background-color: #1f8f7c;
+    color: white;
+}
+
+.submit-button:hover {
+    background-color: #1a7a6a;
 }
