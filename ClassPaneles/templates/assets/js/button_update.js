@@ -85,8 +85,6 @@ function enableEditingReservation() {
 };
 document.getElementById('edit-button-reservation').addEventListener('click', enableEditingReservation);
 
-
-
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-building').addEventListener('click', enableEditingBuilding);
     document.getElementById('edit-button-students').addEventListener('click', enableEditingStudents);
@@ -94,3 +92,55 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-description').addEventListener('click', enableEditingDescription);
     document.getElementById('estudiantes').addEventListener('input', eventQueryStudents);
 });
+
+// Función para mostrar/ocultar el dropdown
+function toggleExportDropdown(event) {
+    var dropdown = document.getElementById('exportDropdown');
+    
+    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+        dropdown.style.display = 'block';
+        setTimeout(function() {
+            dropdown.style.opacity = 1; 
+        }, 10);
+    } else {
+        dropdown.style.opacity = 0;
+        setTimeout(function() {
+            dropdown.style.display = 'none';
+        }, 300);
+    }
+}
+
+function submitExportForm() {
+    var form = document.getElementById('exportForm');
+    var formData = new FormData(form);
+    
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la exportación');
+        }
+        return response.blob(); // Obtener el archivo como Blob
+    })
+    .then(blob => {
+        var format = formData.get('format');
+        var filename = 'reservas.' + (format === 'excel' ? 'xls' : format);
+        
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Hubo un error al exportar los datos.');
+    });
+}
+
+
+
+

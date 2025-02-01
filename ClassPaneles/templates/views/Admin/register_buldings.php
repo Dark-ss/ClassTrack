@@ -148,7 +148,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
 
-        <div class=" modal" id="modal">
+        <div class="modal" id="modal">
             <div class="modal-content">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="form-group-container">

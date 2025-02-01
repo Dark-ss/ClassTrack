@@ -5,7 +5,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
     exit();
 }
 
-include '../../php/conexion_be.php';
+include 'conexion_be.php';//modificado
 
 // Obtener los datos del usuario (como la imagen)
 $correo = $_SESSION['usuario']; // Usamos el correo de la sesión para obtener los datos del usuario

@@ -116,6 +116,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
         <button type="submit">Buscar</button>
     </form>
 
+    <button id="exportButton" class="dropdown-btn" onclick="toggleExportDropdown(event)">Exportar</button>
+
+    <div id="exportDropdown" class="dropdown-content" style="display: none;">
+        <form id="exportForm" action="../../php/export.php" method="post">
+            <input type="hidden" name="export" value="1">
+            <select name="format" id="format" onchange="submitExportForm()">
+                <option value="excel">Excel</option>
+                <option value="pdf">PDF</option>
+                <option value="png">Imagen (PNG)</option>
+            </select>
+        </form>
+    </div>
+
     <h1 class="title-table">Lista de Reservas</h1>
     <table>
         <thead>
@@ -244,6 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
             });
         }
     }
+</script>
 </script>
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>

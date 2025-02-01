@@ -179,63 +179,6 @@ function openModal() {
                 document.getElementById("modal").style.display = "none";
             }
 };
-//update reserva
-function openUpdateForm(id) {
-    // Realiza una solicitud al servidor para obtener los datos de la reserva
-    fetch(`obtener_reserva.php?id=${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Llena los campos del formulario con los datos de la reserva
-                document.getElementById('reservation-id').value = data.reservation.id;
-                document.getElementById('reservation-name').value = data.reservation.name;
-                document.getElementById('reservation-date').value = data.reservation.date;
-                document.getElementById('reservation-time').value = data.reservation.time;
-
-                // Muestra el formulario de actualización
-                document.getElementById('update-form-modal').style.display = 'block';
-            } else {
-                alert('No se pudieron obtener los datos de la reserva.');
-            }
-        })
-        .catch(error => {
-            console.error('Error al obtener la reserva:', error);
-            alert('Ocurrió un error al intentar cargar los datos.');
-        });
-}
-
-// Función para enviar la actualización al servidor
-function updateReservation() {
-    const id = document.getElementById('reservation-id').value;
-    const name = document.getElementById('reservation-name').value;
-    const date = document.getElementById('reservation-date').value;
-    const time = document.getElementById('reservation-time').value;
-
-    // Realiza una solicitud para actualizar los datos
-    fetch('actualizar_reserva.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, name, date, time }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Reserva actualizada exitosamente');
-                // Oculta el formulario de actualización
-                document.getElementById('update-form-modal').style.display = 'none';
-
-                // Aquí puedes actualizar la tabla sin recargar la página.
-                location.reload();
-            } else {
-                alert('Error al actualizar la reserva: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error al actualizar la reserva:', error);
-            alert('Ocurrió un error al intentar actualizar la reserva.');
-        });
-}
-
 // Cerrar el modal cuando se haga clic fuera de él
 window.onclick = function(event) {
     if (event.target === document.getElementById('update-modal')) {

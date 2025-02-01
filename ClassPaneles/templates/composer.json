@@ -3,7 +3,8 @@
     "description": "Un proyecto PHP",
     "version": "1.0.0",
     "require": {
-        "phpmailer/phpmailer": "^6.0"
+        "phpmailer/phpmailer": "^6.0",
+        "tecnickcom/tcpdf": "^6.8"
     },
     "config": {
         "cafile": "C:/xampp/apache/bin/cacert-2024-11-26.pem",

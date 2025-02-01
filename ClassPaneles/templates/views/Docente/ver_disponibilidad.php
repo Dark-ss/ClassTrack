@@ -10,7 +10,6 @@ if (!$id_espacio) {
     exit;
 }
 
-// Consultar las reservas para el espacio seleccionado
 $query = "
     SELECT fecha_inicio, fecha_final, tipo_reservacion, descripcion 
     FROM reservaciones  
@@ -81,7 +80,6 @@ while ($fecha_iteracion <= strtotime($ultimo_dia_del_ano)) {
     $disponibles = [];
 
     foreach ($reservas_dia as $reserva) {
-        // Verificar si hay un bloque libre antes de la reserva actual
         if (strtotime($hora_actual) < strtotime($reserva['inicio'])) {
             $disponibles[] = [
                 'inicio' => $hora_actual,
@@ -105,14 +103,10 @@ while ($fecha_iteracion <= strtotime($ultimo_dia_del_ano)) {
         'fecha' => $fecha_dia,
         'bloques_libres' => $disponibles
     ];
-
-    // Incrementar al siguiente día
     $fecha_iteracion = strtotime('+1 day', $fecha_iteracion);
 }
 
 echo "Huso horario configurado: " . date_default_timezone_get() . "<br>";
-
-// Muestra la hora actual según el huso horario configurado
 echo "Fecha actual: " . date('Y-m-d H:i:s');
 
 ?>
@@ -129,7 +123,7 @@ echo "Fecha actual: " . date('Y-m-d H:i:s');
 </head>
 <body>
     <main>
-        <h1>Disponibilidad del Espaci <?php echo htmlspecialchars($id_espacio); ?></h1>
+        <h1>Disponibilidad del Espacio <?php echo htmlspecialchars($id_espacio); ?></h1>
 
         <div id="calendar"></div>
 
