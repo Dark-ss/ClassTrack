@@ -344,12 +344,13 @@ body {
 }
 
 /* Table Header */
+/* Estilos para el encabezado de la tabla */
 .user-table thead th {
     background-color: #f9fafb;
     color: #8e9da5;
     font-weight: 500;
     font-size: 0.875rem;
-    padding: 12px 24px;
+    padding: 8px 16px; /* Ajusta el padding para reducir la altura */
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
 }
@@ -365,7 +366,7 @@ body {
 
 /* Table Body */
 .user-table tbody td {
-    padding: 16px 24px;
+    padding: 9px 24px;
     color: #000000;
     font-size: 0.875rem;
     border-bottom: 1px solid #e5e7eb;
@@ -392,7 +393,7 @@ body {
 /* User Image */
 .user-image {
     width: 40px;
-    height: 40px;
+    height: 40px; 
     border-radius: 50%;
     object-fit: cover;
 }
@@ -404,8 +405,16 @@ body {
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
-    background-color: #b6e7e9;
-    color: #374151;
+}
+
+.user-table .admin-role {
+    background-color: #bcffff;  /* Fondo azul claro */
+    color: #13749b;  /* Texto azul oscuro */
+}
+
+.user-table .docente-role {
+    background-color: #bfffc5;  /* Fondo verde claro */
+    color: #13570d;  /* Texto verde oscuro */
 }
 
 /* Action Buttons Container */
@@ -414,6 +423,14 @@ body {
     gap: 8px;
     align-items: center;
 }
+
+.user-table th:nth-child(3),
+    .user-table td:nth-child(3) {
+        width: 250px; /* Ajusta el ancho según tus necesidades */
+        min-width: 100px; /* Establece un ancho mínimo */
+        max-width: 250px; /* Establece un ancho máximo si es necesario */
+        word-wrap: break-word; /* Permite que el texto se divida en varias líneas si es muy largo */
+    }
 
 /* Action Button Styles */
 .delete-button,
