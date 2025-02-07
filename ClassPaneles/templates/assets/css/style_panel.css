@@ -405,8 +405,16 @@ body {
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
-    background-color: #b6e7e9;
-    color: #374151;
+}
+
+.user-table .admin-role {
+    background-color: #bcffff;  /* Fondo azul claro */
+    color: #13749b;  /* Texto azul oscuro */
+}
+
+.user-table .docente-role {
+    background-color: #bfffc5;  /* Fondo verde claro */
+    color: #13570d;  /* Texto verde oscuro */
 }
 
 /* Action Buttons Container */
