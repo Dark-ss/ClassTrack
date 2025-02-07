@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
 include '../../php/conexion_be.php';
 
 // Paginación
-$registros_por_pagina = 5;
+$registros_por_pagina = 6;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
@@ -82,10 +82,6 @@ include '../../php/update_table.php';
                         <li><a href="admin_dashboard.php"
                                 class="<?php echo $currentFile == 'admin_dashboard.php' ? 'active' : ''; ?>">
                                 <ion-icon name="home-outline"></ion-icon> Inicio
-                            </a></li>
-                        <li><a href="create_account.php"
-                                class="<?php echo $currentFile == 'create_account.php' ? 'active' : ''; ?>">
-                                <ion-icon name="person-add-outline"></ion-icon> Crear Cuenta
                             </a></li>
                         <li><a href="vista_cuentas.php"
                                 class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
@@ -182,12 +178,16 @@ include '../../php/update_table.php';
                         <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($fila['id']); ?></td>
-                            <td><img src="<?php echo $fila['imagen'] ? "../../uploads/" . $fila['imagen'] : "../../uploads/usuario.png"; ?>"
-                                    alt="Imagen de Usuario" class="user-image"></td>
+                            <td><img src="<?php echo $fila['imagen'] ? "../../uploads/" . $fila['imagen'] : "../../assets/images/photo.jpg"; ?>"
+                                    class="user-image"></td>
                             <td><?php echo htmlspecialchars($fila['nombre_completo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['correo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['usuario']); ?></td>
-                            <td><span class="role"><?php echo htmlspecialchars($fila['rol']); ?></span></td>
+                            <td>
+                                <span class="role <?php echo strtolower($fila['rol']); ?>-role">
+                                    <?php echo htmlspecialchars($fila['rol']); ?>
+                                </span>
+                            </td>
                             <td>
                                 <div class="dropdown">
                                     <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>
@@ -231,16 +231,20 @@ include '../../php/update_table.php';
             <!-- Modal para crear usuario -->
             <div id="createUserModal" class="modal">
                 <div class="modal-content">
-                    <div class="title_modal"><h2>Crear Nuevo Usuario</h2></div>
+                    <div class="title_modal">
+                        <h2>Crear Nuevo Usuario</h2>
+                    </div>
                     <form action="../../php/registro_usuario_be.php" method="POST" enctype="multipart/form-data"
                         class="formulario_register">
 
                         <div class="form-group">
-                            <input autocomplete="off" type="text" placeholder="Nombre Completo" name="nombre_completo" required >
+                            <input autocomplete="off" type="text" placeholder="Nombre Completo" name="nombre_completo"
+                                required>
                         </div>
 
                         <div class="form-group">
-                            <input autocomplete="off" type="text" placeholder="Correo Electrónico" name="correo" required>
+                            <input autocomplete="off" type="text" placeholder="Correo Electrónico" name="correo"
+                                required>
                         </div>
 
                         <div class="form-row">
@@ -263,7 +267,7 @@ include '../../php/update_table.php';
                         <!-- Foto de perfil -->
                         <div class="profile-photo">
                             <div class="photo-circle">
-                                <img src="../../assets/images/photo.png" alt="Foto de perfil" id="profileImage">
+                                <img src="../../assets/images/photo.jpg" alt="Foto de perfil" id="profileImage">
                             </div>
                             <a href="#" class="photo-upload-link" id="uploadPhotoBtn">Seleccionar foto</a>
                             <input type="file" id="photoInput" name="imagen" hidden accept="image/*">
