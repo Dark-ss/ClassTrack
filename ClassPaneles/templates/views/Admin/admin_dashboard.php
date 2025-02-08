@@ -18,7 +18,7 @@ $totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../assets/css/style_paneles.css?v=1 ">
+    <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1 ">
     <link rel="shortcut icon" href="../../assets/images/logo1.png">
     <title>Panel Administrador</title>
 </head>
@@ -41,10 +41,6 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <li><a href="admin_dashboard.php"
                                 class="<?php echo $currentFile == 'admin_dashboard.php' ? 'active' : ''; ?>">
                                 <ion-icon name="home-outline"></ion-icon> Inicio
-                            </a></li>
-                        <li><a href="create_account.php"
-                                class="<?php echo $currentFile == 'create_account.php' ? 'active' : ''; ?>">
-                                <ion-icon name="person-add-outline"></ion-icon> Crear Cuenta
                             </a></li>
                         <li><a href="vista_cuentas.php"
                                 class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
