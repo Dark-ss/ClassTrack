@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 
 <body>
     <main>
-        <div class="profile-container">
+    <div class="profile-container">
             <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
             <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
             <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
@@ -79,17 +79,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                 <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
             </a>
             <a href="../../php/config_docente.php" class="config">
-                <img src="../../assets/images/config.png" alt="Configuración" class="icons-image">
+                <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
             </a>
             <a href="docente_dashboard.php" class="home-admin">
-                <img src="../../assets/images/inicio.png" alt="Inicio" class="icons-image">
+                <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
+            <div class="menu-container" id="menu-container">
+                <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
+                </div>
+                <div class="submenu" id="submenu">
+                    <a href="vista_buildings.php">Edificios</a>
+                    <a href="table_disponibilidad.php">Disponibilidad</a>
+                    <a href="mis_reservas.php">Mis reservas</a>
+                </div>
+            </div>
         </div>
 
         <form method="GET" action="mis_reservas.php" class="search-form">
-            <input type="text" name="buscar" placeholder="Buscar reserva..." value="<?php echo htmlspecialchars($search); ?>">
+            <input type="text" name="buscar" placeholder="Buscar reserva..." value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
             <button type="submit">Buscar</button>
-        </form>
+        </form><!--Corregir los estilos de paginación para poder realizar la busqueda-->
 
         <h1 class="title-table">Lista de Reservas</h1>
         <table>
@@ -168,25 +177,9 @@ function deleteReservation(id) {
     }
 }
 
-// Cerrar el modal cuando se haga clic fuera
-function openModal() {
-            document.getElementById("modal").style.display = "block";
-        }
-
-        // Cerrar el modal cuando se haga clic fuera del modal
-        window.onclick = function(event) {
-            if (event.target === document.getElementById("modal")) {
-                document.getElementById("modal").style.display = "none";
-            }
-};
-// Cerrar el modal cuando se haga clic fuera de él
-window.onclick = function(event) {
-    if (event.target === document.getElementById('update-modal')) {
-        document.getElementById('update-modal').style.display = 'none';
-    }
-};
-
 </script>
+<script src="../../assets/js/button_update.js"></script>
+<script src="../../assets/js/script_menu.js"></script>
 </body>
 
 </html>

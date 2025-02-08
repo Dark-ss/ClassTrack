@@ -120,7 +120,7 @@ if (isset($_GET['id'])) {
                 <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($fila['id']); ?></td>
-                        <td><img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../uploads/usuario.png'; ?>" alt="Imagen de Estudiante" width="50"></td>
+                        <td><img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../uploads/usuario.png'; ?>" alt="Imagen de Edificio" width="50"></td>
                         <td><?php echo htmlspecialchars($fila['nombre']); ?></td>
                         <td><?php echo htmlspecialchars($fila['codigo']); ?></td>
                         <td><?php echo htmlspecialchars($fila['pisos']); ?></td>

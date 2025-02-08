@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $nombre_imagen = $_FILES['imagen']['name'];
         $ruta_temp = $_FILES['imagen']['tmp_name'];
-        $directorio_destino = "uploads/estudiantes/";
+        $directorio_destino = "../../uploads/estudiantes/";
 
         // Asegurarse de que el directorio exista
         if (!file_exists($directorio_destino)) {

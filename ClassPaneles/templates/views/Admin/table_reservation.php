@@ -140,23 +140,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                 <th>Tipo Reservación</th>
                 <th>Descripcion</th>
                 <th>Espacio</th>
+                <th>Edificio</th>
                 <th>Acción</th>
             </tr>
         </thead>
         <tbody>
         <?php
-        $query_pendientes = "SELECT reservaciones.*, usuarios.nombre_completo, espacios_academicos.codigo 
-            FROM reservaciones 
-            LEFT JOIN usuarios ON reservaciones.id_usuario = usuarios.id 
-            LEFT JOIN espacios_academicos ON reservaciones.id_espacio = espacios_academicos.id 
-            WHERE reservaciones.estado = 'pendiente'";
-
+        $query_pendientes = "SELECT r.*, us.nombre_completo, ea.codigo, e.nombre AS nombre_edificio
+        FROM reservaciones r
+        LEFT JOIN usuarios us ON r.id_usuario = us.id 
+        LEFT JOIN espacios_academicos ea ON r.id_espacio = ea.id 
+        LEFT JOIN edificios e ON ea.edificio_id = e.id
+        WHERE r.estado = 'pendiente'";
+        
         $search = isset($_GET['buscar']) ? $_GET['buscar'] : '';
-        $query_pendientes .= " AND (reservaciones.id LIKE '%$search%' 
-            OR usuarios.nombre_completo LIKE '%$search%' 
-            OR reservaciones.fecha_inicio LIKE '%$search%' 
-            OR reservaciones.fecha_final LIKE '%$search%' 
-            OR reservaciones.tipo_reservacion LIKE '%$search%') 
+        $query_pendientes .= " AND (r.id LIKE '%$search%' 
+            OR us.nombre_completo LIKE '%$search%' 
+            OR r.fecha_inicio LIKE '%$search%' 
+            OR r.fecha_final LIKE '%$search%' 
+            OR r.tipo_reservacion LIKE '%$search%')
             LIMIT $offset, $registros_por_pagina";
 
         $result_pendientes = mysqli_query($conexion, $query_pendientes);
@@ -195,6 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                     <td>{$row['tipo_reservacion']}</td>
                     <td>{$row['descripcion']}</td>
                     <td>{$row['codigo']}</td>
+                    <td>{$row['nombre_edificio']}</td>
                     <td>
                         <form method='POST' action='approve_reservation.php' class='btn-container' style='display:inline;'>
                             <input type='hidden' name='id' value='{$row['id']}'>

@@ -7,7 +7,7 @@
         "tecnickcom/tcpdf": "^6.8"
     },
     "config": {
-        "cafile": "C:/xampp/apache/bin/cacert-2024-11-26.pem",
+        "cafile": "C:/xampp/php/extras/ssl",
         "secure-http": true
     }
 }

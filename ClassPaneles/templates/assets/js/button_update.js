@@ -122,7 +122,7 @@ function submitExportForm() {
         if (!response.ok) {
             throw new Error('Error en la exportación');
         }
-        return response.blob(); // Obtener el archivo como Blob
+        return response.blob();
     })
     .then(blob => {
         var format = formData.get('format');
@@ -138,9 +138,5 @@ function submitExportForm() {
     .catch(error => {
         console.error('Error:', error);
         alert('Hubo un error al exportar los datos.');
-    });
+});
 }
-
-
-
-

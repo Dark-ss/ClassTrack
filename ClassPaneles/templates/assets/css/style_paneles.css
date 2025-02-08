@@ -466,19 +466,19 @@ table img {
     border: none;
     cursor: pointer;
     position: absolute;
-    bottom: 68%;
-    left: 87%;
+    bottom: 67.9%;
+    left: 23%;
 }
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: white;
+    background-color: #4CAF50;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     position: absolute;
     bottom: 62%;
-    left: 87%;
+    left: 23%;
 }
 .dropdown-content form {
     padding: 10px;

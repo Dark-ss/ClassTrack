@@ -32,7 +32,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
 ?>
         <aside class="sidebar">
             <div class="logo">
-                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="43" height="auto">
             </div>
             <nav class="menu">
                 <div class="menu-group">
@@ -63,8 +63,8 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                 <div class="menu-group">
                     <p class="menu-title">Gestión de Espacios</p>
                     <ul>
-                        <li><a href="register_buildings.php"
-                                class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
+                        <li><a href="register_buldings.php"
+                                class="<?php echo $currentFile == 'register_buldings.php' ? 'active' : ''; ?>">
                                 <ion-icon name="business-outline"></ion-icon> Añadir Edificios
                             </a></li>
                         <li><a href="table_build.php"
@@ -75,8 +75,8 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                 class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
                                 <ion-icon name="construct-outline"></ion-icon> Equipamientos
                             </a></li>
-                        <li><a href="reservar_espacio.php"
-                                class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
+                        <li><a href="table_reservation.php"
+                                class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
                                 <ion-icon name="calendar-outline"></ion-icon> Reservar Espacio
                             </a></li>
                     </ul>
