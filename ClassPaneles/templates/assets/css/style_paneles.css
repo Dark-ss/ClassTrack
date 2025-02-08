@@ -419,7 +419,6 @@ table img {
     border-color: #40e066;
     pointer-events: none;
 }
-
 /*Dashboard Admin*/
 
 .dashboard {
@@ -456,37 +455,5 @@ table img {
     margin: 5px 0 0;
     font-size: 1.2em;
     color: #555;
-}
-
-/*boton export*/
-.dropdown-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    position: absolute;
-    bottom: 67.9%;
-    left: 23%;
-}
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #4CAF50;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    position: absolute;
-    bottom: 62%;
-    left: 23%;
-}
-.dropdown-content form {
-    padding: 10px;
-    border: 1px solid #ddd;
-}
-
-.dropdown-btn:hover {
-    background-color: #3e8e41;
-    transition: opacity 0.3s ease, visibility 0s 0s;
 }
 

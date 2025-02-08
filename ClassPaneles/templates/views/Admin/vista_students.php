@@ -80,10 +80,6 @@ if (isset($_GET['id'])) {
                                 class="<?php echo $currentFile == 'admin_dashboard.php' ? 'active' : ''; ?>">
                                 <ion-icon name="home-outline"></ion-icon> Inicio
                             </a></li>
-                        <li><a href="create_account.php"
-                                class="<?php echo $currentFile == 'create_account.php' ? 'active' : ''; ?>">
-                                <ion-icon name="person-add-outline"></ion-icon> Crear Cuenta
-                            </a></li>
                         <li><a href="vista_cuentas.php"
                                 class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
                                 <ion-icon name="people-outline"></ion-icon> Cuentas
