@@ -1,6 +1,7 @@
 <?php
 require_once '../../php/conexion_be.php';
 include '../../php/admin_session.php';
+
 // Verificar si se recibió un ID válido
 if (!isset($_GET['id'])) {
     echo "<script>alert('No se especificó un usuario válido.'); window.location.href='vista_cuentas.php';</script>";
@@ -19,6 +20,7 @@ if (mysqli_num_rows($resultado_estudiante) == 0) {
 }
 
 $usuario = mysqli_fetch_assoc($resultado_estudiante);
+$imagen_actual = $usuario['imagen']; // Guardar la imagen actual
 
 // Procesar formulario de actualización
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -26,16 +28,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo = mysqli_real_escape_string($conexion, $_POST['correo']);
     $usuario_id = mysqli_real_escape_string($conexion, $_POST['usuario']);
 
+    $imagen_nueva = null;
+
+    // Verificar si se subió una imagen
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $nombre_imagen = $_FILES['imagen']['name'];
+        $ruta_temp = $_FILES['imagen']['tmp_name'];
+        $directorio_destino = "../../uploads/estudiantes/";
+
+        // Asegurar que el directorio exista
+        if (!file_exists($directorio_destino)) {
+            if (!mkdir($directorio_destino, 0777, true)) {
+                die("<script>alert('Error: No se pudo crear el directorio de destino.');</script>");
+            }
+        }
+
+        $ruta_imagen_nueva = $directorio_destino . uniqid() . "_" . basename($nombre_imagen);
+
+        // Mover el archivo y verificar si se guardó correctamente
+        if (move_uploaded_file($ruta_temp, $ruta_imagen_nueva)) {
+            // Verificar si el archivo realmente se movió
+            if (file_exists($ruta_imagen_nueva)) {
+                echo "<script>console.log('Imagen subida correctamente: $ruta_imagen_nueva');</script>";
+            } else {
+                die("<script>alert('Error: La imagen no se guardó en la carpeta de destino.');</script>");
+            }
+
+            // Eliminar la imagen anterior si existe
+            if (!empty($imagen_actual) && file_exists($imagen_actual)) {
+                unlink($imagen_actual);
+            }
+            $imagen_nueva = $ruta_imagen_nueva;
+        } else {
+            die("<script>alert('Error al subir la nueva imagen.');</script>");
+        }
+    } else {
+        echo "<script>console.log('No se subió una nueva imagen. Se mantiene la anterior.');</script>";
+    }
+
+    // Construcción de la consulta SQL
     $query_update = "UPDATE estudiantes SET
         nombre_completo='$nombre_completo',
         correo='$correo',
-        identificacion='$usuario_id'
-        WHERE id='$id'";
+        identificacion='$usuario_id'";
+
+    // Solo actualizar la imagen si se subió una nueva
+    if ($imagen_nueva) {
+        $query_update .= ", imagen='$imagen_nueva'";
+    }
+
+    $query_update .= " WHERE id='$id'";
 
     if (mysqli_query($conexion, $query_update)) {
         echo "<script>alert('Usuario actualizado con éxito.'); window.location.href='vista_students.php';</script>";
     } else {
-        echo "<script>alert('Error al actualizar el usuario: " . mysqli_error($conexion) . "');</script>";
+        die("<script>alert('Error al actualizar el usuario: " . mysqli_error($conexion) . "');</script>");
     }
 }
 ?>
@@ -88,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="container-form_register_config">
             <h2>Información de cuenta</h2>
-            <form id="update-form" method="POST">
+            <form id="update-form" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="correo_original" value="<?php echo  htmlspecialchars($usuario['correo']); ?>">
                 <label for="nombre_completo">Nombre Completo:</label>
                 <input type="text" id="nombre_completo" name="nombre_completo" value="<?php echo htmlspecialchars($usuario['nombre_completo']); ?>" disabled>

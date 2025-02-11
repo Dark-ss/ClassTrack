@@ -390,7 +390,11 @@ table img {
     display: flex;
     gap: 5px;
     justify-content: center;
-    margin-top: 105px;
+    margin-top: 7.5%;
+    position: sticky;
+    bottom: 0;
+    padding: 10px 0;
+    z-index: 10;
 }
 
 .pagination a {
@@ -415,7 +419,6 @@ table img {
     border-color: #40e066;
     pointer-events: none;
 }
-
 /*Dashboard Admin*/
 
 .dashboard {
@@ -453,3 +456,4 @@ table img {
     font-size: 1.2em;
     color: #555;
 }
+

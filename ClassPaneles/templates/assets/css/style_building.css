@@ -87,6 +87,7 @@ body{
 /* Contenido del modal */
 .modal-content {
     background: #40e066;
+    border: #1f6b31;
     padding: 30px;
     padding-right: 0px;
     border-radius: 10px;
@@ -439,7 +440,7 @@ body{
 }
 .modal-content { 
     background-color: #fff; 
-    margin: 10% auto; 
+    margin: 4% auto; 
     padding: 20px; 
     border-radius: 5px; 
     width: 80%; 

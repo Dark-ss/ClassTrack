@@ -85,8 +85,6 @@ function enableEditingReservation() {
 };
 document.getElementById('edit-button-reservation').addEventListener('click', enableEditingReservation);
 
-
-
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-building').addEventListener('click', enableEditingBuilding);
     document.getElementById('edit-button-students').addEventListener('click', enableEditingStudents);
@@ -94,3 +92,71 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-description').addEventListener('click', enableEditingDescription);
     document.getElementById('estudiantes').addEventListener('input', eventQueryStudents);
 });
+
+// Función para mostrar/ocultar el dropdown
+function toggleExportDropdown(event) {
+    var dropdown = document.getElementById('exportDropdown');
+
+    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+        dropdown.style.display = 'block';
+        setTimeout(() => {
+            dropdown.style.opacity = 1;
+            dropdown.style.transform = 'translateY(0)';
+        }, 10);
+    } else {
+        dropdown.style.opacity = 0;
+        dropdown.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+            dropdown.style.display = 'none';
+        }, 300);
+    }
+}
+
+function submitExportForm(format) {
+    var form = document.getElementById('exportForm');
+    var formData = new FormData(form);
+    formData.set('format', format);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la exportación');
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        var filename = 'reservas.' + (format === 'excel' ? 'xls' : format);
+        
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Hubo un error al exportar los datos.');
+    });
+}
+
+/* Cierra el menú si se hace clic fuera */
+window.onclick = function(event) {
+    if (!event.target.matches('.dropdown-btn')) {
+        let dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+            let openDropdown = dropdowns[i];
+            if (openDropdown.style.display === 'block') {
+                openDropdown.style.opacity = 0;
+                openDropdown.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    openDropdown.style.display = 'none';
+                }, 300);
+            }
+        }
+    }
+};
+

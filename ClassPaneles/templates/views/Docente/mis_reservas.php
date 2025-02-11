@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 
 <body>
     <main>
-        <div class="profile-container">
+    <div class="profile-container">
             <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
             <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
             <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
@@ -79,17 +79,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                 <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
             </a>
             <a href="../../php/config_docente.php" class="config">
-                <img src="../../assets/images/config.png" alt="Configuración" class="icons-image">
+                <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
             </a>
             <a href="docente_dashboard.php" class="home-admin">
-                <img src="../../assets/images/inicio.png" alt="Inicio" class="icons-image">
+                <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
+            <div class="menu-container" id="menu-container">
+                <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
+                </div>
+                <div class="submenu" id="submenu">
+                    <a href="vista_buildings.php">Edificios</a>
+                    <a href="table_disponibilidad.php">Disponibilidad</a>
+                    <a href="mis_reservas.php">Mis reservas</a>
+                </div>
+            </div>
         </div>
 
         <form method="GET" action="mis_reservas.php" class="search-form">
-            <input type="text" name="buscar" placeholder="Buscar reserva..." value="<?php echo htmlspecialchars($search); ?>">
+            <input type="text" name="buscar" placeholder="Buscar reserva..." value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
             <button type="submit">Buscar</button>
-        </form>
+        </form><!--Corregir los estilos de paginación para poder realizar la busqueda-->
 
         <h1 class="title-table">Lista de Reservas</h1>
         <table>
@@ -168,82 +177,9 @@ function deleteReservation(id) {
     }
 }
 
-// Cerrar el modal cuando se haga clic fuera
-function openModal() {
-            document.getElementById("modal").style.display = "block";
-        }
-
-        // Cerrar el modal cuando se haga clic fuera del modal
-        window.onclick = function(event) {
-            if (event.target === document.getElementById("modal")) {
-                document.getElementById("modal").style.display = "none";
-            }
-};
-//update reserva
-function openUpdateForm(id) {
-    // Realiza una solicitud al servidor para obtener los datos de la reserva
-    fetch(`obtener_reserva.php?id=${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Llena los campos del formulario con los datos de la reserva
-                document.getElementById('reservation-id').value = data.reservation.id;
-                document.getElementById('reservation-name').value = data.reservation.name;
-                document.getElementById('reservation-date').value = data.reservation.date;
-                document.getElementById('reservation-time').value = data.reservation.time;
-
-                // Muestra el formulario de actualización
-                document.getElementById('update-form-modal').style.display = 'block';
-            } else {
-                alert('No se pudieron obtener los datos de la reserva.');
-            }
-        })
-        .catch(error => {
-            console.error('Error al obtener la reserva:', error);
-            alert('Ocurrió un error al intentar cargar los datos.');
-        });
-}
-
-// Función para enviar la actualización al servidor
-function updateReservation() {
-    const id = document.getElementById('reservation-id').value;
-    const name = document.getElementById('reservation-name').value;
-    const date = document.getElementById('reservation-date').value;
-    const time = document.getElementById('reservation-time').value;
-
-    // Realiza una solicitud para actualizar los datos
-    fetch('actualizar_reserva.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, name, date, time }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Reserva actualizada exitosamente');
-                // Oculta el formulario de actualización
-                document.getElementById('update-form-modal').style.display = 'none';
-
-                // Aquí puedes actualizar la tabla sin recargar la página.
-                location.reload();
-            } else {
-                alert('Error al actualizar la reserva: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error al actualizar la reserva:', error);
-            alert('Ocurrió un error al intentar actualizar la reserva.');
-        });
-}
-
-// Cerrar el modal cuando se haga clic fuera de él
-window.onclick = function(event) {
-    if (event.target === document.getElementById('update-modal')) {
-        document.getElementById('update-modal').style.display = 'none';
-    }
-};
-
 </script>
+<script src="../../assets/js/button_update.js"></script>
+<script src="../../assets/js/script_menu.js"></script>
 </body>
 
 </html>

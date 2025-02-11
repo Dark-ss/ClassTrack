@@ -76,7 +76,7 @@ if (isset($_POST['reservation_update'])) {
         }
     }
 
-    echo "<script>alert('Reserva actualizada con éxito.'); window.location.href='mis_reservas.php';</script>";
+    echo "<script>alert('Reserva actualizada con éxito'); window.location.href='mis_reservas.php';</script>";
     exit;
 }
 ?>
@@ -91,6 +91,30 @@ if (isset($_POST['reservation_update'])) {
     <link rel="stylesheet" href="../../assets/css/style_teacher.css?v=1.0">
 </head>
 <body>
+    <div class="profile-container">
+        <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
+        <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
+        <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
+        <a href="../../php/cerrar_sesion.php" class="logout">
+            <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
+        </a>
+        <a href="../../php/config_docente.php" class="config">
+            <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
+        </a>
+        <a href="docente_dashboard.php" class="home-admin">
+            <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
+        </a>
+
+        <div class="menu-container" id="menu-container">
+            <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
+            </div>  
+            <div class="submenu" id="submenu">
+                <a href="vista_buildings.php">Edificios</a>
+                <a href="table_disponibilidad.php">Disponibilidad</a>
+                <a href="mis_reservas.php">Mis reservas</a>
+            </div>
+        </div>
+        </div>
     <div class="modal-content">
         <h2>Editar Reserva</h1>
         <form action="update_reservation.php" method="POST">
@@ -108,7 +132,11 @@ if (isset($_POST['reservation_update'])) {
             </div>
             <div class="form-group"> 
                 <label for="tipo_reservacion">Tipo de Reservación:</label>
-                <input type="text" id="tipo_reservacion" name="tipo_reservacion" value="<?php echo $reserva['tipo_reservacion']; ?>" required disabled class="editable">
+                <select id="tipo_reservacion" name="tipo_reservacion" required disabled class="editable">
+                    <option value="Clase" <?php echo ($reserva['tipo_reservacion'] === 'Clase') ? 'selected' : ''; ?>>Clase</option>
+                    <option value="Reunion" <?php echo ($reserva['tipo_reservacion'] === 'Reunion') ? 'selected' : ''; ?>>Reunion</option>
+                    <option value="Evento" <?php echo ($reserva['tipo_reservacion'] === 'Evento') ? 'selected' : ''; ?>>Evento</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="descripcion">Descripción:</label>
