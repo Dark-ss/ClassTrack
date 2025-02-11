@@ -18,7 +18,7 @@ $totalEstudiantes = mysqli_fetch_assoc($resultEstudiantes)['total_estudiantes'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../assets/css/style_paneles.css?v=1 ">
+    <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1 ">
     <link rel="shortcut icon" href="../../assets/images/logo1.png">
     <title>Panel Administrador</title>
 </head>
@@ -42,28 +42,20 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                 class="<?php echo $currentFile == 'admin_dashboard.php' ? 'active' : ''; ?>">
                                 <ion-icon name="home-outline"></ion-icon> Inicio
                             </a></li>
-                        <li><a href="create_account.php"
-                                class="<?php echo $currentFile == 'create_account.php' ? 'active' : ''; ?>">
-                                <ion-icon name="person-add-outline"></ion-icon> Crear Cuenta
-                            </a></li>
                         <li><a href="vista_cuentas.php"
                                 class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
                                 <ion-icon name="people-outline"></ion-icon> Cuentas
                             </a></li>
-                        <li><a href="register_students.php"
-                                class="<?php echo $currentFile == 'register_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="school-outline"></ion-icon> Añadir Estudiantes
-                            </a></li>
                         <li><a href="vista_students.php"
                                 class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="reader-outline"></ion-icon> Estudiantes
+                                <ion-icon name="school-outline"></ion-icon> Estudiantes
                             </a></li>
                     </ul>
                 </div>
                 <div class="menu-group">
                     <p class="menu-title">Gestión de Espacios</p>
                     <ul>
-                        <li><a href="register_buildings.php"
+                        <li><a href="./register_buldings.php"
                                 class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
                                 <ion-icon name="business-outline"></ion-icon> Añadir Edificios
                             </a></li>
