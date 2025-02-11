@@ -62,6 +62,7 @@ include '../../php/update_table.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Usuarios</title>
     <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1 ">
+    <link rel="shortcut icon" href="../../assets/images/logo1.png">
 </head>
 
 <body>
@@ -87,20 +88,16 @@ include '../../php/update_table.php';
                                 class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
                                 <ion-icon name="people-outline"></ion-icon> Cuentas
                             </a></li>
-                        <li><a href="register_students.php"
-                                class="<?php echo $currentFile == 'register_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="school-outline"></ion-icon> Añadir Estudiantes
-                            </a></li>
                         <li><a href="vista_students.php"
                                 class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="reader-outline"></ion-icon> Estudiantes
+                                <ion-icon name="school-outline"></ion-icon> Estudiantes
                             </a></li>
                     </ul>
                 </div>
                 <div class="menu-group">
                     <p class="menu-title">Gestión de Espacios</p>
                     <ul>
-                        <li><a href="register_buildings.php"
+                        <li><a href="./register_buldings.php"
                                 class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
                                 <ion-icon name="business-outline"></ion-icon> Añadir Edificios
                             </a></li>
@@ -162,7 +159,7 @@ include '../../php/update_table.php';
 
             <!-- Contenedor de la tabla -->
             <div class="table-container">
-                <table class="user-table">
+                <table class="user-table user-table-accounts">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -236,28 +233,33 @@ include '../../php/update_table.php';
                     </div>
                     <form action="../../php/registro_usuario_be.php" method="POST" enctype="multipart/form-data"
                         class="formulario_register">
-
                         <div class="form-group">
-                            <input autocomplete="off" type="text" placeholder="Nombre Completo" name="nombre_completo"
-                                required>
+                            <label for="nombre_completo">Nombre Completo</label>
+                            <input autocomplete="off" type="text" id="nombre_completo" placeholder="Nombre Completo"
+                                name="nombre_completo" required>
                         </div>
 
                         <div class="form-group">
-                            <input autocomplete="off" type="text" placeholder="Correo Electrónico" name="correo"
-                                required>
+                            <label for="correo">Correo Electrónico</label>
+                            <input autocomplete="off" type="text" id="correo" placeholder="Correo Electrónico"
+                                name="correo" required>
                         </div>
 
                         <div class="form-row">
                             <div>
-                                <input autocomplete="off" type="text" placeholder="Usuario" name="usuario" required>
+                                <label for="usuario">Usuario</label>
+                                <input autocomplete="off" type="text" id="usuario" placeholder="Usuario" name="usuario"
+                                    required>
                             </div>
                             <div>
-                                <input type="password" placeholder="Contraseña" name="contrasena" required>
+                                <label for="contrasena">Contraseña</label>
+                                <input type="password" id="contrasena" placeholder="Contraseña" name="contrasena"
+                                    required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="selection-rol" for="rol">Selecciona el Rol:</label>
+                            <label for="rol">Selecciona el Rol:</label>
                             <select name="rol" id="rol" required>
                                 <option value="admin">Administrador</option>
                                 <option value="docente">Docente</option>
