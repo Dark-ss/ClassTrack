@@ -25,12 +25,12 @@ $resultado = mysqli_query($conexion, $query);
 $search = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 
 $query = "SELECT id, imagen, nombre_completo, correo, identificacion, fecha_registro 
-            FROM estudiantes 
-            WHERE nombre_completo LIKE '%$search%' 
-            OR correo LIKE '%$search%' 
-            OR identificacion LIKE '%$search%' 
-            ORDER BY fecha_registro DESC 
-            LIMIT $registros_por_pagina OFFSET $offset";
+          FROM estudiantes 
+          WHERE nombre_completo LIKE '%$search%' 
+          OR correo LIKE '%$search%' 
+          OR identificacion LIKE '%$search%' 
+          ORDER BY fecha_registro DESC 
+          LIMIT $registros_por_pagina OFFSET $offset";
 
 $resultado = mysqli_query($conexion, $query);
 
@@ -59,6 +59,7 @@ if (isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Estudiantes</title>
     <link rel="stylesheet" href="../../assets/css/style_panel.css">
+    <link rel="shortcut icon" href="../../assets/images/logo1.png">
 </head>
 
 <body>
@@ -84,21 +85,17 @@ if (isset($_GET['id'])) {
                                 class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
                                 <ion-icon name="people-outline"></ion-icon> Cuentas
                             </a></li>
-                        <li><a href="register_students.php"
-                                class="<?php echo $currentFile == 'register_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="school-outline"></ion-icon> Añadir Estudiantes
-                            </a></li>
                         <li><a href="vista_students.php"
                                 class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="reader-outline"></ion-icon> Estudiantes
+                                <ion-icon name="school-outline"></ion-icon> Estudiantes
                             </a></li>
                     </ul>
                 </div>
                 <div class="menu-group">
                     <p class="menu-title">Gestión de Espacios</p>
                     <ul>
-                        <li><a href="register_buldings.php"
-                                class="<?php echo $currentFile == 'register_buldings.php' ? 'active' : ''; ?>">
+                        <li><a href="./register_buldings.php"
+                                class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
                                 <ion-icon name="business-outline"></ion-icon> Añadir Edificios
                             </a></li>
                         <li><a href="table_build.php"
@@ -109,9 +106,9 @@ if (isset($_GET['id'])) {
                                 class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
                                 <ion-icon name="construct-outline"></ion-icon> Equipamientos
                             </a></li>
-                        <li><a href="table_reservation.php"
-                                class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
-                                <ion-icon name="calendar-outline"></ion-icon> Reservas
+                        <li><a href="reservar_espacio.php"
+                                class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Reservar Espacio
                             </a></li>
                     </ul>
                 </div>
@@ -151,11 +148,15 @@ if (isset($_GET['id'])) {
                         value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
                     <button type="submit">Buscar</button>
                 </form>
+                <a href="#" class="create-user-button" id="openCreateUserModal">
+                    <ion-icon name="person-add-sharp"></ion-icon>
+                    Crear Estudiante
+                </a>
             </div>
 
             <!-- Contenedor de la tabla -->
             <div class="table-container">
-                <table class="user-table">
+                <table class="user-table user-table-students">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -163,7 +164,7 @@ if (isset($_GET['id'])) {
                             <th>NOMBRE COMPLETO</th>
                             <th>CORREO</th>
                             <th>IDENTIFICACIÓN</th>
-                            <th>FECHA DE REGISTRO</th>
+                            <th>F. CREACIÓN</th>
                             <th>ACCIÓN</th>
                         </tr>
                     </thead>
@@ -171,7 +172,10 @@ if (isset($_GET['id'])) {
                         <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($fila['id']); ?></td>
-                            <td><img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../uploads/usuario.png'; ?>" alt="Imagen de Estudiante" width="45"></td>
+                            <td>
+                                <img src="<?php echo $fila['imagen'] ? "../../uploads/" . $fila['imagen'] : "../../assets/images/photo.jpg"; ?>"
+                                    class="user-image">
+                            </td>
                             <td><?php echo htmlspecialchars($fila['nombre_completo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['correo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['identificacion']); ?></td>
@@ -215,6 +219,55 @@ if (isset($_GET['id'])) {
                 <a href="?pagina=<?php echo $pagina_actual + 1; ?>&buscar=<?php echo htmlspecialchars($search); ?>"
                     class="pagination-button">Siguiente</a>
                 <?php endif; ?>
+            </div>
+
+            <!-- Modal para crear estudiante -->
+            <div id="createUserModal" class="modal">
+                <div class="modal-content">
+                    <div class="title_modal">
+                        <h2>Crear Nuevo Estudiante</h2>
+                    </div>
+                    <form action="../../php/registro_estudiante_be.php" method="POST" enctype="multipart/form-data"
+                        class="formulario_register">
+
+                        <!-- Campo: Nombre Completo -->
+                        <div class="form-group">
+                            <label for="nombre_completo">Nombre Completo:</label>
+                            <input autocomplete="off" type="text" id="nombre_completo" placeholder="Nombre Completo"
+                                name="nombre_completo" required>
+                        </div>
+
+                        <!-- Campo: Correo Electrónico -->
+                        <div class="form-group">
+                            <label for="correo">Correo Electrónico:</label>
+                            <input autocomplete="off" type="email" id="correo" placeholder="Correo Electrónico"
+                                name="correo" required>
+                        </div>
+
+                        <!-- Campo: Identificación -->
+                        <div class="form-group">
+                            <label for="identificacion">Identificación:</label>
+                            <input autocomplete="off" type="text" id="identificacion" placeholder="Identificación"
+                                name="identificacion" required>
+                        </div>
+
+                        <!-- Foto de perfil -->
+                        <div class="profile-photo">
+                            <div class="photo-circle">
+                                <img src="../../assets/images/photo.jpg" alt="Foto de perfil" id="profileImage">
+                            </div>
+                            <label for="photoInput" class="photo-upload-link" id="uploadPhotoBtn">Seleccionar
+                                foto</label>
+                            <input type="file" id="photoInput" name="imagen" hidden accept="image/*">
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="modal-buttons">
+                            <button type="button" class="cancel-button">Cancelar</button>
+                            <button type="submit" class="submit-button">Crear</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </main>
     </div>
