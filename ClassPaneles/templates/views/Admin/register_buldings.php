@@ -98,7 +98,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         ?>
         <aside class="sidebar">
             <div class="logo">
-                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" height="auto">
             </div>
             <nav class="menu">
                 <div class="menu-group">
@@ -135,7 +135,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </a></li>
                         <li><a href="./table_reservation.php"
                                 class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
-                                <ion-icon name="calendar-outline"></ion-icon> Reservar Espacio
+                                <ion-icon name="calendar-outline"></ion-icon> Reservas
                             </a></li>
                     </ul>
                 </div>

@@ -67,9 +67,9 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                 class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
                                 <ion-icon name="construct-outline"></ion-icon> Equipamientos
                             </a></li>
-                        <li><a href="reservar_espacio.php"
-                                class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
-                                <ion-icon name="calendar-outline"></ion-icon> Reservar Espacio
+                        <li><a href="table_reservation.php"
+                                class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Reservas
                             </a></li>
                     </ul>
                 </div>

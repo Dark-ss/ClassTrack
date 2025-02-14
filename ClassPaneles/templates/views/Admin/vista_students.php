@@ -25,12 +25,12 @@ $resultado = mysqli_query($conexion, $query);
 $search = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 
 $query = "SELECT id, imagen, nombre_completo, correo, identificacion, fecha_registro 
-          FROM estudiantes 
-          WHERE nombre_completo LIKE '%$search%' 
-          OR correo LIKE '%$search%' 
-          OR identificacion LIKE '%$search%' 
-          ORDER BY fecha_registro DESC 
-          LIMIT $registros_por_pagina OFFSET $offset";
+        FROM estudiantes 
+        WHERE nombre_completo LIKE '%$search%' 
+        OR correo LIKE '%$search%' 
+        OR identificacion LIKE '%$search%' 
+        ORDER BY fecha_registro DESC 
+        LIMIT $registros_por_pagina OFFSET $offset";
 
 $resultado = mysqli_query($conexion, $query);
 
@@ -106,9 +106,9 @@ if (isset($_GET['id'])) {
                                 class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
                                 <ion-icon name="construct-outline"></ion-icon> Equipamientos
                             </a></li>
-                        <li><a href="reservar_espacio.php"
-                                class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
-                                <ion-icon name="calendar-outline"></ion-icon> Reservar Espacio
+                        <li><a href="table_reservation.php"
+                                class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Reservas
                             </a></li>
                     </ul>
                 </div>
@@ -173,8 +173,7 @@ if (isset($_GET['id'])) {
                         <tr>
                             <td><?php echo htmlspecialchars($fila['id']); ?></td>
                             <td>
-                                <img src="<?php echo $fila['imagen'] ? "../../uploads/" . $fila['imagen'] : "../../assets/images/photo.jpg"; ?>"
-                                    class="user-image">
+                                <img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../assets/images/photo.jpg'; ?>" alt="Imagen de Estudiante" class="user-image">
                             </td>
                             <td><?php echo htmlspecialchars($fila['nombre_completo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['correo']); ?></td>
