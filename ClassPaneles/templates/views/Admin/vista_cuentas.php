@@ -178,7 +178,7 @@ include '../../php/update_table.php';
                             <td><img src="<?php echo $fila['imagen'] ? "../../uploads/" . $fila['imagen'] : "../../assets/images/photo.jpg"; ?>"
                                     class="user-image"></td>
                             <td><?php echo htmlspecialchars($fila['nombre_completo']); ?></td>
-                            <td><?php echo htmlspecialchars($fila['correo']); ?></td>
+                            <td class="email-use_count"><?php echo htmlspecialchars($fila['correo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['usuario']); ?></td>
                             <td>
                                 <span class="role <?php echo strtolower($fila['rol']); ?>-role">

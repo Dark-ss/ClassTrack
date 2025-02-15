@@ -229,28 +229,24 @@ if (isset($_GET['id'])) {
                     <form action="../../php/registro_estudiante_be.php" method="POST" enctype="multipart/form-data"
                         class="formulario_register">
 
-                        <!-- Campo: Nombre Completo -->
                         <div class="form-group">
                             <label for="nombre_completo">Nombre Completo:</label>
                             <input autocomplete="off" type="text" id="nombre_completo" placeholder="Nombre Completo"
                                 name="nombre_completo" required>
                         </div>
 
-                        <!-- Campo: Correo Electrónico -->
                         <div class="form-group">
                             <label for="correo">Correo Electrónico:</label>
                             <input autocomplete="off" type="email" id="correo" placeholder="Correo Electrónico"
                                 name="correo" required>
                         </div>
 
-                        <!-- Campo: Identificación -->
                         <div class="form-group">
                             <label for="identificacion">Identificación:</label>
                             <input autocomplete="off" type="text" id="identificacion" placeholder="Identificación"
                                 name="identificacion" required>
                         </div>
 
-                        <!-- Foto de perfil -->
                         <div class="profile-photo">
                             <div class="photo-circle">
                                 <img src="../../assets/images/photo.jpg" alt="Foto de perfil" id="profileImage">
@@ -260,7 +256,6 @@ if (isset($_GET['id'])) {
                             <input type="file" id="photoInput" name="imagen" hidden accept="image/*">
                         </div>
 
-                        <!-- Botones -->
                         <div class="modal-buttons">
                             <button type="button" class="cancel-button">Cancelar</button>
                             <button type="submit" class="submit-button">Crear</button>

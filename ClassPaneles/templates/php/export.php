@@ -334,7 +334,7 @@ if (isset($_POST['export']) && isset($_POST['format'])) {
                 <td>' . $estadisticas['max_estudiantes'] . '</td>
             </tr>
         </table>';
-    
+
         $pdf->writeHTMLCell(90, '', $xInicio + 100, $yInicio, $htmlEstadisticas, 0, 1, false, true, 'R');
     
         $pdf->Output('reservas.pdf', 'D');

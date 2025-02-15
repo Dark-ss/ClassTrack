@@ -696,6 +696,12 @@ h2 {
     width: 100%;
 }
 
+.form-group input:focus {
+    outline: none;
+    border-color: #1f8f7c;
+    box-shadow: 0 0 0 3px rgba(31, 143, 124, 0.1);
+}
+
 
 .form-group #rol{
     width: 150px;
@@ -1122,3 +1128,71 @@ h2 {
     opacity: 1;
     transform: translateY(0);
 }
+/*config admin*/
+.container-form_register_config {
+    position: fixed;
+    top: 20%;
+    left: 25%;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.container-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+/*config button*/
+.update-button-config{
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #1f8f7c;
+    width: 50%;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    justify-content: center;
+}
+
+.update-button-config:hover {
+    background-color: #1a7a6a;
+}
+
+.save-button{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #1f8f7c;
+    color: white;
+    width: 60%;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-button:hover {
+    background-color: #1a7a6a;
+}
+/*correo*/
+.email-use_count{
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    color: #777;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    }
