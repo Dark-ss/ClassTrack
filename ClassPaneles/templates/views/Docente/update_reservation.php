@@ -12,7 +12,8 @@ $id_reservacion = isset($_GET['id']) ? $_GET['id'] : null;
 $id_usuario = $_SESSION['id_usuario'];
 
 // Obtener datos de la reserva
-$query_reserva = "SELECT r.id, r.fecha_inicio, r.fecha_final, r.tipo_reservacion, r.descripcion, r.id_espacio, GROUP_CONCAT(re.id_estudiante) AS estudiantes
+$query_reserva = "SELECT r.id, r.fecha_inicio, r.fecha_final, r.tipo_reservacion, r.descripcion, r.id_espacio, 
+    GROUP_CONCAT(re.id_estudiante) AS estudiantes, r.estado, r.motivo_rechazo
     FROM reservaciones r
     JOIN espacios_academicos e ON r.id_espacio = e.id
     JOIN reservaciones_estudiantes re ON r.id = re.id_reservacion
@@ -41,12 +42,22 @@ if (isset($_POST['reservation_update'])) {
     $descripcion = $_POST['descripcion'];
     $id_espacio = $_POST['id_espacio'];
     $estudiantes = $_POST['estudiantes'];
+    $estado = $_POST['estado'];
 
     date_default_timezone_set('America/Bogota');
     $fecha_actual = date('Y-m-d H:i:s');
     // Validar fechas
     if (strtotime($fecha_inicio) < strtotime($fecha_actual)) {
         echo "<script>alert('La fecha no es válida.'); window.history.back();</script>";
+        exit;
+    }
+    //verificar si fue aceptada la reservación
+    $query_verificar_estado = "SELECT estado FROM reservaciones WHERE id = '$id_reservacion'";
+    $resultado_estado = mysqli_query($conexion, $query_verificar_estado);
+    $estado_reserva = mysqli_fetch_assoc($resultado_estado)['estado'];
+
+    if ($estado_reserva === 'aceptada') {
+        echo "<script>alert('No puedes actualizar una reservación que ya ha sido aceptada por el administrador.'); window.history.back();</script>";
         exit;
     }
     // Actualizar la reservación
@@ -119,6 +130,7 @@ if (isset($_POST['reservation_update'])) {
         <h2>Editar Reserva</h1>
         <form action="update_reservation.php" method="POST">
             <input type="hidden" name="reservation_update" value="true">
+            <input type="hidden" name="estado" value="<?php echo $reserva['estado']; ?>">
             <input type="hidden" name="id_reservacion" value="<?= $id_reservacion ?>">
             <div class="form-group-container">  
                 <div class="form-group">
@@ -168,15 +180,29 @@ if (isset($_POST['reservation_update'])) {
                 <div style="display: flex; align-items: center; margin: 5px 0; padding: 5px; background-color: #e9ecef; border-radius: 4px;">
                     <span><?php echo $estudiante['nombre_completo']; ?></span>
                     <input type="hidden" name="estudiantes[]" value="<?php echo $estudianteId; ?>">
+                    <?php if ($reserva['estado'] !== "aceptada"): ?>
                     <button type="button" style="margin-left: 10px; cursor: pointer; border: none; background: none; color: red; font-weight: bold;" onclick="this.parentElement.remove();">×</button>
+                <?php endif; ?>
                 </div>
             <?php 
                 }
-            } 
+            }
             ?>
+            <?php if ($reserva['estado'] === 'rechazada' && !empty($reserva['motivo_rechazo'])): ?>
+                <div class="form-group">
+                    <label for="motivo_rechazo">Motivo del rechazo:</label>
+                    <p style="color: red; font-weight: bold;"><?php echo htmlspecialchars($reserva['motivo_rechazo']); ?></p>
+                </div>
+            <?php endif; ?>
             </div>
             <div class="buttons-form-container">
+            <?php if ($reserva['estado'] !== "aceptada"): ?>
                 <button type="button" id="edit-button-reservation" class="update-button" onclick="enableEditingReservation()">Actualizar</button>
+            <?php else: ?>
+                <p style="color: red;">No puedes actualizar la reserva porque ya ha sido aceptada.</p>
+            <?php endif; ?>
+
+
                 <button type="submit" id="save-button-reservation" class="save-button" style="display: none;">Guardar Cambios</button>
             </div>
         </form>

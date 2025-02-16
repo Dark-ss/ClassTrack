@@ -1,5 +1,8 @@
 <?php
 include '../../php/admin_session.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
     header("Location: ../templates/index.php"); 
@@ -91,11 +94,6 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                 <li>
                     <a href="vista_cuentas.php" class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
                     <ion-icon name="people-outline"></ion-icon> Cuentas
-                    </a>
-                </li>
-                <li>
-                    <a href="register_students.php" class="<?php echo $currentFile == 'register_students.php' ? 'active' : ''; ?>">
-                    <ion-icon name="school-outline"></ion-icon> Añadir Estudiantes
                     </a>
                 </li>
                 <li>
@@ -251,20 +249,24 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <td>
                             <div class='dropdown'>
                                 <form method='POST' action='approve_reservation.php' class='btn-container' style='display:inline;'>
-                                <ion-icon name='ellipsis-horizontal-sharp' class='dropdown-toggle'></ion-icon>
+                                    <ion-icon name='ellipsis-horizontal-sharp' class='dropdown-toggle'></ion-icon>
                                     <input type='hidden' name='id' value='{$row['id']}'>
-                                <div class='dropdown-content'>
-                                    <button type='submit' name='approve' class='btn-approve'>
-                                    <ion-icon name='create-outline'></ion-icon>
-                                    Aceptar
-                                    </button>
-                                    <button type='submit' name='reject' class='btn-reject'>
-                                    <ion-icon name='trash-outline'></ion-icon>
-                                    Rechazar
-                                    </button>
-                                </div>
+                                    <div class='dropdown-content'>
+                                        <button type='submit' name='approve' class='btn-approve'>
+                                            <ion-icon name='create-outline'></ion-icon>
+                                            Aceptar
+                                        </button>
+                                        <button type='button' class='btn-reject' onclick='mostrarMotivoRechazo({$row['id']})'>
+                                            <ion-icon name='trash-outline'></ion-icon>
+                                            Rechazar
+                                        </button>
+                                    </div>
                                 </form>
-                            <div>
+                                <div id='motivo-container-{$row['id']}' style='display:none; margin-top:10px;'>
+                                <textarea id='motivo-text-{$row['id']}' placeholder='Escriba el motivo del rechazo'></textarea>
+                                <button onclick='rechazarReserva({$row['id']})'>Confirmar Rechazo</button>
+                        </div>
+                        </div>
                         </td>
                     </tr>";
                 }
@@ -312,6 +314,58 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             }
         }
     }
+</script>
+<script>
+// Función para mostrar el cuadro de texto del motivo de rechazo
+function mostrarMotivoRechazo(idReserva) {
+    let container = document.getElementById(`motivo-container-${idReserva}`);
+    if (container) {
+        container.style.display = "block";
+    } else {
+        console.error("No se encontró el contenedor para la reserva: " + idReserva);
+    }
+}
+
+// Función para rechazar la reserva enviando datos por AJAX
+function rechazarReserva(idReserva) {
+    let motivoInput = document.getElementById(`motivo-text-${idReserva}`);
+    if (!motivoInput) {
+        alert("No se encontró el campo de motivo.");
+        return;
+    }
+
+    let motivo = motivoInput.value.trim();
+    if (motivo === "") {
+        alert("Por favor, ingrese un motivo de rechazo.");
+        return;
+    }
+
+    fetch("../../php/rechazar_reserva.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `id=${encodeURIComponent(idReserva)}&motivo_rechazo=${encodeURIComponent(motivo)}`
+    })
+    .then(response => response.text())
+    .then(text => {
+        console.log("Respuesta del servidor:", text); 
+        return JSON.parse(text); // Convertir JSON
+    })
+    .then(data => {
+        if (data.success) {
+            alert("Reserva rechazada correctamente.");
+            window.location.reload(); // Recarga la página
+        } else {
+            alert("Error al rechazar la reserva: " + data.error);
+        }
+    })
+    .catch(error => {
+        console.error("Error en el fetch:", error);
+        alert("Hubo un problema con la solicitud. Revisa la consola para más detalles.");
+    });
+}
+
 </script>
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
