@@ -71,7 +71,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         ?>
         <aside class="sidebar">
             <div class="logo">
-                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" height="auto">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
             </div>
             <nav class="menu">
                 <div class="menu-group">
