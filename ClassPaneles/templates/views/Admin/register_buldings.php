@@ -1,7 +1,8 @@
 <?php
 include '../../php/admin_session.php';
 include '../../php/conexion_be.php';
-//formulario envio
+
+// Formulario de envío
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $codigo = mysqli_real_escape_string($conexion, $_POST['codigo']);
@@ -44,22 +45,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('Error al registrar el edificio: " . mysqli_error($conexion) . "');</script>";
     }
 }
+// Al inicio del archivo, después de la conexión
+$registros_por_pagina = 6; // Puedes ajustar esto a 9 si prefieres
+$pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$offset = ($pagina_actual - 1) * $registros_por_pagina;
 
-// Consultar edificios
-$query = "SELECT id, nombre, imagen FROM edificios";
-$result = mysqli_query($conexion, $query);
-$edificios = [];
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $edificios[] = $row;
-}
-
-// Consultar edificios junto con el conteo de espacios académicos
+// Modificar la consulta para incluir LIMIT y OFFSET
 $query_spaces_count = "
     SELECT 
-        e.id, 
+        e.id,
+        e.tipo,
+        e.cupo,
+        e.pisos,
+        e.codigo,
         e.nombre, 
         e.imagen, 
+        e.direccion,
         COUNT(s.id) AS espacios_asociados
     FROM 
         edificios e
@@ -68,14 +69,25 @@ $query_spaces_count = "
     ON 
         e.id = s.edificio_id
     GROUP BY 
-        e.id
-";
+        e.id, e.nombre, e.imagen, e.direccion
+    ORDER BY e.id DESC
+    LIMIT $registros_por_pagina OFFSET $offset";
+
+// Consulta para obtener el total de registros
+$query_total = "
+    SELECT COUNT(DISTINCT e.id) as total 
+    FROM edificios e";
+$result_total = mysqli_query($conexion, $query_total);
+$row_total = mysqli_fetch_assoc($result_total);
+$total_registros = $row_total['total'];
+$total_paginas = ceil($total_registros / $registros_por_pagina);
 $result = mysqli_query($conexion, $query_spaces_count);
 $edificios = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
     $edificios[] = $row;
 }
+
 
 ?>
 
@@ -85,8 +97,10 @@ while ($row = mysqli_fetch_assoc($result)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../assets/css/style_panel.css">
+    <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1">
+    <link rel="stylesheet" href="../../assets/css/style_building.css?v=1">
     <link rel="shortcut icon" href="../../assets/images/logo1.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <title>Registro de Edificios</title>
 </head>
 
@@ -98,7 +112,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         ?>
         <aside class="sidebar">
             <div class="logo">
-                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" height="auto">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
             </div>
             <nav class="menu">
                 <div class="menu-group">
@@ -118,6 +132,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </a></li>
                     </ul>
                 </div>
+                <hr>
                 <div class="menu-group">
                     <p class="menu-title">Gestión de Espacios</p>
                     <ul>
@@ -135,7 +150,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </a></li>
                         <li><a href="./table_reservation.php"
                                 class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
-                                <ion-icon name="calendar-outline"></ion-icon> Reservas
+                                <ion-icon name="calendar-outline"></ion-icon> Reservar Espacio
                             </a></li>
                     </ul>
                 </div>
@@ -167,92 +182,184 @@ while ($row = mysqli_fetch_assoc($result)) {
         <main class="content">
             <div class="content-header">
                 <h2>Gestión de Edificios</h2>
-                <button class="add-button" onclick="openModal()">
-                    <ion-icon name="add-outline"></ion-icon>
-                    Añadir Edificio
-                </button>
+            </div>
+
+            <!-- Mover la barra de búsqueda aquí -->
+            <div class="content_nav">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Buscar edificio...">
+                    <ion-icon name="search-outline"></ion-icon>
+
+                    <!-- Menú desplegable para filtrar por tipo -->
+                    <select id="filter-type" class="filter-select">
+                        <option value="">Todos los tipos</option>
+                        <option value="Laboratorio">Laboratorio</option>
+                        <option value="Académico">Académico</option>
+                        <option value="Auditorio">Auditorio</option>
+                    </select>
+                </div>
+                <div>
+                    <div class="add-button-container">
+                        <button class="add-button" onclick="openModal()">
+                            <ion-icon name="add-circle"></ion-icon>
+                            Añadir Edificio
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="buildings-grid">
                 <?php foreach ($edificios as $edificio): ?>
                 <div class="building-card">
-                    <img src="<?php echo htmlspecialchars($edificio['imagen']); ?>" alt="Edificio"
-                        class="building-image">
+                    <div class="image-container">
+                        <img src="<?php echo htmlspecialchars($edificio['imagen']); ?>" alt="Edificio"
+                            class="building-image">
+                        <a href="update_building.php?id=<?php echo htmlspecialchars($edificio['id']); ?>"
+                            class="edit-button">
+                            <i class="ti ti-edit"></i>
+                        </a>
+                    </div>
                     <div class="building-info">
-                        <h3><?php echo htmlspecialchars($edificio['nombre']); ?></h3>
+                        <div class="building-header">
+                            <h3 class="building-name"><?php echo htmlspecialchars($edificio['nombre']); ?></h3>
+                            <!-- Identificador del tipo de edificio -->
+                            <span
+                                class="role building-type <?php echo strtolower(str_replace(' ', '-', $edificio['tipo'] ?? 'desconocido')); ?>">
+                                <?php
+                    // Cambiar "Espacio Académico" por "Académico"
+                    echo htmlspecialchars(($edificio['tipo'] ?? 'Desconocido') === 'Espacio Académico' ? 'Académico' : $edificio['tipo']);
+                    ?>
+                            </span>
+                        </div>
+                        <!-- Nueva fila para código, pisos y cupo -->
                         <div class="space-count">
-                            <ion-icon name="business-outline"></ion-icon>
+                            <i class="ti ti-building"></i> <!-- Reemplaza ion-icon name="business-outline" -->
                             <span>Espacios: <?php echo htmlspecialchars($edificio['espacios_asociados']); ?></span>
                         </div>
-                        <a href="update_building.php?id=<?php echo htmlspecialchars($edificio['id']); ?>"
-                            class="edit-link">
-                            <ion-icon name="create-outline"></ion-icon>
-                            Editar
-                        </a>
+                        <div class="space-count">
+                            <i class="ti ti-map-pin"></i> <!-- Reemplaza ion-icon name="location-outline" -->
+                            <span><?php echo htmlspecialchars($edificio['direccion']); ?></span>
+                        </div>
+
+                        <hr>
+                        <div class="building-details">
+                            <div class="detail-item">
+                                <i class="ti ti-barcode"></i> <!-- Reemplaza ion-icon name="barcode-outline" -->
+                                <span class="detail-value"><?php echo htmlspecialchars($edificio['codigo']); ?></span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="ti ti-stack-3"></i> <!-- Reemplaza ion-icon name="layers-outline" -->
+                                <span class="detail-value"><?php echo htmlspecialchars($edificio['pisos']); ?></span>
+                                <span>pisos</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="ti ti-users"></i> <!-- Reemplaza ion-icon name="people-outline" -->
+                                <span class="detail-value"><?php echo htmlspecialchars($edificio['cupo']); ?></span>
+                                <span>cupos</span>
+                            </div>
+                        </div>
+                        <hr>
                     </div>
                 </div>
                 <?php endforeach; ?>
             </div>
+            <!-- Paginación -->
+            <div class="pagination">
+                <?php if ($pagina_actual > 1): ?>
+                <a href="?pagina=<?php echo $pagina_actual - 1; ?>" class="pagination-button">Anterior</a>
+                <?php endif; ?>
 
-            <!-- Modal para añadir edificio -->
-            <div class="modal1" id="modal">
-                <div class="modal-content1">
-                    <div class="modal-header1">
-                        <h3>Añadir Nuevo Edificio</h3>
-                        <button class="close-button" onclick="closeModal()">
-                            <ion-icon name="close-outline"></ion-icon>
-                        </button>
-                    </div>
-                    <form action="" method="POST" enctype="multipart/form-data" class="form-grid">
-                        <div class="form-group">
-                            <label for="nombre">Nombre del edificio</label>
-                            <input type="text" id="nombre" name="nombre" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="codigo">Código</label>
-                            <input type="text" id="codigo" name="codigo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="pisos">Cantidad de pisos</label>
-                            <input type="number" id="pisos" name="pisos" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cupo">Cupo</label>
-                            <input type="number" id="cupo" name="cupo" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="direccion">Dirección</label>
-                            <input type="text" id="direccion" name="direccion" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipo">Tipo</label>
-                            <select id="tipo" name="tipo" required>
-                                <option value="">Seleccione un tipo</option>
-                                <option value="Laboratorio">Laboratorio</option>
-                                <option value="Espacio Académico">Espacio Académico</option>
-                                <option value="Auditorio">Auditorio</option>
-                            </select>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="descripcion">Descripción General</label>
-                            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="imagen">Imagen</label>
-                            <input type="file" id="imagen" name="imagen" accept="image/*">
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="cancel-button" onclick="closeModal()">Cancelar</button>
-                            <button type="submit" class="submit-button">Guardar</button>
-                        </div>
-                    </form>
-                </div>
+                <?php
+    // Mostrar solo un rango de páginas si hay muchas
+    $rango = 2;
+    $inicio_rango = max(1, $pagina_actual - $rango);
+    $fin_rango = min($total_paginas, $pagina_actual + $rango);
+
+    if ($inicio_rango > 1) {
+        echo '<a href="?pagina=1" class="pagination-button">1</a>';
+        if ($inicio_rango > 2) {
+            echo '<span class="pagination-ellipsis">...</span>';
+        }
+    }
+
+    for ($i = $inicio_rango; $i <= $fin_rango; $i++): ?>
+                <a href="?pagina=<?php echo $i; ?>"
+                    class="pagination-button <?php echo $i === $pagina_actual ? 'active' : ''; ?>">
+                    <?php echo $i; ?>
+                </a>
+                <?php endfor; 
+
+    if ($fin_rango < $total_paginas) {
+        if ($fin_rango < $total_paginas - 1) {
+            echo '<span class="pagination-ellipsis">...</span>';
+        }
+        echo '<a href="?pagina=' . $total_paginas . '" class="pagination-button">' . $total_paginas . '</a>';
+    }
+    ?>
+
+                <?php if ($pagina_actual < $total_paginas): ?>
+                <a href="?pagina=<?php echo $pagina_actual + 1; ?>" class="pagination-button">Siguiente</a>
+                <?php endif; ?>
             </div>
         </main>
-    </div>
 
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script>
+        <!-- Modal para añadir edificio -->
+        <div class="modal1" id="modal">
+            <div class="modal-content1">
+                <div class="modal-header1">
+                    <h3>Añadir Nuevo Edificio</h3>
+                    <button class="close-button" onclick="closeModal()">
+                        <ion-icon name="close-outline"></ion-icon>
+                    </button>
+                </div>
+                <form action="" method="POST" enctype="multipart/form-data" class="form-grid">
+                    <div class="form-group">
+                        <label for="nombre">Nombre del edificio</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="codigo">Código</label>
+                        <input type="text" id="codigo" name="codigo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pisos">Cantidad de pisos</label>
+                        <input type="number" id="pisos" name="pisos" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cupo">Cupo</label>
+                        <input type="number" id="cupo" name="cupo" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" id="direccion" name="direccion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Tipo</label>
+                        <select id="tipo" name="tipo" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="Laboratorio">Laboratorio</option>
+                            <option value="Espacio Académico">Espacio Académico</option>
+                            <option value="Auditorio">Auditorio</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="descripcion">Descripción General</label>
+                        <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="imagen">Imagen</label>
+                        <input type="file" id="imagen" name="imagen" accept="image/*">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-button" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="submit-button">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script>
     function openModal() {
         document.getElementById('modal').style.display = 'flex';
     }
@@ -267,6 +374,103 @@ while ($row = mysqli_fetch_assoc($result)) {
             closeModal();
         }
     };
+    </script>
+
+    <script>
+    document.getElementById('search-input').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase(); // Obtén el término de búsqueda en minúsculas
+        const buildings = document.querySelectorAll('.building-card'); // Selecciona todas las tarjetas
+
+        buildings.forEach(building => {
+            const buildingName = building.querySelector('.building-name').textContent
+                .toLowerCase(); // Obtén el nombre del edificio
+            if (buildingName.includes(searchTerm)) {
+                building.style.display = 'block'; // Muestra la tarjeta si coincide
+            } else {
+                building.style.display = 'none'; // Oculta la tarjeta si no coincide
+            }
+        });
+    });
+
+    // Función para filtrar por tipo de edificio
+    document.getElementById('filter-type').addEventListener('change', function() {
+        const selectedType = this.value.toLowerCase(); // Obtén el tipo seleccionado en minúsculas
+        const buildings = document.querySelectorAll('.building-card'); // Selecciona todas las tarjetas
+
+        buildings.forEach(building => {
+            const buildingType = building.querySelector('.building-type').textContent
+                .toLowerCase(); // Obtén el tipo del edificio
+            if (selectedType === "" || buildingType.includes(selectedType)) {
+                building.style.display = 'block'; // Muestra la tarjeta si coincide
+            } else {
+                building.style.display = 'none'; // Oculta la tarjeta si no coincide
+            }
+        });
+    });
+
+    // Función para filtrar por nombre (barra de búsqueda)
+    document.getElementById('search-input').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase(); // Obtén el término de búsqueda en minúsculas
+        const buildings = document.querySelectorAll('.building-card'); // Selecciona todas las tarjetas
+
+        buildings.forEach(building => {
+            const buildingName = building.querySelector('.building-name').textContent
+                .toLowerCase(); // Obtén el nombre del edificio
+            if (buildingName.includes(searchTerm)) {
+                building.style.display = 'block'; // Muestra la tarjeta si coincide
+            } else {
+                building.style.display = 'none'; // Oculta la tarjeta si no coincide
+            }
+        });
+    });
+
+    let currentSearchTerm = '';
+    let currentType = '';
+
+    // Function to check if a building matches both filters
+    function buildingMatchesFilters(building, searchTerm, type) {
+        const buildingName = building.querySelector('.building-name').textContent.toLowerCase();
+        const buildingType = building.querySelector('.building-type').textContent.toLowerCase();
+
+        const matchesSearch = buildingName.includes(searchTerm);
+        const matchesType = type === "" || buildingType.includes(type);
+
+        return matchesSearch && matchesType;
+    }
+
+    // Function to apply both filters
+    function applyFilters() {
+        const buildings = document.querySelectorAll('.building-card');
+
+        buildings.forEach(building => {
+            if (buildingMatchesFilters(building, currentSearchTerm, currentType)) {
+                building.style.display = 'block';
+            } else {
+                building.style.display = 'none';
+            }
+        });
+    }
+
+    // Event listener for search input
+    document.getElementById('search-input').addEventListener('input', function() {
+        currentSearchTerm = this.value.toLowerCase();
+        applyFilters();
+    });
+
+    // Event listener for type filter
+    document.getElementById('filter-type').addEventListener('change', function() {
+        currentType = this.value.toLowerCase();
+        applyFilters();
+    });
+
+    // Function to reset filters
+    function resetFilters() {
+        document.getElementById('search-input').value = '';
+        document.getElementById('filter-type').value = '';
+        currentSearchTerm = '';
+        currentType = '';
+        applyFilters();
+    }
     </script>
 </body>
 

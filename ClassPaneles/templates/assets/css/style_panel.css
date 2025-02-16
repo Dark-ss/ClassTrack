@@ -5,6 +5,7 @@ body {
     margin: 0;
     font-family: 'Inter', sans-serif; 
     background-color: #e6edee;
+    overflow: auto;
 }
 
 .container {
@@ -219,7 +220,7 @@ body {
     color: white;
     text-decoration: none;
     border-radius: 10px;
-    font-size: 13px;
+    font-size: 0.85rem;
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease;
@@ -253,7 +254,7 @@ body {
     padding: 12px 16px 12px 45px; /* Espacio a la izquierda para el icono */
     border: 1px solid #e5e7eb;
     border-radius: 15px;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     color: #374151;
     background-color: #fff;
     transition: all 0.3s ease;
@@ -288,7 +289,7 @@ body {
     color: white;
     border: none;
     border-radius: 12px;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -310,7 +311,7 @@ body {
     color: white;
     text-decoration: none;
     border-radius: 12px;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 500;
     transition: all 0.3s ease;
     white-space: nowrap;
@@ -813,210 +814,9 @@ h2 {
 .submit-button:hover {
     background-color: #1a7a6a;
 }
-.build {
-    flex: 1;
-    padding: 20px;
-    background-color: #f4f4f4; /* Fondo suave */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
 
-.build .Button-view_Table_build {
-    background-color: #007bff; /* Azul vibrante */
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.3s ease;
-}
-
-.build .Button-view_Table_build:hover {
-    background-color: #0056b3; /* Azul más oscuro en hover */
-}
-/* Añade estos estilos a tu style_panel.css */
-
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-
-.add-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background-color: #1f8f7c;
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.add-button:hover {
-    background-color: #1a7a6a;
-}
-
-.buildings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    padding: 1rem;
-}
-
-.building-card {
-    background: white;
-    border-radius: 1rem;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-}
-
-.building-card:hover {
-    transform: translateY(-5px);
-}
-
-.building-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.building-info {
-    padding: 1.5rem;
-}
-
-.building-info h3 {
-    margin: 0 0 1rem 0;
-    color: #333;
-}
-
-.space-count {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #666;
-    margin-bottom: 1rem;
-}
-
-.edit-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #1f8f7c;
-    text-decoration: none;
-}
-
-.edit-link:hover {
-    color: #1a7a6a;
-}
-
-/* Modal Styles */
-.modal1 {
+::-webkit-scrollbar {
     display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal-content1 {
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-header1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.close-button {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #666;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.form-group.full-width {
-    grid-column: 1 / -1;
-}
-
-.form-group label {
-    font-weight: 500;
-    color: #333;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-}
-
-.form-actions {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.submit-button,
-.cancel-button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.submit-button {
-    background-color: #1f8f7c;
-    color: white;
-}
-
-.cancel-button {
-    background-color: #e5e7eb;
-    color: #374151;
-}
-
-.submit-button:hover {
-    background-color: #1a7a6a;
-}
-
-.cancel-button:hover {
-    background-color: #d1d5db;
 }
 /*Styles Export*/
 .btn-container {
