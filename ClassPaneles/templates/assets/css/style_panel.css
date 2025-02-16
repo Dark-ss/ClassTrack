@@ -32,9 +32,9 @@ body {
 }
 
 .logo-img {
-    width: 105px;
     padding-left: 20px;
-    margin-bottom: 20px;
+    width: 150px;
+    height: auto;
 }
 
 .menu {
