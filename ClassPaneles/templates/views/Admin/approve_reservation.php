@@ -6,6 +6,10 @@ use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+// Cargar variables de entorno
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 4));
+$dotenv->load();
+
 if (isset($_POST['approve']) || isset($_POST['reject'])) {
     $id_reservacion = $_POST['id'];
     $nuevo_estado = isset($_POST['approve']) ? 'aceptada' : 'rechazada';
@@ -34,7 +38,7 @@ if (isset($_POST['approve']) || isset($_POST['reject'])) {
             $query_conflicto = "SELECT id FROM reservaciones 
                                 WHERE id_espacio = ? 
                                 AND fecha_inicio < ? 
-                                AND fecha_final > ?
+                                AND fecha_final > ? 
                                 AND estado = 'aceptada'";
 
             $stmt_conflicto = mysqli_prepare($conexion, $query_conflicto);
@@ -48,7 +52,7 @@ if (isset($_POST['approve']) || isset($_POST['reject'])) {
             }
             mysqli_stmt_close($stmt_conflicto);
         }
-        
+
         // Actualizar el estado de la reserva
         $query_update = "UPDATE reservaciones SET estado = ? WHERE id = ?";
         $stmt_update = mysqli_prepare($conexion, $query_update);
@@ -62,17 +66,17 @@ if (isset($_POST['approve']) || isset($_POST['reject'])) {
             $mail->CharSet = 'UTF-8';
 
             try {
-                // Configuración del servidor SMTP
+                // Configuración del servidor SMTP con variables de entorno
                 $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com';
+                $mail->Host = $_ENV['SMTP_HOST'];
                 $mail->SMTPAuth = true;
-                $mail->Username = 'juancamilocalderon69@gmail.com';
-                $mail->Password = 'zjdg rgdb viwc nqls';
+                $mail->Username = $_ENV['SMTP_USER'];
+                $mail->Password = $_ENV['SMTP_PASS'];
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                $mail->Port = 587;
+                $mail->Port = $_ENV['SMTP_PORT'];
 
                 // Configuración del remitente y destinatario
-                $mail->setFrom('juancamilocalderon69@gmail.com', 'Plataforma ClassTrack');
+                $mail->setFrom($_ENV['SMTP_FROM_EMAIL'], $_ENV['SMTP_FROM_NAME']);
                 $mail->addAddress($correo_usuario);
 
                 // Contenido del correo
@@ -84,11 +88,14 @@ if (isset($_POST['approve']) || isset($_POST['reject'])) {
                             <p>Fecha de finalización: <b>$fecha_fin</b></p>
                             <p>Gracias por usar nuestra plataforma.</p>";
 
-                // Enviar el correo
-                $mail->send();
-
-                echo "<script>alert('Reservación $nuevo_estado exitosamente. Se ha enviado una notificación al usuario.'); window.location.href = 'table_reservation.php';</script>";
-                exit();
+                if ($mail->send()) {
+                    echo "<script>
+                    alert('Correo enviado correctamente.');
+                    window.location.href = 'table_reservation.php';</script>";
+            
+                } else {
+                    echo "<script>alert('Error al enviar correo: " . $mail->ErrorInfo . "');</script>";
+                }
 
             } catch (Exception $e) {
                 echo "<script>alert('La reservación fue $nuevo_estado, pero hubo un error al enviar el correo: " . $mail->ErrorInfo . "'); window.location.href = 'table_reservation.php';</script>";

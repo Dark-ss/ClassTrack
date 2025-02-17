@@ -6,47 +6,52 @@ use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Cargar variables de entorno
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
 $correo = $_POST['correo'];
 
 // Verificar si el correo existe en la base de datos
+$correo = mysqli_real_escape_string($conexion, $_POST['correo']);
 $verificar_correo = mysqli_query($conexion, "SELECT * FROM usuarios WHERE correo='$correo'");
 
-if (isset($_POST['correo'])) {
-
-    $correo = mysqli_real_escape_string($conexion, $_POST['correo']);
-    $verificar_correo = mysqli_query($conexion, "SELECT * FROM usuarios WHERE correo='$correo'");
+if ($verificar_correo && mysqli_num_rows($verificar_correo) > 0) {
     // Generar un token de recuperación
-    $token = bin2hex(random_bytes(50)); // Genera un token aleatorio
-    $expira = date("Y-m-d H:i:s", strtotime('+1 hour')); // Fecha de expiración de 1 hora
+    $token = bin2hex(random_bytes(50));
+    $expira = date("Y-m-d H:i:s", strtotime('+1 hour'));
 
-    // Guardar el token en la base de datos con el correo
+    // Guardar el token en la base de datos
     $update_token = mysqli_query($conexion, "UPDATE usuarios SET reset_token='$token', reset_expira='$expira' WHERE correo='$correo'");
 
     // Configurar el enlace de recuperación
     $reset_link = "http://localhost/ClassTrack/ClassPaneles/templates/php/reset_password.php?token=$token";
 
-    // Usar PHPMailer para enviar el correo
+    // Enviar correo con PHPMailer
     $mail = new PHPMailer(true);
     $mail->CharSet = 'UTF-8';
-    try {
-        // Configuración del servidor de correo
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'juancamilocalderon69@gmail.com';
-        $mail->Password = 'zjdg rgdb viwc nqls';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Habilitar STARTTLS
-        $mail->Port = 587;
 
-        // Remitente y destinatario
-        $mail->setFrom('juancamilocalderon69@gmail.com', 'Plataforma ClassTrack');
+    try {
+        // Configuración del servidor SMTP desde variables de entorno
+        $mail->isSMTP();
+        $mail->Host = $_ENV['SMTP_HOST'];
+        $mail->SMTPAuth = true;
+        $mail->Username = $_ENV['SMTP_USER'];
+        $mail->Password = $_ENV['SMTP_PASS'];
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $_ENV['SMTP_PORT'];
+
+        // Configuración del remitente y destinatario
+        $mail->setFrom($_ENV['SMTP_USER'], 'Plataforma ClassTrack');
         $mail->addAddress($correo);
 
         // Contenido del correo
         $mail->isHTML(true);
-        $mail->Subject = 'Recuperación de contraseña plataforma ClassTrack';
-        $mail->Body = $descripcion . "<br><img src='https://drive.google.com/uc?export=view&id=1dU3ND1kXnVhZLdah6iMpWGbyu3tggWcf' alt='Imagen de recuperación' /> <br><br> Hola, <br><br> Para recuperar tu contraseña, por favor haz clic en el siguiente enlace  <a href='$reset_link'>$reset_link</a>. <br> Si no solicitaste este cambio, por favor ignora este correo. <br><br> ¡Gracias!" ;
+        $mail->Subject = 'Recuperación de contraseña - ClassTrack';
+        $mail->Body = "<p>Hola,</p>
+                      <p>Para recuperar tu contraseña, haz clic en el siguiente enlace: <a href='$reset_link'>$reset_link</a></p>
+                      <p>Si no solicitaste este cambio, ignora este correo.</p>
+                      <p>¡Gracias!</p>";
 
         // Enviar el correo
         $mail->send();
@@ -55,10 +60,10 @@ if (isset($_POST['correo'])) {
                 window.location = "../index.php";
               </script>';
     } catch (Exception $e) {
-          echo '<script>
-            alert("Error al enviar el correo de recuperación. Mailer Error: ' . $mail->ErrorInfo . '");
-            window.location = "../index.php";
-          </script>';
+        echo '<script>
+                alert("Error al enviar el correo: ' . $mail->ErrorInfo . '");
+                window.location = "../index.php";
+              </script>';
     }
 } else {
     echo '<script>

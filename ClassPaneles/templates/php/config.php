@@ -113,22 +113,22 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
             <form id="update-form" method="POST" enctype="multipart/form-data" class="form-grid">
                 <input type="hidden" name="correo_original" value="<?php echo  htmlspecialchars($correo); ?>">
 
-                <div class="form-group">
+                <div class="form-group-config">
                     <label for="nombre_completo">Nombre Completo:</label>
                     <input type="text" id="nombre_completo" name="nombre_completo" value="<?php echo htmlspecialchars($nombre_completo); ?>" disabled>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group-config">
                     <label for="correo">Correo Electrónico:</label>
                     <input type="email" id="correo" name="correo" value="<?php echo htmlspecialchars($correo); ?>" disabled>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group-config">
                     <label for="usuario">Usuario:</label>
                     <input type="text" id="usuario" name="usuario" value="<?php echo htmlspecialchars($usuario); ?>" disabled>
                 </div>
                     
-                <div class="form-group">
+                <div class="form-group-config">
                     <label for="rol">Rol:</label>
                     <select id="rol" name="rol" disabled>
                         <option value="admin" <?php if ($rol == 'admin') echo 'selected'; ?>>Admin</option>
