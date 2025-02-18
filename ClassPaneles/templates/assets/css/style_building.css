@@ -388,8 +388,8 @@ body{
     display: block;
     position: absolute;
     background-color: #1f6b31;
-    bottom: 55%;
-    left: 50%;
+    bottom: 10%;
+    left: 70%;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -402,8 +402,8 @@ body{
     display: block;
     position: absolute;
     background-color: #1f6b31;
-    bottom: 55%;
-    left: 25%;
+    bottom: 10%;
+    left: 10%;
     color: white;
     padding: 10px 20px;
     border: none;

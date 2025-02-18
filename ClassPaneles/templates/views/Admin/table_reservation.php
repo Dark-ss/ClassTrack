@@ -256,16 +256,12 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                             <ion-icon name='create-outline'></ion-icon>
                                             Aceptar
                                         </button>
-                                        <button type='button' class='btn-reject' onclick='mostrarMotivoRechazo({$row['id']})'>
-                                            <ion-icon name='trash-outline'></ion-icon>
-                                            Rechazar
-                                        </button>
+                                    <button type='button' class='btn-reject' onclick='mostrarMotivoRechazo({$row['id']})'>
+                                        <ion-icon name='trash-outline'></ion-icon>
+                                        Rechazar
+                                    </button>
                                     </div>
                                 </form>
-                                <div id='motivo-container-{$row['id']}' style='display:none; margin-top:10px;'>
-                                <textarea id='motivo-text-{$row['id']}' placeholder='Escriba el motivo del rechazo'></textarea>
-                                <button onclick='rechazarReserva({$row['id']})'>Confirmar Rechazo</button>
-                        </div>
                         </div>
                         </td>
                     </tr>";
@@ -276,6 +272,15 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             ?>
             </tbody>
         </table>
+    </div>
+
+    <div id="motivoModal" class="modal-reject">
+        <div class="modal-content-reject">
+            <span class="close-reject" onclick="closeModal()">&times;</span>
+            <h2>Motivo de Rechazo</h2>
+            <textarea id="motivo-text" class="motivo-reject-text" placeholder="Escriba el motivo del rechazo"></textarea>
+            <button class="button-reject" onclick="rechazarReserva()">Confirmar Rechazo</button>
+        </div>
     </div>
 
     <div class="pagination">
@@ -318,54 +323,49 @@ $currentFile = basename($_SERVER['PHP_SELF']);
 <script>
 // Función para mostrar el cuadro de texto del motivo de rechazo
 function mostrarMotivoRechazo(idReserva) {
-    let container = document.getElementById(`motivo-container-${idReserva}`);
-    if (container) {
-        container.style.display = "block";
-    } else {
-        console.error("No se encontró el contenedor para la reserva: " + idReserva);
-    }
+    document.getElementById("motivo-text").dataset.reservaId = idReserva;
+    document.getElementById("motivoModal").style.display = "block";
 }
 
-// Función para rechazar la reserva enviando datos por AJAX
-function rechazarReserva(idReserva) {
-    let motivoInput = document.getElementById(`motivo-text-${idReserva}`);
-    if (!motivoInput) {
-        alert("No se encontró el campo de motivo.");
-        return;
-    }
+// Cerrar el modal
+function closeModal() {
+    document.getElementById("motivoModal").style.display = "none";
+}
 
+
+function rechazarReserva() {
+    let motivoInput = document.getElementById("motivo-text");
+    let idReserva = motivoInput.dataset.reservaId;
     let motivo = motivoInput.value.trim();
-    if (motivo === "") {
-        alert("Por favor, ingrese un motivo de rechazo.");
-        return;
-    }
 
-    fetch("../../php/rechazar_reserva.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `id=${encodeURIComponent(idReserva)}&motivo_rechazo=${encodeURIComponent(motivo)}`
-    })
-    .then(response => response.text())
-    .then(text => {
-        console.log("Respuesta del servidor:", text); 
-        return JSON.parse(text); // Convertir JSON
-    })
-    .then(data => {
-        if (data.success) {
-            alert("Reserva rechazada correctamente.");
-            window.location.reload(); // Recarga la página
-        } else {
-            alert("Error al rechazar la reserva: " + data.error);
+        if (motivo === "") {
+            alert("Por favor, ingrese un motivo de rechazo.");
+            return;
         }
-    })
-    .catch(error => {
-        console.error("Error en el fetch:", error);
-        alert("Hubo un problema con la solicitud. Revisa la consola para más detalles.");
-    });
-}
 
+        fetch("../../php/rechazar_reserva.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `id=${encodeURIComponent(idReserva)}&motivo_rechazo=${encodeURIComponent(motivo)}`
+        })
+        .then(response => response.json()) // Aseguramos que la respuesta sea JSON
+        .then(data => {
+            if (data.success) {
+                alert("Reserva rechazada correctamente.");
+                window.location.reload(); // Recarga la página
+            } else {
+                alert("Error al rechazar la reserva: " + data.error);
+            }
+        })
+        .catch(error => {
+            console.error("Error en el fetch:", error);
+            alert("Hubo un problema con la solicitud. Revisa la consola para más detalles.");
+        });
+
+        closeModal();
+}
 </script>
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
