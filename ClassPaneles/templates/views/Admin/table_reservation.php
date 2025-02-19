@@ -81,7 +81,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
     <aside class="sidebar">
     <div class="logo">
         <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150">
-    </div>
+    </div>  
     <nav class="menu">
         <div class="menu-group">
             <p class="menu-title">Menú Principal</p>
@@ -276,10 +276,12 @@ $currentFile = basename($_SERVER['PHP_SELF']);
 
     <div id="motivoModal" class="modal-reject">
         <div class="modal-content-reject">
-            <span class="close-reject" onclick="closeModal()">&times;</span>
             <h2>Motivo de Rechazo</h2>
-            <textarea id="motivo-text" class="motivo-reject-text" placeholder="Escriba el motivo del rechazo"></textarea>
-            <button class="button-reject" onclick="rechazarReserva()">Confirmar Rechazo</button>
+            <textarea id="motivo-text" class="motivo_text" placeholder="Escriba el motivo del rechazo"></textarea>
+            <div>
+                <button class="close-reject" onclick="closeModal()">Cancelar</button>
+                <button class="button-reject" onclick="rechazarReserva()">Confirmar Rechazo</button>
+            </div>
         </div>
     </div>
 

@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Cargar variables de entorno
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 3));
 $dotenv->load();
 
 $correo = $_POST['correo'];
@@ -48,11 +48,13 @@ if ($verificar_correo && mysqli_num_rows($verificar_correo) > 0) {
         // Contenido del correo
         $mail->isHTML(true);
         $mail->Subject = 'Recuperación de contraseña - ClassTrack';
-        $mail->Body = "<p>Hola,</p>
+        $mail->AddEmbeddedImage(__DIR__ . './../assets/images/logo_correo.png','logoimg','logo_correo.png');
+        $mail->Body = "
+                      <img src='cid:logoimg' alt='ClassTrack Logo' style='width: 350px; height: 250px'>
+                      <p>Hola,</p>
                       <p>Para recuperar tu contraseña, haz clic en el siguiente enlace: <a href='$reset_link'>$reset_link</a></p>
                       <p>Si no solicitaste este cambio, ignora este correo.</p>
                       <p>¡Gracias!</p>";
-
         // Enviar el correo
         $mail->send();
         echo '<script>

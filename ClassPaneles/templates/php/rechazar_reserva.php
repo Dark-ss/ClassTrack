@@ -73,7 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Contenido del correo
             $mail->isHTML(true);
             $mail->Subject = "Reserva rechazada en ClassTrack";
-            $mail->Body = "<p>Hola,</p>
+            $mail->AddEmbeddedImage(__DIR__ . './../assets/images/logo_correo.png','logoimg','logo_correo.png');
+            $mail->Body = "
+                        <img src='cid:logoimg' alt='ClassTrack Logo' style='width: 350px; height: 250px'>
+                        <p>Hola,</p>
                         <p>Lamentamos informarte que tu reserva en el espacio <b>$espacio_id</b> ha sido <b>rechazada</b>.</p>
                         <p><b>Motivo del rechazo:</b> $motivo</p>
                         <p>Fecha de inicio: <b>$fecha_inicio</b></p>

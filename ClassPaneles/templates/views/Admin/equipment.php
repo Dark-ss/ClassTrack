@@ -59,7 +59,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../assets/css/style_panel.css">
+    <link rel="stylesheet" href="../../assets/css/style_building.css?v=1">
     <link rel="shortcut icon" href="../../assets/images/logo2.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <title>Registro de Edificios</title>
 </head>
 
@@ -135,29 +137,29 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
             </div>
         </aside>
-    <main class="content">
-            <div class="content-header">
-                <h2>Gestión de Equipamientos</h2>
-                <button class="add-button" onclick="openModal()">
-                    <ion-icon name="add-outline"></ion-icon>
-                    Añadir Equipamiento 
-                </button>
-            </div>
-            <div class="buildings-grid">
+<main class="content">
+    <div class="content-header">
+        <h2>Gestión de Equipamientos</h2>
+        <button class="add-button" onclick="openModal()">
+            <ion-icon name="add-outline"></ion-icon>
+            Añadir Equipamiento 
+        </button>
+    </div>        
+    <div class="buildings-grid">
         <?php foreach ($equipamientos as $equipamiento): ?>
         <div class="building-card">
             <img src="<?php echo htmlspecialchars($equipamiento['imagen']); ?>" alt="Equipamiento" class="building-image">
             <div class="building-info">
                 <h3><?php echo htmlspecialchars($equipamiento['nombre']); ?></h3>
-                <a href="update_equipment.php?id=<?php echo htmlspecialchars($equipamiento['id']); ?>" class="edit-link">
-                    <ion-icon name="create-outline"></ion-icon>
-                    Editar
+                <a href="update_equipment.php?id=<?php echo htmlspecialchars($equipamiento['id']); ?>" class="edit-button">
+                    <i class="ti ti-edit"></i>
                 </a>
             </div>
         </div>
         <?php endforeach; ?>
     </div>
-    <div class="modal1" id="modal">
+
+<div class="modal1" id="modal">
     <div class="modal-content1">
         <div class="modal-header1">
             <h3>Añadir Nuevo Equipamiento</h3>

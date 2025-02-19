@@ -184,7 +184,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <h2>Gestión de Edificios</h2>
             </div>
 
-            <!-- Mover la barra de búsqueda aquí -->
             <div class="content_nav">
                 <div class="search-bar">
                     <input type="text" id="search-input" placeholder="Buscar edificio...">

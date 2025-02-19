@@ -82,7 +82,10 @@ if (isset($_POST['approve']) || isset($_POST['reject'])) {
                 // Contenido del correo
                 $mail->isHTML(true);
                 $mail->Subject = "Estado de tu reserva en ClassTrack";
-                $mail->Body = "<p>Hola,</p>
+                $mail->AddEmbeddedImage(__DIR__ . './../../assets/images/logo_correo.png','logoimg','logo_correo.png');
+                $mail->Body = "
+                            <img src='cid:logoimg' alt='ClassTrack Logo' style='width: 350px; height: 250px'>
+                            <p>Hola,</p>
                             <p>Tu reserva en el espacio <b>$espacio_id</b> ha sido <b>$nuevo_estado</b>.</p>
                             <p>Fecha de inicio: <b>$fecha_inicio</b></p>
                             <p>Fecha de finalización: <b>$fecha_fin</b></p>

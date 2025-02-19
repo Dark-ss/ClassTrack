@@ -1,5 +1,6 @@
 <?php
-session_start(); // sesión abierta
+session_name("docente_session");
+session_start();
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'docente') {
     header("Location: ../templates/index.php"); // Redirige al login si no es docente
     exit();
