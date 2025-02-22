@@ -27,9 +27,10 @@ $total_reservas = mysqli_fetch_assoc($resultado_total)['total'];
 $total_paginas = ceil($total_reservas / $registros_por_pagina);
 
 // Obtener las reservas del usuario
-$query = "SELECT r.id, r.fecha_inicio, r.fecha_final, r.tipo_reservacion, r.estado,e.codigo AS espacio
+$query = "SELECT r.id, r.fecha_inicio, r.fecha_final, r.tipo_reservacion, r.estado,e.codigo AS espacio, ed.nombre AS nombre_edificio
         FROM reservaciones r 
         JOIN espacios_academicos e ON r.id_espacio = e.id
+        LEFT JOIN edificios ed ON e.edificio_id = ed.id
         WHERE r.id_usuario = '$id_usuario'
         ORDER BY r.fecha_inicio DESC
         LIMIT $offset, $registros_por_pagina";
@@ -64,94 +65,146 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Mis Reservas</title>
-    <link rel="stylesheet" href="../../assets/css/style_paneles.css">
+    <link rel="stylesheet" href="../../assets/css/style_panel.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
-    <main>
-    <div class="profile-container">
-            <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
-            <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
-            <a href="../../php/cerrar_sesion.php" class="logout">
-                <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
-            </a>
-            <a href="../../php/config_docente.php" class="config">
-                <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
-            </a>
-            <a href="docente_dashboard.php" class="home-admin">
-                <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
-            </a>
-            <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
+<div class="container">
+<?php
+$currentFile = basename($_SERVER['PHP_SELF']);
+?>
+    <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
+            </div>
+            <nav class="menu">
+                <div class="menu-group">
+                    <p class="menu-title">Menú Principal</p>
+                    <ul>
+                        <li><a href="docente_dashboard.php"
+                                class="<?php echo $currentFile == 'docente_dashboard.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Inicio
+                            </a></li>
+                        <li><a href="vista_buildings.php"
+                                class="<?php echo $currentFile == 'vista_buildings.php' ? 'active' : ''; ?>">
+                                <ion-icon name="business-outline"></ion-icon> Edificios
+                            </a></li>
+                        <li><a href="table_disponibilidad.php"
+                                class="<?php echo $currentFile == 'table_disponibilidad.php' ? 'active' : ''; ?>">
+                                <ion-icon name="list-outline"></ion-icon> Disponibilidad
+                            </a></li>
+                    </ul>
                 </div>
-                <div class="submenu" id="submenu">
-                    <a href="vista_buildings.php">Edificios</a>
-                    <a href="table_disponibilidad.php">Disponibilidad</a>
-                    <a href="mis_reservas.php">Mis reservas</a>
+                <div class="menu-group">
+                    <p class="menu-title">Gestión de reservas</p>
+                    <ul>
+                        <li><a href="mis_reservas.php"
+                                class="<?php echo $currentFile == 'mis_reservas.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Configuración</p>
+                    <ul>
+                        <li><a href="../../php/config_docente.php"
+                                class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
+                                <ion-icon name="settings-outline"></ion-icon> Ajustes
+                            </a></li>
+                        <li><a href="../../php/cerrar_sesion.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                                <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+                            </a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="divider"></div>
+            <div class="profile">
+                <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
+                <div>
+                    <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <form method="GET" action="mis_reservas.php" class="search-form">
-            <input type="text" name="buscar" placeholder="Buscar reserva..." value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
-            <button type="submit">Buscar</button>
-        </form><!--Corregir los estilos de paginación para poder realizar la busqueda-->
+        <main class="main-content-cuenta">
+            <h1 class="title-table">Lista de Edificios</h1>
+            <!-- Barra de búsqueda -->
+            <div class="search-and-create">
+                <form method="GET" action="mis_reservas.php" class="search-form">
+                    <ion-icon name="search-outline" class="search-icon"></ion-icon>
+                    <input type="text" name="buscar" placeholder="Buscar reservas..."
+                        value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
 
         <h1 class="title-table">Lista de Reservas</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Fecha inicio</th>
-                    <th>Fecha fin</th>
-                    <th>Tipo reservación</th>
-                    <th>Espacio</th>
-                    <th>Estado</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
+        <div class="table-container">
+            <table class="user-table">
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($fila['id']); ?></td>
-                        <td><?php echo htmlspecialchars(date('d/m/Y h:i A', strtotime($fila['fecha_inicio']))); ?></td>
-                        <td><?php echo htmlspecialchars(date('d/m/Y h:i A', strtotime($fila['fecha_final']))); ?></td>
-                        <td><?php echo htmlspecialchars($fila['tipo_reservacion']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['espacio']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['estado']); ?></td>
-                        <td>
-                            <a href="#" class="delete-button" onclick="deleteReservation(<?php echo $fila['id']; ?>); return false;">
-                                <img src="../../assets/images/delete.png" alt="Eliminar" class="icons-image">
-                            </a>
-                            <a href="update_reservation.php?id=<?php echo $fila['id']; ?>" class="delete-button">
-                                <img src="../../assets/images/update.png" alt="configuracion" class="icons-image">
-                            </a>
-                        </td>
+                        <th>Id</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha fin</th>
+                        <th>Tipo reservación</th>
+                        <th>Espacio</th>
+                        <th>Edificio</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    <div class="pagination">
-        <?php if ($pagina_actual > 1): ?>
-            <a href="?pagina=<?php echo $pagina_actual - 1; ?>">Anterior</a>
-        <?php endif; ?>
-
-        <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
-            <a href="?pagina=<?php echo $i; ?>" class="<?php echo $i === $pagina_actual ? 'active' : ''; ?>">
-        <?php echo $i; ?>
-            </a>
-        <?php endfor; ?>
-
-        <?php if ($pagina_actual < $total_paginas): ?>
-            <a href="?pagina=<?php echo $pagina_actual + 1; ?>">Siguiente</a>
-        <?php endif; ?>
-    </div>
+                </thead>
+                <tbody>
+                    <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($fila['id']); ?></td>
+                            <td><?php echo htmlspecialchars(date('d/m/Y h:i A', strtotime($fila['fecha_inicio']))); ?></td>
+                            <td><?php echo htmlspecialchars(date('d/m/Y h:i A', strtotime($fila['fecha_final']))); ?></td>
+                            <td><?php echo htmlspecialchars($fila['tipo_reservacion']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['espacio']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['nombre_edificio']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['estado']); ?></td>
+                            <td>
+                                <div class="dropdown">
+                                    <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>
+                                    <div class="dropdown-content">
+                                        <a href="update_reservation.php?id=<?php echo $fila['id']; ?>" class="update-button">
+                                            <ion-icon name="create-outline"></ion-icon>
+                                            Actualizar
+                                        </a>
+                                        <a href="#" class="delete-button" onclick="deleteReservation(<?php echo $fila['id']; ?>); return false;">
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                            Eliminar
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            <?php if ($pagina_actual > 1): ?>
+                <a href="?pagina=<?php echo $pagina_actual - 1; ?>&buscar=<?php echo htmlspecialchars($search); ?>"
+                    class="pagination-button">Anterior</a>
+            <?php endif; ?>
+            <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
+                <a href="?pagina=<?php echo $i; ?>&buscar=<?php echo htmlspecialchars($search); ?>"
+                    class="pagination-button <?php echo $i === $pagina_actual ? 'active' : ''; ?>"><?php echo $i; ?></a>
+            <?php endfor; ?>
+            <?php if ($pagina_actual < $total_paginas): ?>
+                <a href="?pagina=<?php echo $pagina_actual + 1; ?>&buscar=<?php echo htmlspecialchars($search); ?>"
+                    class="pagination-button">Siguiente</a>
+            <?php endif; ?>
+        </div>
 </main>
-
-    <script>
+</div>
+<script>
 function deleteReservation(id) {
     if (confirm('¿Estás seguro de que deseas eliminar esta reserva?')) {
         fetch('mis_reservas.php', {
@@ -180,8 +233,8 @@ function deleteReservation(id) {
 </script>
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </body>
-
 </html>
 
 <?php

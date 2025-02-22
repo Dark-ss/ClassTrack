@@ -32,7 +32,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuración</title>
+    <title>Configuración Administrador</title>
     <link rel="stylesheet" href="../assets/css/style_panel.css">
 </head>
 
@@ -144,7 +144,6 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
     </main>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script src="../assets/js/button_update.js"></script>
-    <script src="../assets/js/script_menu.js"></script>
 </body>
 
 </html>
