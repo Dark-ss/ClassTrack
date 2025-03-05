@@ -102,7 +102,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1">
     <link rel="stylesheet" href="../../assets/css/style_building.css?v=1">
-    <link rel="shortcut icon" href="../../assets/images/logo1.png">
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <title>Edificios</title>
 </head>

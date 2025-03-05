@@ -32,8 +32,9 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuración Docente</title>
     <link rel="stylesheet" href="../assets/css/style_panel.css">
+    <link rel="shortcut icon" href="../assets/images/logo2.png">
+    <title>Configuración Docente</title>
 </head>
 
 <body>

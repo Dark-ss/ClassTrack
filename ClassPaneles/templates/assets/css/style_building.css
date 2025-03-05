@@ -142,15 +142,6 @@ body{
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-/*boton añadir edificio*/
-.form-group button {
-    background-color: #1f6b31;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-}
 
 /* Contenedor de edificios */
 .container-edificios {
@@ -1101,3 +1092,16 @@ hr {
     justify-content: space-between;
     margin-right: 25px;
 }
+/*soporte tecnico*/
+
+#nivel_prioridad{
+    width: 40%;
+}
+
+#mensaje{
+    width: 70%;
+    resize: none;
+    width: 425px;
+    height: 100px;
+}
+

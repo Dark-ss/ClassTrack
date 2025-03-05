@@ -66,14 +66,15 @@ if (isset($_POST['reservation_update'])) {
     fecha_final = '$fecha_final', 
     tipo_reservacion = '$tipo_reservacion', 
     descripcion = '$descripcion', 
-    id_espacio = '$id_espacio'
+    id_espacio = '$id_espacio',
+    estado = 'pendiente'
     WHERE id = '$id_reservacion' AND id_usuario = '$id_usuario'
     ";
     if (!mysqli_query($conexion, $query_update)) {
         die("Error al actualizar la reservación: " . mysqli_error($conexion));
     }
 
-    // Actualizar estudiantes
+    // Delete students
     $query_delete_estudiantes = "DELETE FROM reservaciones_estudiantes WHERE id_reservacion = '$id_reservacion'";
     mysqli_query($conexion, $query_delete_estudiantes);
 
@@ -96,38 +97,68 @@ if (isset($_POST['reservation_update'])) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Reserva</title>
-    <link rel="stylesheet" href="../../assets/css/style_paneles.css">
+    <link rel="stylesheet" href="../../assets/css/style_panel.css">
     <link rel="stylesheet" href="../../assets/css/style_building.css?v=1.0">
-    <link rel="stylesheet" href="../../assets/css/style_teacher.css?v=1.0">
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
+    <title>Editar Reserva</title>
 </head>
 <body>
-    <div class="profile-container">
-        <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-        <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
-        <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
-        <a href="../../php/cerrar_sesion.php" class="logout">
-            <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
-        </a>
-        <a href="../../php/config_docente.php" class="config">
-            <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
-        </a>
-        <a href="docente_dashboard.php" class="home-admin">
-            <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
-        </a>
-
-        <div class="menu-container" id="menu-container">
-            <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
-            </div>  
-            <div class="submenu" id="submenu">
-                <a href="vista_buildings.php">Edificios</a>
-                <a href="table_disponibilidad.php">Disponibilidad</a>
-                <a href="mis_reservas.php">Mis reservas</a>
+    <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
             </div>
-        </div>
-        </div>
+            <nav class="menu">
+                <div class="menu-group">
+                    <p class="menu-title">Menú Principal</p>
+                    <ul>
+                        <li><a href="docente_dashboard.php"
+                                class="<?php echo $currentFile == 'docente_dashboard.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Inicio
+                            </a></li>
+                        <li><a href="vista_buildings.php"
+                                class="<?php echo $currentFile == 'vista_buildings.php' ? 'active' : ''; ?>">
+                                <ion-icon name="business-outline"></ion-icon> Edificios
+                            </a></li>
+                        <li><a href="table_disponibilidad.php"
+                                class="<?php echo $currentFile == 'table_disponibilidad.php' ? 'active' : ''; ?>">
+                                <ion-icon name="list-outline"></ion-icon> Disponibilidad
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Gestión de reservas</p>
+                    <ul>
+                        <li><a href="mis_reservas.php"
+                                class="<?php echo $currentFile == 'mis_reservas.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Configuración</p>
+                    <ul>
+                        <li><a href="../../php/config_docente.php"
+                                class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
+                                <ion-icon name="settings-outline"></ion-icon> Ajustes
+                            </a></li>
+                        <li><a href="../../php/cerrar_sesion.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                                <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+                            </a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="divider"></div>
+            <div class="profile">
+                <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
+                <div>
+                    <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
+                </div>
+            </div>
+    </aside>
     <div class="modal-content">
-        <h2>Editar Reserva</h1>
+        <h2>Editar Reserva</h2>
         <form action="update_reservation.php" method="POST">
             <input type="hidden" name="reservation_update" value="true">
             <input type="hidden" name="estado" value="<?php echo $reserva['estado']; ?>">
@@ -166,7 +197,7 @@ if (isset($_POST['reservation_update'])) {
             </div>
             <div class="form-group">
                 <label for="estudiantes">Añadir Estudiantes:</label>
-                <input type="text" id="estudiantes" name="estudiantes" placeholder="Buscar estudiante..." autocomplete="off">
+                <input type="text" id="estudiantes_search" name="estudiantes" placeholder="Buscar estudiante..." autocomplete="off" disabled>
                 <div id="student-list" style="margin-top: 8px;"></div>
                 <div id="selected-students" style="margin-top: 8px;">
             <?php 
@@ -177,13 +208,13 @@ if (isset($_POST['reservation_update'])) {
                 $estudiante = mysqli_fetch_assoc($resultado);
                 if ($estudiante) {
             ?>
-                <div style="display: flex; align-items: center; margin: 5px 0; padding: 5px; background-color: #e9ecef; border-radius: 4px;">
-                    <span><?php echo $estudiante['nombre_completo']; ?></span>
-                    <input type="hidden" name="estudiantes[]" value="<?php echo $estudianteId; ?>">
-                    <?php if ($reserva['estado'] !== "aceptada"): ?>
-                    <button type="button" style="margin-left: 10px; cursor: pointer; border: none; background: none; color: red; font-weight: bold;" onclick="this.parentElement.remove();">×</button>
+            <div style="display: flex; align-items: center; margin: 5px 0; padding: 5px; background-color: #e9ecef; border-radius: 4px;">
+                <span><?php echo $estudiante['nombre_completo']; ?></span>
+                <input type="hidden" name="estudiantes[]" value="<?php echo $estudianteId; ?>">
+                <?php if ($reserva['estado'] !== "aceptada"): ?>
+                <button type="button" id="button-state-acept" style="margin-left: 10px; cursor: pointer; border: none; background: none; color: #1f8f7c; font-weight: bold;" onclick="this.parentElement.remove();" disabled>×</button>
                 <?php endif; ?>
-                </div>
+            </div>
             <?php 
                 }
             }
@@ -191,19 +222,17 @@ if (isset($_POST['reservation_update'])) {
             <?php if ($reserva['estado'] === 'rechazada' && !empty($reserva['motivo_rechazo'])): ?>
                 <div class="form-group">
                     <label for="motivo_rechazo">Motivo del rechazo:</label>
-                    <p style="color: red; font-weight: bold;"><?php echo htmlspecialchars($reserva['motivo_rechazo']); ?></p>
+                    <p style="color:rgb(70, 73, 78); font-weight: bold;"><?php echo htmlspecialchars($reserva['motivo_rechazo']); ?></p>
                 </div>
             <?php endif; ?>
             </div>
             <div class="buttons-form-container">
             <?php if ($reserva['estado'] !== "aceptada"): ?>
-                <button type="button" id="edit-button-reservation" class="update-button" onclick="enableEditingReservation()">Actualizar</button>
+                <button type="button" id="edit-button-reservation" class="update-button-reservation" onclick="enableEditingReservation()">Actualizar</button>
             <?php else: ?>
                 <p style="color: red;">No puedes actualizar la reserva porque ya ha sido aceptada.</p>
             <?php endif; ?>
-
-
-                <button type="submit" id="save-button-reservation" class="save-button" style="display: none;">Guardar Cambios</button>
+                <button type="submit" id="save-button-reservation" class="save-button-reservation" style="display: none;">Guardar Cambios</button>
             </div>
         </form>
     </div> 
@@ -355,6 +384,6 @@ if (isset($_POST['reservation_update'])) {
 
     </script>
     <script src="../../assets/js/button_update.js"></script>
-    <script src="../../assets/js/script_menu.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </body>
 </html>

@@ -169,7 +169,7 @@ body {
 .stat-card {
     background-color: #fff;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 25px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
     flex: 1 1 calc(50% - 20px); /* Ajusta el tamaño para dos columnas con espacio entre ellas */
@@ -511,6 +511,30 @@ body {
 .docente-role {
     background-color: #bfffc5;
     color: #13570d;
+}
+
+/*style table (mis reservas) column (estado)*/
+.state {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.aceptada-stat {
+    background-color: #bfffc5;
+    color: #13570d;
+}
+
+.rechazada-stat {
+    background-color: #ffd9bf;
+    color: #9b131e;
+}
+
+.pendiente-stat{
+    background-color: #6FB5E3;
+    color: #2d4a5e;
 }
 
 .action-buttons {
@@ -1186,4 +1210,107 @@ h2 {
     color: #9ca3af;
     font-size: 18px;
     pointer-events: none;
+}
+/*graficas dashboard (docente)*/
+.charts-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr; /* La gráfica de líneas más grande y las otras dos a su lado */
+    gap: 15px; /* Reducir el espacio entre gráficas */
+    align-items: start;
+}
+.chart-big {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 98%;
+    height: 100%;
+    box-sizing: border-box;
+    grid-column: 1;
+    margin-top: 20px;
+}
+.chart-small {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#chartEstudiantes {
+    width: 100%;
+    height: 300px;
+}
+
+#chartAulas{
+    max-width: 250px;
+    max-height: 500px;
+    margin: auto;
+}
+
+#chartHoras {
+    max-width: 250px;
+    max-height: 500px;
+    margin: auto;
+}
+
+/*datetime update_reservation*/
+#fecha_inicio, #fecha_final{
+    width: 80%;
+}
+#tipo_reservacion{
+    width: 30%;
+}
+#id_espacio{
+    width: 15%;
+}
+#estudiantes{
+    width: 90%;
+}
+/*button udpate_reservation*/
+.update-button-reservation{
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 4%;
+    padding: 0.75rem 1.5rem;
+    background-color: #1f8f7c;
+    width: 30%;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    justify-content: center;
+}
+
+.update-button-reservation:hover {
+    background-color: #1a7a6a;
+}
+
+.save-button-reservation{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 4%;
+    padding: 0.75rem 1.5rem;
+    background-color: #1f8f7c;
+    color: white;
+    width: 30%;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-button-reservation:hover {
+    background-color: #1a7a6a;
+}
+/*mis_solicitudes*/
+.respondida {
+    background-color: #d4edda !important;
 }

@@ -38,6 +38,47 @@ for ($i = 1; $i <= 12; $i++) {
 while ($row = mysqli_fetch_assoc($resultEstudiantesPorMes)) {
     $estudiantesPorMes[$row['mes_registro']] = $row['total_estudiantes'];
 }
+
+$queryAulasMasUsadas = "
+    SELECT a.codigo AS codigo_espacio, e.codigo AS codigo_edificio, COUNT(r.id) AS total_usos
+    FROM reservaciones r
+    JOIN espacios_academicos a ON r.id_espacio = a.id
+    JOIN edificios e ON a.edificio_id = e.id
+    WHERE r.id_usuario = '$id_usuario'
+    GROUP BY a.codigo, e.codigo
+    ORDER BY total_usos DESC
+    LIMIT 5";
+
+$resultAulasMasUsadas = mysqli_query($conexion, $queryAulasMasUsadas);
+
+if (!$resultAulasMasUsadas) {
+    die("Error en la consulta de aulas más usadas: " . mysqli_error($conexion));
+}
+
+$aulasMasUsadas = [];
+while ($row = mysqli_fetch_assoc($resultAulasMasUsadas)) {
+    // Concatenamos el código del edificio con el código del espacio
+    $codigoCompleto = $row['codigo_edificio'] . '-' . $row['codigo_espacio'];
+    $aulasMasUsadas[$codigoCompleto] = $row['total_usos'];
+}
+
+
+$queryHorasAulas = "
+    SELECT CONCAT(e.codigo, '-', a.codigo) AS codigo_completo, SUM(TIMESTAMPDIFF(HOUR, r.fecha_inicio, r.fecha_final)) AS horas_totales
+    FROM reservaciones r
+    JOIN espacios_academicos a ON r.id_espacio = a.id
+    JOIN edificios e ON a.edificio_id = e.id
+    WHERE r.id_usuario = '$id_usuario'
+    GROUP BY codigo_completo
+    ORDER BY horas_totales DESC
+    LIMIT 5";
+
+$resultHorasAulas = mysqli_query($conexion, $queryHorasAulas);
+$horasAulas = [];
+while ($row = mysqli_fetch_assoc($resultHorasAulas)) {
+    $horasAulas[$row['codigo_completo']] = $row['horas_totales'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +88,7 @@ while ($row = mysqli_fetch_assoc($resultEstudiantesPorMes)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../assets/css/style_panel.css">
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Panel Docente</title>
 </head>
@@ -88,6 +130,21 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     </ul>
                 </div>
                 <div class="menu-group">
+                    <p class="menu-title">Ayuda</p>
+                    <ul>
+                        <li><a href="suport.php"
+                                class="<?php echo $currentFile == 'suport.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Soporte técnico
+                            </a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="mis_solicitudes.php"
+                                class="<?php echo $currentFile == 'mis_solicitudes.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis solicitudes
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
                     <p class="menu-title">Configuración</p>
                     <ul>
                         <li><a href="../../php/config_docente.php"
@@ -125,57 +182,72 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     <p><?php echo $totalEstudiantes; ?></p>
                 </div>
             </div>
-            <div class="chart-container">
-                <h3>Estudiantes Registrados Por Mes (Último Año)</h3>
-                <canvas id="chartEstudiantes" width="400" height="200"></canvas>
-                <script>
-                    // Datos para el gráfico (deberías llenar estos valores dinámicamente con PHP)
-                    var estudiantesPorMes = <?php echo json_encode(array_values($estudiantesPorMes)); ?>;
-                    var labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            <div class="charts-container">       
+                <div class="chart-big">
+                    <h3>Estudiantes Registrados Por Mes (Último Año)</h3>
+                    <canvas id="chartEstudiantes"></canvas>
+                </div>
 
-                    var ctx = document.getElementById('chartEstudiantes').getContext('2d');
-                    var chart = new Chart(ctx, {
-                        type: 'line', // Tipo de gráfico ahora es de línea
-                        data: {
-                            labels: labels, // Etiquetas para los meses
-                            datasets: [{
-                                label: 'Estudiantes Registrados',
-                                data: estudiantesPorMes, // Datos de los estudiantes por mes
-                                borderColor: 'rgba(54, 162, 235, 1)', // Color de la línea
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo de la línea
-                                fill: true, // Rellenar el área bajo la línea
-                                tension: 0.4, // Para suavizar las líneas
-                                borderWidth: 2
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        stepSize: 1 // Definir tamaño de los pasos en el eje Y
-                                    }
-                                }
-                            },
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(tooltipItem) {
-                                            return 'Estudiantes: ' + tooltipItem.raw;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
+                <div class="chart-small">
+                    <h3>Aulas Más Utilizadas</h3>
+                    <canvas id="chartAulas"></canvas>
+                </div>
+                <div class="chart-small">
+                    <h3>Horas Totales de Uso de Aulas</h3>
+                    <canvas id="chartHoras"></canvas>
+                </div>
             </div>
         </main>
     </div>
+    <script>
+        var ctx1 = document.getElementById('chartEstudiantes').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                datasets: [{
+                    label: 'Estudiantes Registrados',
+                    data: <?php echo json_encode(array_values($estudiantesPorMes)); ?>,
+                    borderColor: '#10646C',
+                    backgroundColor: '#6FE3C6',
+                    fill: true,
+                    tension: 0.5,
+                    borderWidth: 1 
+                }]
+            }
+        });
+        var ctx2 = document.getElementById('chartAulas').getContext('2d');
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: <?php echo json_encode(array_keys($aulasMasUsadas)); ?>,
+                datasets: [{
+                    data: <?php echo json_encode(array_values($aulasMasUsadas)); ?>,
+                    backgroundColor: ['#10646c', '#6F90E3', '#6FB5E3', '#6FE3C6', '#736FE3']
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'right'  // Mueve las etiquetas al lado derecho
+                    }
+                }
+            }
+        });
+
+        var ctx3 = document.getElementById('chartHoras').getContext('2d');
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode(array_keys($horasAulas)); ?>,
+                datasets: [{
+                    label: 'Horas Totales',
+                    data: <?php echo json_encode(array_values($horasAulas)); ?>,
+                    backgroundColor: '#6FB5E3'
+                }]
+            }
+        });
+    </script>
 </body>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </html>

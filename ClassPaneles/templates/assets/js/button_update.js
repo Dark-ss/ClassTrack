@@ -78,7 +78,8 @@ function enableEditingReservation() {
     document.getElementById('tipo_reservacion').disabled = false;
     document.getElementById('descripcion').disabled = false;
     document.getElementById('id_espacio').disabled = false;
-    document.getElementById('estudiantes').disabled = false;
+    document.getElementById('button-state-acept').disabled = false;
+    document.getElementById('estudiantes_search').disabled = false;
 
     document.getElementById('save-button-reservation').style.display = 'inline-block';
     event.target.style.display = 'none';
@@ -91,6 +92,8 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('edit-button-users').addEventListener('click', enableEditingUsers);
     document.getElementById('edit-button-description').addEventListener('click', enableEditingDescription);
     document.getElementById('estudiantes').addEventListener('input', eventQueryStudents);
+    document.getElementById('button-state-acept').addEventListener('click', enableEditingReservation);
+    document.getElementById('estudiantes_search').addEventListener('click', enableEditingReservation);
 });
 
 // Función para mostrar/ocultar el dropdown
