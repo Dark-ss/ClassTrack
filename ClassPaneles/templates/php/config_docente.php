@@ -38,7 +38,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
 </head>
 
 <body>
-<div class="container">
+<div class="container-docente">
 <aside class="sidebar">
             <div class="logo">
                 <img src="../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
@@ -67,6 +67,21 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                         <li><a href="../views/Docente/mis_reservas.php"
                                 class="<?php echo $currentFile == '../views/Docente/mis_reservas.php' ? 'active' : ''; ?>">
                                 <ion-icon name="calendar-outline"></ion-icon> Mis reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Ayuda</p>
+                    <ul>
+                        <li><a href="../views/Docente/suport.php"
+                                class="<?php echo $currentFile == '../views/Docente/suport.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Soporte técnico
+                            </a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="../views/Docente/mis_solicitudes.php"
+                                class="<?php echo $currentFile == '../views/Docente/mis_solicitudes.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis solicitudes
                             </a></li>
                     </ul>
                 </div>

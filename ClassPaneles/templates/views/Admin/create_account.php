@@ -1,4 +1,4 @@
-<?php
+    <?php
 include '../../php/admin_session.php';
 ?>
 <!DOCTYPE html>

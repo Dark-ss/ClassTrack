@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-<div class="container">
+<div class="container-docente">
 <?php
 $currentFile = basename($_SERVER['PHP_SELF']);
 ?>
@@ -85,6 +85,12 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <li><a href="suport.php"
                                 class="<?php echo $currentFile == 'suport.php' ? 'active' : ''; ?>">
                                 <ion-icon name="calendar-outline"></ion-icon> Soporte técnico
+                            </a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="mis_solicitudes.php"
+                                class="<?php echo $currentFile == 'mis_solicitudes.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis solicitudes
                             </a></li>
                     </ul>
                 </div>

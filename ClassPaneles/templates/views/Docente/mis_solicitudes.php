@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 </head>
 
 <body>
-<div class="container">
+<div class="container-docente">
 <?php
 $currentFile = basename($_SERVER['PHP_SELF']);
 ?>
@@ -109,6 +109,21 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     </ul>
                 </div>
                 <div class="menu-group">
+                    <p class="menu-title">Ayuda</p>
+                    <ul>
+                        <li><a href="suport.php"
+                                class="<?php echo $currentFile == 'suport.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Soporte técnico
+                            </a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="mis_solicitudes.php"
+                                class="<?php echo $currentFile == 'mis_solicitudes.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis solicitudes
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
                     <p class="menu-title">Configuración</p>
                     <ul>
                         <li><a href="../../php/config_docente.php"
@@ -136,7 +151,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             <h1 class="title-table">Lista de Solicitudes</h1>
             <!-- Barra de búsqueda -->
             <div class="search-and-create">
-                <form method="GET" action="mi_solicitudes.php" class="search-form">
+                <form method="GET" action="mis_solicitudes.php" class="search-form">
                     <ion-icon name="search-outline" class="search-icon"></ion-icon>
                     <input type="text" name="buscar" placeholder="Buscar solicitudes..."
                         value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">

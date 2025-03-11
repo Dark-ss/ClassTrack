@@ -50,7 +50,7 @@ $query = "SELECT id, nombre, imagen FROM edificios";
 $result = mysqli_query($conexion, $query);
 $edificios = [];
 
-$registros_por_pagina = 6; // Puedes ajustar esto a 9 si prefieres
+$registros_por_pagina = 6;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
@@ -144,6 +144,21 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     </ul>
                 </div>
                 <div class="menu-group">
+                    <p class="menu-title">Ayuda</p>
+                    <ul>
+                        <li><a href="suport.php"
+                                class="<?php echo $currentFile == 'suport.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Soporte técnico
+                            </a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="mis_solicitudes.php"
+                                class="<?php echo $currentFile == 'mis_solicitudes.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis solicitudes
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
                     <p class="menu-title">Configuración</p>
                     <ul>
                         <li><a href="../../php/config_docente.php"
@@ -176,7 +191,6 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     <input type="text" id="search-input" placeholder="Buscar edificio...">
                     <ion-icon name="search-outline"></ion-icon>
 
-                    <!-- Menú desplegable para filtrar por tipo -->
                     <select id="filter-type" class="filter-select">
                         <option value="">Todos los tipos</option>
                         <option value="Laboratorio">Laboratorio</option>
@@ -184,9 +198,6 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <option value="Auditorio">Auditorio</option>
                     </select>
                 </div>
-            </div>
-            <div class="buildings-grid">
-
             </div>
             <div class="buildings-grid">
                 <?php foreach ($edificios as $edificio): ?>
@@ -202,18 +213,15 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     <div class="building-info">
                         <div class="building-header">
                             <h3 class="building-name"><?php echo htmlspecialchars($edificio['nombre']); ?></h3>
-                            <!-- Identificador del tipo de edificio -->
                             <span
                                 class="role building-type <?php echo strtolower(str_replace(' ', '-', $edificio['tipo'] ?? 'desconocido')); ?>">
                                 <?php
-                    // Cambiar "Espacio Académico" por "Académico"
-                    echo htmlspecialchars(($edificio['tipo'] ?? 'Desconocido') === 'Espacio Académico' ? 'Académico' : $edificio['tipo']);
-                    ?>
+                                    echo htmlspecialchars(($edificio['tipo'] ?? 'Desconocido') === 'Espacio Académico' ? 'Académico' : $edificio['tipo']);
+                                ?>
                             </span>
                         </div>
-                        <!-- Nueva fila para código, pisos y cupo -->
                         <div class="space-count">
-                            <i class="ti ti-building"></i> <!-- Reemplaza ion-icon name="business-outline" -->
+                            <i class="ti ti-building"></i>
                             <span>Espacios: <?php echo htmlspecialchars($edificio['espacios_asociados']); ?></span>
                         </div>
                         <div class="space-count">

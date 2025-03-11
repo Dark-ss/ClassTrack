@@ -58,7 +58,7 @@ if (isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Lista Edificios</title>
     <link rel="stylesheet" href="../../assets/css/style_panel.css">
-    <link rel="shortcut icon" href="../../assets/images/logo1.png">
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
 </head>
 
 <body>

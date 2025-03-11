@@ -87,53 +87,87 @@ if (isset($_POST['update_building'])) { //Solicitud HTTP
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Información Edificio</title>
-    <link rel="stylesheet" href="../../assets/css/style_paneles.css">
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
+    <link rel="stylesheet" href="../../assets/css/style_panel.css">
     <link rel="stylesheet" href="../../assets/css/style_building.css?v=1.0">
     <link rel="stylesheet" href="../../assets/css/style_teacher.css?v=1.0">
 </head>
 
 <body>
-    <main>
-        <div class="profile-container">
-            <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
-            <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
-            <a href="../../php/cerrar_sesion.php" class="logout">
-                <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
-            </a>
-            <a href="../../php/config_docente.php" class="config">
-                <img src="../../assets/images/config.png" alt="Configuración" class="incons-image">
-            </a>
-            <a href="docente_dashboard.php" class="home-admin">
-                <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
-            </a>
-            <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Espacios<span>▼</span>
-                </div>  
-                <div class="submenu" id="submenu">
-                    <a href="vista_buildings.php">Edificios</a>
-                    <a href="table_disponibilidad.php">Disponibilidad</a>
+    <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
+            </div>
+            <nav class="menu">
+                <div class="menu-group">
+                    <p class="menu-title">Menú Principal</p>
+                    <ul>
+                        <li><a href="docente_dashboard.php"
+                                class="<?php echo $currentFile == 'docente_dashboard.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Inicio
+                            </a></li>
+                        <li><a href="vista_buildings.php"
+                                class="<?php echo $currentFile == 'vista_buildings.php' ? 'active' : ''; ?>">
+                                <ion-icon name="business-outline"></ion-icon> Edificios
+                            </a></li>
+                        <li><a href="table_disponibilidad.php"
+                                class="<?php echo $currentFile == 'table_disponibilidad.php' ? 'active' : ''; ?>">
+                                <ion-icon name="list-outline"></ion-icon> Disponibilidad
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Gestión de reservas</p>
+                    <ul>
+                        <li><a href="mis_reservas.php"
+                                class="<?php echo $currentFile == 'mis_reservas.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Configuración</p>
+                    <ul>
+                        <li><a href="../../php/config_docente.php"
+                                class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
+                                <ion-icon name="settings-outline"></ion-icon> Ajustes
+                            </a></li>
+                        <li><a href="../../php/cerrar_sesion.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                                <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+                            </a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="divider"></div>
+            <div class="profile">
+                <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
+                <div>
+                    <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
                 </div>
             </div>
-        </div>
+    </aside>
+
+    <main class="content">
 
         <div class="container-description-image" style="display: flex">
 
             <div class="image-container">
                 <h1 class="title_build"><?php echo htmlspecialchars($usuario['nombre']); ?></h1>
                 <img src="<?php echo  htmlspecialchars($usuario['imagen']); ?>" alt="Edificio" class="profile-img-build">
-                <a href="vista_spaces_docente.php?edificio_id=<?php echo $id; ?>" class="button-space">Ver Espacios</a>
+                <a href="vista_spaces_docente.php?edificio_id=<?php echo $id; ?>" class="btn-spaces">Ver Espacios</a>
             </div>
             
             <form method="POST" enctype="multipart/form-data" class="description-form" sytle="flex-direction: column">
-                <input type="hidden" name="update_description" value="true"><!--Campo oculto-->
+                <input type="hidden" name="update_description" value="true">
                 <div class="build-description">
-                    <label for="descripcion" class="title_description">Descripción General:</label>
+                    <label for="descripcion" class="title_description">Descripción General</label>
                     <textarea id="descripcion" name="descripcion" class="description-textarea_docente" rows="10" cols="5" disabled><?php echo htmlspecialchars($usuario['descripcion']); ?></textarea>
                 </div>
             </form>
         </div>
-        <div class="container-form_register_build">
+        <div class="modal-content-building">
             <h2>Información de edificio</h2>
             <form id="update-form-build_teacher" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="update_building" value="true">
@@ -168,10 +202,10 @@ if (isset($_POST['update_building'])) { //Solicitud HTTP
                 </div>
             </form>
         </div>
-
     </main>
 </body>
 <script src="../../assets/js/button_update.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
-
 </html>

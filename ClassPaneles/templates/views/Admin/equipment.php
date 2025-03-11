@@ -58,11 +58,11 @@ while ($row = mysqli_fetch_assoc($result)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Edificios</title>
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
     <link rel="stylesheet" href="../../assets/css/style_panel.css">
     <link rel="stylesheet" href="../../assets/css/style_building.css?v=1">
-    <link rel="shortcut icon" href="../../assets/images/logo2.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
-    <title>Registro de Edificios</title>
 </head>
 
 <body>

@@ -87,7 +87,6 @@ if (isset($_POST['reservation_update'])) {
             die("Error al actualizar estudiantes: " . mysqli_error($conexion));
         }
     }
-
     echo "<script>alert('Reserva actualizada con éxito'); window.location.href='mis_reservas.php';</script>";
     exit;
 }
@@ -197,7 +196,7 @@ if (isset($_POST['reservation_update'])) {
             </div>
             <div class="form-group">
                 <label for="estudiantes">Añadir Estudiantes:</label>
-                <input type="text" id="estudiantes_search" name="estudiantes" placeholder="Buscar estudiante..." autocomplete="off" disabled>
+                <input type="text" id="estudiantes" name="estudiantes[]" placeholder="Buscar estudiante..." autocomplete="off" disabled>
                 <div id="student-list" style="margin-top: 8px;"></div>
                 <div id="selected-students" style="margin-top: 8px;">
             <?php 
@@ -212,7 +211,7 @@ if (isset($_POST['reservation_update'])) {
                 <span><?php echo $estudiante['nombre_completo']; ?></span>
                 <input type="hidden" name="estudiantes[]" value="<?php echo $estudianteId; ?>">
                 <?php if ($reserva['estado'] !== "aceptada"): ?>
-                <button type="button" id="button-state-acept" style="margin-left: 10px; cursor: pointer; border: none; background: none; color: #1f8f7c; font-weight: bold;" onclick="this.parentElement.remove();" disabled>×</button>
+                <button type="button" id="button-state-acept" style="margin-left: 10px; cursor: pointer; border: none; background: none; color: #1f8f7c; font-weight: bold;" onclick="this.parentElement.remove(); enableEditingReservation();" disabled>×</button>
                 <?php endif; ?>
             </div>
             <?php 

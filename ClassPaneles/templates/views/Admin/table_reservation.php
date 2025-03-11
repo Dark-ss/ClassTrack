@@ -59,23 +59,24 @@ $currentFile = basename($_SERVER['PHP_SELF']);
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ver Reservas</title>
-<link rel="stylesheet" href="../../assets/css/style_panel.css?v=1">
-<style>
-    .conflict-row {
-    background-color: #f8d7da;
-    color: #721c24;
-    }
-    .no-conflict-row {
-    background-color: rgb(219, 248, 215);
-    color: green;
-    }
-    /* Si se requiere ajustar márgenes, paddings u otros detalles, se pueden agregar aquí */
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Reservas</title>
+    <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1">
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
 </head>
 <body>
+    <style>
+        .conflict-row {
+        background-color: #f8d7da;
+        color: #721c24;
+        }
+        .no-conflict-row {
+        background-color: rgb(219, 248, 215);
+        color: green;
+        }
+        /* Si se requiere ajustar márgenes, paddings u otros detalles, se pueden agregar aquí */
+    </style>
 <div class="container">
     <!-- Sidebar (estructura igual a la de la tabla de usuarios de referencia) -->
     <aside class="sidebar">

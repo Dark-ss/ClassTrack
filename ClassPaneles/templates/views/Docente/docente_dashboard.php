@@ -94,7 +94,7 @@ while ($row = mysqli_fetch_assoc($resultHorasAulas)) {
 </head>
 
 <body>
-<div class="container">
+<div class="container-docente">
 <?php
 $currentFile = basename($_SERVER['PHP_SELF']);
 ?>

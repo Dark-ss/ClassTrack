@@ -803,12 +803,6 @@ hr {
     justify-content: space-between;
     margin-bottom: 10px;
 }
-.building-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
 
 .building-name {
     font-size: 15px; /* Tamaño de fuente del nombre del edificio */
@@ -844,6 +838,19 @@ hr {
 .building-type.desconocido {
     background-color: #e0e0e0; /* Fondo gris */
     color: #333; /* Texto gris oscuro */
+}
+/*spaces role*/
+.space-type.sala-computo{
+    background-color: #b8fafa;
+    color: #13749b;
+}
+.space-type.espacio-academico {
+    background-color: #bfffc5; /* Fondo verde claro */
+    color: #13570d; /* Texto verde oscuro */
+}
+.space-type.auditorio {
+    background-color: #ffcccb; /* Fondo rosa claro */
+    color: #8b0000; /* Texto rojo oscuro */
 }
 
 /* Estilos del Modal */
