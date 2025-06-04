@@ -1,115 +1,378 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=League+Spartan:wght@100..900&display=swap');
+
+
+* {
+    font-family: "DM Sans", sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    text-decoration: none;
-    font-family: 'Roboto', sans-serif;
 }
 
-body{
-    background-image: url(../images/fondo2.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-}
-
-main{
-    width: 100%;
-    padding: 20px;
-    margin: auto;
-    margin-top: 200px;
-    margin-left: 20px;
-}
-
-.contenedor_todo{
-    width: 100%;
-    max-width: 800px;
-    margin: auto;
-    top: 100px;
-    position: relative;
-}
-
-.contenedor_login-register{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 380px;
-    position: relative;
-    top: -185px;
-    left: 10px;
-    transition: left 500ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
-}
-
-.contenedor_login-register form{
-    width: 100%;
-    padding: 80px 20px;
-    background: #fff;
-    position: absolute;
-    border-radius: 20px;
-}
-
-.contenedor_login-register form h2{
-    font-size: 30px;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #46A2FD;
-}
-
-.contenedor_login-register form input{
-    width: 100%;
-    margin-top: 20px;
-    padding: 10px;
+button {
+    padding: 9px 25px;
+    background-color: #1dc0c9;
+    height: 3rem;
     border: none;
-    background-color: #F2F2F2;
-    font-size: 16px;
-    outline: none;
-}
-
-.contenedor_login-register form button{
-    padding: 10px 40px;
-    margin-top: 40px;
-    border: none;
-    font-size: 14px;
-    background: #46A2FD;
-    color: white;
+    border-radius: 50px;
     cursor: pointer;
-    outline: none;
-}
-.logo-container{
-    margin-left: 400px;
+    transition: all 0.2s ease 0s;
     position: relative;
-    background: white;
+    z-index: 2;
+    color: #0e343e;
+    font-weight: 500;
+}
+
+button:hover {
+    background-color: #1a93a0;
+}
+
+button:active {
+    scale: 0.80;
+}
+
+
+.fondo3 {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: #ffffff;
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+
+.contenedor_formulario {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 25px;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    color: #000000;
+    z-index: 2;
+
+    padding: 20px;
+
+.form_img{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.form_img .ilustracion1 {
+    background: url('../../assets/images/ilustracion1.png') no-repeat center center;
+    background-size: cover;
+    width: 55%;
+    border-radius: 30px;
+    margin-right: 25px;
+}
+
+
+.form_img .formulario {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    justify-content: center;
+    margin-left: auto;
+    border-radius: 30px;
+}
+
+.intro_inicio {
+    margin-bottom: 30px;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    justify-content: center;
+    margin-right: 35px;
+}
+
+.cont_form {
+    max-width: 350px;
+    width: 70%;
+}
+
+.formulario h1 {
+    font-family: "League Spartan", sans-serif;
+    font-size: 2.2rem;
+    text-align: center;
+}
+
+.formulario h1,
+.formulario p {
+    margin: 0 0 10px;
+}
+
+.formulario form {
+    display: flex;
+    flex-direction: column;
+}
+
+.formulario label {
+    font-family: "DM Sans", sans-serif;
+    margin: 0 0 5px;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.formulario input {
+    border: 1.5px solid #d8d8d8;
+    border-radius: 10px;
+    height: 50px;
     display: flex;
     align-items: center;
-    border-radius: 20px;
+    padding-left: 10px;
+    transition: 0.2s ease-in-out;
+    font-family: "DM Sans", sans-serif;
+    font-size: 14px;
 }
 
-.logo-container img {
-    max-width: 480px;
-    height: auto;
+.formulario ::placeholder {
+    font-family: "DM Sans", sans-serif;
+    font-size: 14px;
 }
 
-.formulario_login{
-    opacity: 1;
-    display: block;
+.formulario input:focus {
+    outline: none;
+    border: 1.5px solid #1a93a0;
+    /* Color azul claro */
 }
 
-/*Responsive*/
+.formulario button {
+    height: 54px;
+    border-radius: 15px;
+    font-size: 14px;
+}
 
-@media screen and (max-width: 850px) {
-    
-    main{
-        margin-top: 50px;
-    }
-    /*Formulario*/
-    .contenedor_login-register{
-        top: -10px;
-        left: -5px;
-        margin: auto;
-    }
-    .contenedor_login-register form{
-        position: relative;
+.title h1{
+    margin-bottom: 35px;
+    font-family: "DM Sans", sans-serif;
+}
+.links_log {
+    margin-top: 10px;
+    /* Margen superior de 20px */
+    font-family: "DM Sans", sans-serif;
+    font-size: 14px;
+}
+
+.links_log a{
+    color: #1a93a0;
+}
+
+
+.link_change_password {
+    margin-top: 10px;
+
+}
+
+.link_change_password a {
+    color: #1a93a0;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.input_field{
+    position: relative;
+    width: 100%;
+    margin-bottom: 27px;
+}
+
+.input_field input{
+    width: 100%;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-container input {
+    flex: 1;
+    padding-right: 40px;
+}
+
+
+.login_eye_closed {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #919191;
+    width: 20px; /* Ancho fijo */
+    text-align: center; /* Centrar el contenido */
+    user-select: none;
+    top: 30%;
+}
+
+.login_eye_closed, .fa-eye {
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hint_message{
+    margin-top: 3px;
+    position: absolute;
+    font-family: "DM Sans", sans-serif;
+    font-size: 12px;
+    color: #636363;
+}
+
+#password-field.valid, #confirm-password.valid{
+    border-bottom-color: #4CAF50;
+    border-bottom-width: 3.5px;
+}
+
+.check-icon {
+    position: absolute;
+    right: -30px; /* Ajusta este valor según necesites */
+    top: 60%;
+    transform: translateY(-50%);
+    color: #4CAF50;
+    font-size: 20px;
+    font-weight: 700;
+    display: none; /* Inicialmente oculto */
+}
+
+/*RESPONSIVIDAD*/
+
+@media (max-width: 894px) {
+
+    .fondo3 {
+        min-height: 90vh;
     }
 
+    .contenedor_formulario {
+        width: 100%;
+        /* Reduce el ancho para dispositivos más pequeños */
+        height: 90vh;
+        min-height: 750px;
+        padding: 0.5rem;
+    }
+
+    .form_img {
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .form_img .ilustracion1 {
+        display: none;
+    }
+
+    .form_img .formulario {
+        width: 100%;
+        height: 100%;
+        margin-top: 30px;
+        margin-bottom: 50px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .cont_form {
+        width: 100%;
+        max-width: 350px;
+        /* Mantén el ancho máximo */
+    }
+
+    .formulario h1 {
+        font-size: 1.9rem;
+        padding: unset;
+    }
+
+    .formulario p a {
+        font-size: 1rem;
+    }
+
+    .formulario label {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .menu_desplegable {
+        left: 5%;
+        width: 90%;
+        margin: 0;
+    }
+
+    .main-content {
+        padding: 0 20px;
+        justify-content: center;
+    }
+
+    .text-container {
+        max-width: 100%;
+        text-align: center;
+        /* Centra el texto */
+    }
+
+    .main-title {
+        margin-top: 16%;
+        font-family: "League Spartan", sans-serif;
+        font-size: 2.5rem;
+        color: rgb(255, 255, 255);
+        /* Cambio de color*/
+        text-shadow: 1px 1px 4px rgb(0, 0, 0);
+    }
+
+    .subtitle {
+        font-family: "DM Sans", sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        color: rgb(255, 255, 255);
+        /* Cambio de color*/
+        text-shadow: 1px 1px 4px rgb(0, 0, 0);
+    }
+
+    .hint_message{
+        font-size: 11px;
+    }
+
+}
+
+@media screen and (min-width: 576px) {
+    .check-icon.show {
+        display: block;
+    }
+}
+
+/* Estilos para el scroll en todo el documento */
+::-webkit-scrollbar {
+    width: 7px;
+    /* Ancho del scroll */
+}
+
+/* Estilo para la barra de scroll */
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    /* Color de fondo de la barra de scroll */
+}
+
+/* Estilo para el pulgar del scroll */
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Color del pulgar del scroll */
+    border-radius: 10px;
+    /* Borde redondeado del pulgar */
+}
+
+/* Estilo para el pulgar del scroll al pasar el mouse sobre él */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Color del pulgar al pasar el mouse */
 }

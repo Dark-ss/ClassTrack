@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 body{
     margin: 0;
     padding: 0;
@@ -87,6 +89,7 @@ body{
 /* Contenido del modal */
 .modal-content {
     background: #40e066;
+    border: #1f6b31;
     padding: 30px;
     padding-right: 0px;
     border-radius: 10px;
@@ -137,15 +140,6 @@ body{
     padding: 8px;
     margin-top: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-}
-/*boton añadir edificio*/
-.form-group button {
-    background-color: #1f6b31;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
     border-radius: 5px;
 }
 
@@ -385,8 +379,22 @@ body{
     display: block;
     position: absolute;
     background-color: #1f6b31;
-    bottom: 55%;
-    left: 50%;
+    bottom: 10%;
+    left: 70%;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 140px;
+}
+
+.button-avail{
+    display: block;
+    position: absolute;
+    background-color: #1f6b31;
+    bottom: 10%;
+    left: 10%;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -425,7 +433,7 @@ body{
 }
 .modal-content { 
     background-color: #fff; 
-    margin: 10% auto; 
+    margin: 4% auto; 
     padding: 20px; 
     border-radius: 5px; 
     width: 80%; 
@@ -567,3 +575,540 @@ body{
 .equipamiento-info.no-disponible {
     background-color: rgba(220, 53, 69, 0.5);
 }
+
+/*Estilo reserva busqueda estudiantes*/
+.student-item {
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 2px 0;
+}
+
+.student-item:hover {
+    background-color: #f0f0f0;
+}
+
+.selected-student {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.remove-student {
+    margin-left: 10px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: red;
+    font-weight: bold;
+}
+
+#student-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin-top: 5px;
+    padding: 0;
+    list-style: none;
+}
+
+/*conflicto entre reservas*/
+.conflict-row {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+
+/* Ajusta el contenedor principal */
+.container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    position: relative; /* Añadido para mejor posicionamiento */
+}
+
+/* Ajusta el sidebar */
+.sidebar {
+    width: 230px;
+    min-width: 230px; /* Asegura un ancho mínimo */
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    height: 98.5vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+/* Ajusta el contenido principal */
+.content {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100vh;
+    overflow-y: auto;
+    margin-left: 250px; /* Mantiene el margen pero ajustamos otros estilos */
+    width: calc(100% - 230px); /* Ajusta el ancho considerando el sidebar */
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    margin-bottom: 20px;
+}
+
+.content-header h2 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #000000;
+    font-family: 'Inter', sans-serif; 
+    margin-bottom: 0;
+}
+
+.add-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #1f8f7c;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif; 
+    font-size: 0.85rem;
+}
+
+.add-button:hover {
+    background-color: #1a7a6a;
+}
+
+/* Ajusta el grid de edificios */
+.buildings-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px; /* Espacio entre tarjetas */
+    justify-content: flex-start; /* Alinea las tarjetas a la izquierda */
+    padding: 20px; /* Espaciado interno */
+    width: 100%; /* Ocupa el ancho completo */
+    box-sizing: border-box; /* Incluye el padding en el ancho */
+}
+
+/* Ajusta el tamaño de las tarjetas */
+.building-card {
+    min-width: 250px; /* Ancho mínimo de 250px */
+    flex: 1;
+    max-width: calc(33.333% - 20px);
+    border-radius: 25px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 5px;
+}
+
+.building-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.image-container {
+    position: relative;
+}
+
+.building-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+    border-radius: 20px;
+}
+
+.building-card:hover .building-image {
+    transform: scale(1.1);
+}
+
+ion-icon {
+    font-size: 20px;
+
+}
+
+.building-info {
+    padding: 20px;
+    text-align:left;
+    
+}
+
+.space-count {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    gap: 5px;
+    color: #666;
+    font-size: 14px;
+}
+
+.building-info h3 {
+    font-size: 14px; /* Tamaño de fuente ajustado a 15px */
+    font-weight: bold; /* Mantener negrita */
+    color: #333; /* Color del texto */
+    margin: 0; /* Eliminar margen inferior predeterminado */
+}
+
+.building-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.875rem;
+    color: #555;
+}
+
+.detail-item ion-icon {
+    font-size: 1rem;
+    color: #333;
+}
+
+
+hr {
+    height: 2px; /* Grosor de la línea */
+    background-color: #e2e2e2; /* Color azul */
+    border: none; /* Quita el borde predeterminado */
+}
+
+
+.building-card:hover .building-image {
+    transform: scale(1.1);
+}
+
+/* Botón de edición con aparición fluida */
+
+.building-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.building-name {
+    font-size: 15px; /* Tamaño de fuente del nombre del edificio */
+    font-weight: 500; /* Grosor de la fuente */
+    margin: 0; /* Elimina el margen predeterminado */
+}
+
+/* Estilo para el identificador del tipo de edificio */
+.role {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+/* Colores para cada tipo de edificio */
+.building-type.espacio-académico {
+    background-color: #b8fafa; /* Fondo verde azulado */
+    color: #13749b; /* Texto azul oscuro */
+}
+
+.building-type.laboratorio {
+    background-color: #bfffc5; /* Fondo verde claro */
+    color: #13570d; /* Texto verde oscuro */
+}
+
+.building-type.auditorio {
+    background-color: #ffcccb; /* Fondo rosa claro */
+    color: #8b0000; /* Texto rojo oscuro */
+}
+
+.building-type.desconocido {
+    background-color: #e0e0e0; /* Fondo gris */
+    color: #333; /* Texto gris oscuro */
+}
+/*spaces role*/
+.space-type.sala-computo{
+    background-color: #b8fafa;
+    color: #13749b;
+}
+.space-type.espacio-academico {
+    background-color: #bfffc5; /* Fondo verde claro */
+    color: #13570d; /* Texto verde oscuro */
+}
+.space-type.auditorio {
+    background-color: #ffcccb; /* Fondo rosa claro */
+    color: #8b0000; /* Texto rojo oscuro */
+}
+
+/* Estilos del Modal */
+.modal1 {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content1 {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header1 h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0.5rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #333;
+    font-size: 0.875rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1f8f7c;
+    box-shadow: 0 0 0 2px rgba(31, 143, 124, 0.1);
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.submit-button,
+.cancel-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.submit-button {
+    background-color: #1f8f7c;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.submit-button:hover {
+    background-color: #1a7a6a;
+}
+
+.cancel-button:hover {
+    background-color: #d1d5db;
+}
+
+/* Estilos adicionales para el botón de edición en la tarjeta */
+.building-card .edit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: none;
+    border-radius: 50%;
+    width: 38px;  /* Aumentado para dar más espacio */
+    height: 38px; /* Aumentado para dar más espacio */
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+    text-decoration: none;
+    display: flex;           /* Añadido para centrar */
+    align-items: center;     /* Añadido para centrar */
+    justify-content: center; /* Añadido para centrar */
+    padding: 0;             /* Removido el padding */
+}
+
+.building-card:hover .edit-button {
+    opacity: 1;
+}
+
+.building-card .edit-button:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.building-card .edit-button i {  /* Cambiado de ion-icon a i para Tabler */
+    font-size: 1.1rem;
+    color: #4d4d4d;
+}
+
+/* Prevenir cambio de color en todos los estados */
+.building-card .edit-button,
+.building-card .edit-button:visited,
+.building-card .edit-button:active,
+.building-card .edit-button:focus {
+    color: #333;
+    outline: none;
+}
+
+/* Mantener el color del ícono en todos los estados */
+.building-card .edit-button i,
+.building-card .edit-button:hover i,
+.building-card .edit-button:visited i,
+.building-card .edit-button:active i,
+.building-card .edit-button:focus i {
+    color: #333;
+}
+
+/* Asegura que los valores sean más llamativos */
+.detail-value {
+    color: #222222;  /* Azul fuerte */
+    font-weight: bold;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    flex: 1;
+    max-width: 450px;
+    margin-left: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 16px 12px 45px; /* Espacio a la izquierda para el icono */
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    color: #374151;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif; 
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #1f8f7c;
+    box-shadow: 0 0 0 3px rgba(31, 143, 124, 0.1);
+}
+
+.search-bar input::placeholder{
+    color: #9ca3af;
+}
+
+.search-bar ion-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.filter-select {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+    color: #666666;
+    font-family: 'Inter', sans-serif; 
+}
+
+.filter-select:focus {
+    border-color: #1f8f7c;
+}
+
+.content_nav{
+    display: flex;
+    justify-content: space-between;
+    margin-right: 25px;
+}
+/*soporte tecnico*/
+
+#nivel_prioridad{
+    width: 40%;
+}
+
+#mensaje{
+    width: 70%;
+    resize: none;
+    width: 425px;
+    height: 100px;
+}
+

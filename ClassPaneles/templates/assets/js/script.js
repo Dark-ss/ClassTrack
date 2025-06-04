@@ -57,5 +57,48 @@ function login() {
         caja_trasera_register.style.display = "block";
         caja_trasera_login.style.display = "none";
     }
-
 }
+
+function deleteReservation(reservationId) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta reserva?')) {
+        fetch(`eliminar_reserva.php?id=${reservationId}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al eliminar la reserva');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Reserva eliminada correctamente');
+                location.reload(); // Recargar la página para actualizar la lista
+            } else {
+                alert('No se pudo eliminar la reserva');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Hubo un problema al eliminar la reserva');
+        });
+    }
+}
+
+function openUpdateModal(reservation) {
+    document.getElementById('update-id').value = reservation.id;
+    document.getElementById('update-nombre-usuario').value = reservation.nombre_usuario;
+    document.getElementById('update-fecha-inicio').value = reservation.fecha_inicio;
+    document.getElementById('update-fecha-final').value = reservation.fecha_final;
+    document.getElementById('update-tipo-reservacion').value = reservation.tipo_reservacion;
+    document.getElementById('update-descripcion').value = reservation.descripcion;
+
+    document.getElementById('update-modal').style.display = 'block';
+}
+
+// Cerrar el modal cuando se haga clic fuera
+window.onclick = function(event) {
+    if (event.target === document.getElementById('update-modal')) {
+        document.getElementById('update-modal').style.display = 'none';
+    }
+};
