@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
 include '../../php/conexion_be.php';
 
 //paginación
-$registros_por_pagina = 5;
+$registros_por_pagina = 7;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
@@ -26,8 +26,13 @@ $search = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 
 $query = "SELECT id, imagen, nombre, codigo, pisos, cupo, direccion, tipo FROM 
         edificios WHERE nombre LIKE '%$search%' OR codigo LIKE '%$search%' OR 
-        tipo LIKE '%$search%'";
+        tipo LIKE '%$search%' 
+        ORDER BY id DESC 
+        LIMIT $registros_por_pagina OFFSET $offset";
 $resultado = mysqli_query($conexion, $query);
+
+$query_total = "SELECT COUNT(*) as total FROM edificios 
+               WHERE nombre LIKE '%$search%' OR codigo LIKE '%$search%' OR tipo LIKE '%$search%'";
 
 if (!$resultado) {
     die("Error al obtener los datos: " . mysqli_error($conexion));
@@ -59,6 +64,7 @@ if (isset($_GET['id'])) {
     <title>Ver Lista Edificios</title>
     <link rel="stylesheet" href="../../assets/css/style_panel.css">
     <link rel="shortcut icon" href="../../assets/images/logo2.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -75,52 +81,61 @@ if (isset($_GET['id'])) {
                 <div class="menu-group">
                     <p class="menu-title">Menú Principal</p>
                     <ul>
-                        <li><a href="admin_dashboard.php" 
-                            class="<?php echo $currentFile == 'admin_dashboard.php' ? 'active' : ''; ?>">
-                            <ion-icon name="home-outline"></ion-icon> Inicio
-                        </a></li>
+                        <li><a href="admin_dashboard.php"
+                                class="<?php echo $currentFile == 'admin_dashboard.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Inicio
+                            </a></li>
                         <li><a href="vista_cuentas.php"
-                            class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
-                            <ion-icon name="people-outline"></ion-icon> Cuentas
-                        </a></li>
+                                class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
+                                <ion-icon name="people-outline"></ion-icon> Cuentas
+                            </a></li>
                         <li><a href="vista_students.php"
-                            class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                            <ion-icon name="school-outline"></ion-icon> Estudiantes
-                        </a></li>
+                                class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
+                                <ion-icon name="person-outline"></ion-icon> Estudiantes
+                            </a></li>
                     </ul>
                 </div>
                 <div class="menu-group">
                     <p class="menu-title">Gestión de Espacios</p>
                     <ul>
-                        <li><a href="register_buldings.php"
-                            class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
-                            <ion-icon name="business-outline"></ion-icon> Añadir Edificios
-                        </a></li>
+                        <li><a href="./register_buldings.php"
+                                class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Añadir Edificios
+                            </a></li>
                         <li><a href="table_build.php"
-                            class="<?php echo $currentFile == 'table_build.php' ? 'active' : ''; ?>">
-                            <ion-icon name="list-outline"></ion-icon> Edificios
-                        </a></li>
+                                class="<?php echo $currentFile == 'table_build.php' ? 'active' : ''; ?>">
+                                <ion-icon name="list-outline"></ion-icon> Edificios
+                            </a></li>
                         <li><a href="equipment.php"
-                            class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
-                            <ion-icon name="construct-outline"></ion-icon> Equipamientos
-                        </a></li>
+                                class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
+                                <ion-icon name="construct-outline"></ion-icon> Equipamientos
+                            </a></li>
                         <li><a href="table_reservation.php"
-                            class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
-                            <ion-icon name="calendar-outline"></ion-icon> Reservas
-                        </a></li>
+                                class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Mensajeria</p>
+                    <ul>
+                        <li><a href="messages.php"
+                                class="<?php echo $currentFile == 'messages.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Buzon ayuda
+                            </a></li>
                     </ul>
                 </div>
                 <div class="menu-group">
                     <p class="menu-title">Configuración</p>
                     <ul>
                         <li><a href="../../php/config.php"
-                            class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
-                            <ion-icon name="settings-outline"></ion-icon> Ajustes
-                        </a></li>
+                                class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
+                                <ion-icon name="settings-outline"></ion-icon> Ajustes
+                            </a></li>
                         <li><a href="../../php/cerrar_sesion.php"
-                            class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
-                            <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
-                        </a></li>
+                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                                <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+                            </a></li>
                     </ul>
                 </div>
             </nav>
@@ -129,7 +144,7 @@ if (isset($_GET['id'])) {
                 <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
                 <div>
                     <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
-                    <p class="user-email"><?php echo htmlspecialchars($correo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
                 </div>
             </div>
         </aside>
@@ -141,7 +156,7 @@ if (isset($_GET['id'])) {
             <!-- Barra de búsqueda -->
             <div class="search-and-create">
                 <form method="GET" action="table_build.php" class="search-form">
-                    <ion-icon name="search-outline" class="search-icon"></ion-icon>
+                    <i class="fas fa-search search-icon"></i>
                     <input type="text" name="buscar" placeholder="Buscar edificio..."
                         value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
                     <button type="submit">Buscar</button>
@@ -180,9 +195,10 @@ if (isset($_GET['id'])) {
                             <td><?php echo htmlspecialchars($fila['tipo']); ?></td>
                             <td>
                                 <div class="dropdown">
-                                    <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>
+                                <i class="fa-solid fa-ellipsis dropdown-toggle"></i>
                                     <div class="dropdown-content">
-                                        <a href="update_building.php?id=<?php echo $fila['id']; ?>" class="update-button">
+                                        <a href="update_building.php?id=<?php echo $fila['id']; ?>"
+                                            class="update-button">
                                             <ion-icon name="create-outline"></ion-icon>
                                             Actualizar
                                         </a>

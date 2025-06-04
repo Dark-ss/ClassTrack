@@ -89,16 +89,16 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </a></li>
                         <li><a href="vista_students.php"
                                 class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="school-outline"></ion-icon> Estudiantes
+                                <ion-icon name="person-outline"></ion-icon> Estudiantes
                             </a></li>
                     </ul>
                 </div>
                 <div class="menu-group">
                     <p class="menu-title">Gestión de Espacios</p>
                     <ul>
-                        <li><a href="register_buldings.php"
-                                class="<?php echo $currentFile == 'register_buldings.php' ? 'active' : ''; ?>">
-                                <ion-icon name="business-outline"></ion-icon> Añadir Edificios
+                        <li><a href="./register_buldings.php"
+                                class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Añadir Edificios
                             </a></li>
                         <li><a href="table_build.php"
                                 class="<?php echo $currentFile == 'table_build.php' ? 'active' : ''; ?>">
@@ -108,9 +108,18 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
                                 <ion-icon name="construct-outline"></ion-icon> Equipamientos
                             </a></li>
-                        <li><a href="./table_reservation.php"
-                                class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
+                        <li><a href="table_reservation.php"
+                                class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
                                 <ion-icon name="calendar-outline"></ion-icon> Reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Mensajeria</p>
+                    <ul>
+                        <li><a href="messages.php"
+                                class="<?php echo $currentFile == 'messages.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Buzon ayuda
                             </a></li>
                     </ul>
                 </div>
@@ -133,7 +142,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
                 <div>
                     <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
-                    <p class="user-email"><?php echo htmlspecialchars($correo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
                 </div>
             </div>
         </aside>
