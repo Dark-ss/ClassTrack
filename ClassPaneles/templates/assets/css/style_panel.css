@@ -10,8 +10,9 @@ body {
 
 .container {
     display: flex;
-    height: 106vh;
+    height: 100vh;
 }
+
 
 .container-docente {
     display: flex;
@@ -276,14 +277,21 @@ body {
 }
 
 /* Icono de búsqueda */
+.search-form {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .search-icon {
     position: absolute;
     left: 16px;
     top: 50%;
     transform: translateY(-50%);
     color: #9ca3af;
-    font-size: 18px;
+    font-size: 16px; /* Un poco más pequeño */
     pointer-events: none;
+    z-index: 2; /* Asegura que esté sobre el input */
 }
 
 /* Botón de búsqueda */
@@ -364,10 +372,62 @@ body {
 
 /* Estilos para las celdas de ambas tablas */
 .user-table tbody td {
-    padding: 9px 24px;
+    padding: 7px 24px;
     color: #000000;
     font-size: 0.875rem;
     border-bottom: 1px solid #e5e7eb;
+}
+/* Contenedor principal */
+.fecha-contenedor {
+    text-align: left;
+    padding-left: 8px;
+}
+
+.fecha-estilo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fecha-linea {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Íconos */
+.icono-fecha {
+    color: #26a2b3;
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+}
+
+.icono-hora {
+    color: #94a3b8;
+    font-size: 13px;
+    width: 16px;
+    text-align: center;
+}
+
+/* Textos */
+.fecha-dia {
+    font-weight: 500;
+    color: #1e293b;
+    font-size: 13px;
+}
+
+.fecha-hora {
+    font-size: 12px;
+    color: #64748b;
+    background: #f8fafc;
+    padding: 2px 2px;
+    border-radius: 4px;
+}
+
+/* Efecto hover */
+tr:hover .fecha-hora {
+    background: #f1f5f9;
 }
 
 .user-table thead tr th:first-child {
@@ -498,6 +558,13 @@ body {
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
+    transition: all 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.user-table tbody tr:hover .user-image {
+    box-shadow: 
+        0 0 0 0.5px white,       /* Borde blanco interno */
+        0 0 0 3px #3b82f6;       /* Borde azul externo */
 }
 
 .role {
