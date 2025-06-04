@@ -1,4 +1,4 @@
-<?php
+    <?php
 include '../../php/admin_session.php';
 ?>
 <!DOCTYPE html>
@@ -26,7 +26,7 @@ include '../../php/admin_session.php';
             <a href="admin_dashboard.php" class="home-admin">
                 <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
             </a>
-
+    
             <div class="menu-container" id="menu-container">
                 <div class="menu-link" onclick="toggleDropdown()">Cuenta<span>▼</span>
                 </div>
@@ -68,6 +68,7 @@ include '../../php/admin_session.php';
     </main>
     <script src="../../assets/js/script.js"></script>
     <script src="../../assets/js/script_menu.js"></script>
+    <script src="../../assets/js/main.js"></script>
 </body>
 
 </html>

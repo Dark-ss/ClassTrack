@@ -58,122 +58,179 @@ while ($row = mysqli_fetch_assoc($result)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipamiento</title>
-    <link rel="stylesheet" href="../../assets/css/style_paneles.css">
-    <link rel="stylesheet" href="../../assets/css/style_building.css">
+    <title>Registro de Edificios</title>
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
+    <link rel="stylesheet" href="../../assets/css/style_panel.css">
+    <link rel="stylesheet" href="../../assets/css/style_building.css?v=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
 </head>
 
 <body>
-    <main class="build">
-        <div class="profile-container">
-            <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
-            <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
-            <a href="../../php/cerrar_sesion.php" class="logout">
-                <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
-            </a>
-            <a href="../../php/config.php" class="config">
-                <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
-            </a>
-            <a href="admin_dashboard.php" class="home-admin">
-                <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
-            </a>
-
-            <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">Cuenta<span>▼</span>
-                </div>
-                <div class="submenu" id="submenu">
-                    <a href="create_account.php">Crear Cuenta</a>
-                    <a href="vista_cuentas.php">cuentas </a>
-                    <a href="register_students.php">Añadir Estudiantes</a>
-                    <a href="vista_students.php">Estudiantes</a>
-                </div>
-            </div>
-
-            <div class="menu-container_espacios" id="menu-container_espacios">
-                <div class="menu-link" onclick="toggleDropdown_space()">Espacios<span>▼</span>
-                </div>
-                <div class="submenu" id="submenu_espacios">
-                    <a href="register_buldings.php">Añadir Edificios</a>
-                    <a href="table_build.php">Edificios</a>
-                    <a href="register_students.php">Añadir Salones</a>
-                    <a href="vista_students.php">Salones</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="container-edificios">
+<div class="container">
+        <!-- Sidebar -->
         <?php
-        foreach ($equipamientos as $equipamiento) {
-            ?>
-            <div class="add-box">
-                <h1 class="title_build"><?php echo htmlspecialchars($equipamiento['nombre']); ?></h1>
-                <a href="update_equipment.php?id=<?php echo htmlspecialchars($equipamiento['id']); ?>">
-                    <img src="<?php echo htmlspecialchars($equipamiento['imagen']); ?>" alt="Equipamiento" class="building-img">
+        $currentFile = basename($_SERVER['PHP_SELF']);
+        ?>
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
+            </div>
+            <nav class="menu">
+                <div class="menu-group">
+                    <p class="menu-title">Menú Principal</p>
+                    <ul>
+                        <li><a href="admin_dashboard.php"
+                                class="<?php echo $currentFile == 'admin_dashboard.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Inicio
+                            </a></li>
+                        <li><a href="vista_cuentas.php"
+                                class="<?php echo $currentFile == 'vista_cuentas.php' ? 'active' : ''; ?>">
+                                <ion-icon name="people-outline"></ion-icon> Cuentas
+                            </a></li>
+                        <li><a href="vista_students.php"
+                                class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
+                                <ion-icon name="person-outline"></ion-icon> Estudiantes
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Gestión de Espacios</p>
+                    <ul>
+                        <li><a href="./register_buldings.php"
+                                class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Añadir Edificios
+                            </a></li>
+                        <li><a href="table_build.php"
+                                class="<?php echo $currentFile == 'table_build.php' ? 'active' : ''; ?>">
+                                <ion-icon name="list-outline"></ion-icon> Edificios
+                            </a></li>
+                        <li><a href="equipment.php"
+                                class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
+                                <ion-icon name="construct-outline"></ion-icon> Equipamientos
+                            </a></li>
+                        <li><a href="table_reservation.php"
+                                class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Mensajeria</p>
+                    <ul>
+                        <li><a href="messages.php"
+                                class="<?php echo $currentFile == 'messages.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Buzon ayuda
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Configuración</p>
+                    <ul>
+                        <li><a href="../../php/config.php"
+                                class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
+                                <ion-icon name="settings-outline"></ion-icon> Ajustes
+                            </a></li>
+                        <li><a href="../../php/cerrar_sesion.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                                <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+                            </a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="divider"></div>
+            <div class="profile">
+                <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
+                <div>
+                    <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
+                </div>
+            </div>
+        </aside>
+<main class="content">
+    <div class="content-header">
+        <h2>Gestión de Equipamientos</h2>
+        <button class="add-button" onclick="openModal()">
+            <ion-icon name="add-outline"></ion-icon>
+            Añadir Equipamiento 
+        </button>
+    </div>        
+    <div class="buildings-grid">
+        <?php foreach ($equipamientos as $equipamiento): ?>
+        <div class="building-card">
+            <img src="<?php echo htmlspecialchars($equipamiento['imagen']); ?>" alt="Equipamiento" class="building-image">
+            <div class="building-info">
+                <h3><?php echo htmlspecialchars($equipamiento['nombre']); ?></h3>
+                <a href="update_equipment.php?id=<?php echo htmlspecialchars($equipamiento['id']); ?>" class="edit-button">
+                    <i class="ti ti-edit"></i>
                 </a>
             </div>
-        <?php
+        </div>
+        <?php endforeach; ?>
+    </div>
+
+<div class="modal1" id="modal">
+    <div class="modal-content1">
+        <div class="modal-header1">
+            <h3>Añadir Nuevo Equipamiento</h3>
+            <button class="close-button" onclick="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+            </button>
+        </div>
+        <form action="equipment.php" method="POST" enctype="multipart/form-data" class="form-grid">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="codigo">Código</label>
+                <input type="text" id="codigo" name="codigo" required>
+            </div>
+            <div class="form-group">
+                <label for="estado">Estado</label>
+                <select id="estado" name="estado" required>
+                    <option value="">Seleccione el estado</option>
+                    <option value="Disponible">Disponible</option>
+                    <option value="En Mantenimiento">En Mantenimiento</option>
+                    <option value="No Disponible">No Disponible</option>
+                </select>
+            </div>
+            <div class="form-group full-width">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+            </div>
+            <div class="form-group full-width">
+                <label for="imagen">Imagen</label>
+                <input type="file" id="imagen" name="imagen" accept="image/*">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-button" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="submit-button">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</main>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script>
+    function openModal() {
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('modal');
+        if (event.target === modal) {
+            closeModal();
         }
-        ?>
-            <div class="add-box" onclick="openModal()">+</p>
-            </div>
-        </div>
-
-        <div class="modal" id="modal">
-            <div class="modal-content">
-                <form action="equipment.php" method="POST" enctype="multipart/form-data">
-
-                    <div class="form-group-container">
-                        <div class="form-group">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="codigo">Código:</label>
-                            <input type="text" id="codigo" name="codigo" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="estado">Estado:</label>
-                        <select id="estado" name="estado" required>
-                            <option value="">Seleccione el estado</option>
-                            <option value="Disponible">Disponible</option>
-                            <option value="En Mantenimiento">En Mantenimiento</option>
-                            <option value="No Disponible">No Disponible</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Descripción:</label>
-                        <textarea id="descripcion" name="descripcion" class="description-register" rows="4" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="imagen">Imagen:</label>
-                        <input type="file" id="imagen" name="imagen" accept="image/*">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit">Añadir Equipamiento</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        </main>
-        <script>
-            function openModal() {
-                document.getElementById('modal').classList.add('active');
-            }
-
-            window.onclick = function(event) {
-                const modal = document.getElementById('modal');
-                if (event.target === modal) {
-                    modal.classList.remove('active');
-                }
-            };
-        </script>
-        <script src="../../assets/js/script.js"></script>
-        <script src="../../assets/js/script_menu.js"></script>
-    </main>
+    };
+</script>
+<script src="../../assets/js/script.js"></script>
+<script src="../../assets/js/script_menu.js"></script>
+</main>
 </body>
 
 </html>

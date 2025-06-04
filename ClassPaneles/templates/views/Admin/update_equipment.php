@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Actualiza solo la descripción
         $query_update = "UPDATE equipamiento SET descripcion='$descripcion' WHERE id='$equip_id'";
         if (mysqli_query($conexion, $query_update)) {
-            echo "<script>alert('Descripción actualizada con éxito.'); window.location.href='register_buldings.php';</script>";
+            echo "<script>alert('Descripción actualizada con éxito.'); window.location.href='equipment.php';</script>";
         } else {
             echo "<script>alert('Error al actualizar la descripción: " . mysqli_error($conexion) . "');</script>";
         }
