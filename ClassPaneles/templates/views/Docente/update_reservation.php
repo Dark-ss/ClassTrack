@@ -6,7 +6,8 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'docente') {
 }
 include '../../php/conexion_be.php';
 
-$id_reservacion = isset($_GET['id']) ? $_GET['id'] : null;
+//$id_reservacion = isset($_GET['id']) ? $_GET['id'] : null;
+$id_reservacion = $_GET['id'] ?? $_POST['id_reservacion'] ?? null;
 
 
 $id_usuario = $_SESSION['id_usuario'];
@@ -21,8 +22,14 @@ $query_reserva = "SELECT r.id, r.fecha_inicio, r.fecha_final, r.tipo_reservacion
     GROUP BY r.id
 ";
 $resultado_reserva = mysqli_query($conexion, $query_reserva);
-
+if (!$resultado_reserva) {
+    die("Error en la consulta de reserva: " . mysqli_error($conexion) . "<br>Consulta: " . $query_reserva);
+}
 $reserva = mysqli_fetch_assoc($resultado_reserva);
+if (!$reserva) {
+    die("No se encontró la reserva. Verifique que el ID es correcto y que le pertenece al usuario.");
+}
+
 
 // Obtener espacios académicos
 $query_espacios = "SELECT id, codigo FROM espacios_academicos";
@@ -31,6 +38,9 @@ $resultado_espacios = mysqli_query($conexion, $query_espacios);
 // Obtener lista de estudiantes
 $query_estudiantes = "SELECT id, nombre_completo FROM estudiantes";
 $resultado_estudiantes = mysqli_query($conexion, $query_estudiantes);
+
+$query_estudiante_reservas = "SELECT id, id_reservacion, id_estudiante FROM reservaciones_estudiantes";
+$resultado_reservaEstudiante= mysqli_query($conexion,$query_estudiante_reservas);
 
 //procesar edicion reserva
 
@@ -41,7 +51,7 @@ if (isset($_POST['reservation_update'])) {
     $tipo_reservacion = $_POST['tipo_reservacion'];
     $descripcion = $_POST['descripcion'];
     $id_espacio = $_POST['id_espacio'];
-    $estudiantes = $_POST['estudiantes'];
+    $estudiantes = isset($_POST['estudiantes']) ? $_POST['estudiantes'] : [];
     $estado = $_POST['estado'];
 
     date_default_timezone_set('America/Bogota');
@@ -60,35 +70,43 @@ if (isset($_POST['reservation_update'])) {
         echo "<script>alert('No puedes actualizar una reservación que ya ha sido aceptada por el administrador.'); window.history.back();</script>";
         exit;
     }
-    // Actualizar la reservación
-    $query_update = "UPDATE reservaciones SET
+    if (empty($_POST['estudiantes']) || !is_array($_POST['estudiantes']) || count($_POST['estudiantes']) === 0) {
+        die("Error: Debe asignar al menos un estudiante a la reserva para guardar los cambios.");
+    }
+    // Actualizar la reservación    
+    $query_update = "UPDATE reservaciones SET 
     fecha_inicio = '$fecha_inicio', 
     fecha_final = '$fecha_final', 
     tipo_reservacion = '$tipo_reservacion', 
     descripcion = '$descripcion', 
-    id_espacio = '$id_espacio',
+    id_espacio = '$id_espacio', 
     estado = 'pendiente'
-    WHERE id = '$id_reservacion' AND id_usuario = '$id_usuario'
-    ";
+    WHERE id = '$id_reservacion' AND id_usuario='$id_usuario'";
+
     if (!mysqli_query($conexion, $query_update)) {
         die("Error al actualizar la reservación: " . mysqli_error($conexion));
     }
 
-    // Delete students
-    $query_delete_estudiantes = "DELETE FROM reservaciones_estudiantes WHERE id_reservacion = '$id_reservacion'";
-    mysqli_query($conexion, $query_delete_estudiantes);
-
-    foreach ($estudiantes as $id_estudiante) {
-        $query_insert_estudiante = "
-            INSERT INTO reservaciones_estudiantes (id_reservacion, id_estudiante) 
-            VALUES ('$id_reservacion', '$id_estudiante')
-        ";
-        if (!mysqli_query($conexion, $query_insert_estudiante)) {
-            die("Error al actualizar estudiantes: " . mysqli_error($conexion));
+    if (isset($_POST['estudiantes']) && is_array($_POST['estudiantes']) && !empty($_POST['estudiantes'])) {
+        // Eliminar los estudiantes actuales de la reserva
+        $query_delete = "DELETE FROM reservaciones_estudiantes WHERE id_reservacion = '$id_reservacion'";
+        mysqli_query($conexion, $query_delete);
+    
+        // Insertar los nuevos estudiantes
+        foreach ($_POST['estudiantes'] as $id_estudiante) {
+            if (!empty($id_estudiante) && is_numeric($id_estudiante)) {
+                $query_insert = "INSERT INTO reservaciones_estudiantes (id_reservacion, id_estudiante) 
+                                VALUES ('$id_reservacion', '$id_estudiante')";
+                mysqli_query($conexion, $query_insert);
+            }
         }
+    } else {
+        echo "<script>alert('No seleccionaste estudiantes, se mantendrán los actuales.');</script>";
     }
-    echo "<script>alert('Reserva actualizada con éxito'); window.location.href='mis_reservas.php';</script>";
+
+    header("Location: update_reservation.php?id=" . $_POST['id_reservacion']);
     exit;
+    
 }
 ?>
 
@@ -160,6 +178,7 @@ if (isset($_POST['reservation_update'])) {
         <h2>Editar Reserva</h2>
         <form action="update_reservation.php" method="POST">
             <input type="hidden" name="reservation_update" value="true">
+            <input type="hidden" name="id_estudiante">
             <input type="hidden" name="estado" value="<?php echo $reserva['estado']; ?>">
             <input type="hidden" name="id_reservacion" value="<?= $id_reservacion ?>">
             <div class="form-group-container">  
@@ -202,16 +221,19 @@ if (isset($_POST['reservation_update'])) {
             <?php 
             $estudiantesSeleccionados = explode(',', $reserva['estudiantes']);
             foreach ($estudiantesSeleccionados as $estudianteId) {
-                $query = "SELECT nombre_completo FROM estudiantes WHERE id = $estudianteId";
+                $query = "SELECT id, nombre_completo FROM estudiantes WHERE id = $estudianteId";
                 $resultado = mysqli_query($conexion, $query);
                 $estudiante = mysqli_fetch_assoc($resultado);
+                if (mysqli_num_rows($resultado) == 0) {
+                    die("Error: El estudiante con ID $id_estudiante no existe.");
+                }
                 if ($estudiante) {
             ?>
             <div style="display: flex; align-items: center; margin: 5px 0; padding: 5px; background-color: #e9ecef; border-radius: 4px;">
                 <span><?php echo $estudiante['nombre_completo']; ?></span>
                 <input type="hidden" name="estudiantes[]" value="<?php echo $estudianteId; ?>">
                 <?php if ($reserva['estado'] !== "aceptada"): ?>
-                <button type="button" id="button-state-acept" style="margin-left: 10px; cursor: pointer; border: none; background: none; color: #1f8f7c; font-weight: bold;" onclick="this.parentElement.remove(); enableEditingReservation();" disabled>×</button>
+                <button type="button" id="button-state-acept" style="margin-left: 10px; cursor: pointer; border: none; background: none; color: #1f8f7c; font-weight: bold;" onclick="this.parentElement.remove(); guardarCambiosEstudiantes();" disabled>×</button>
                 <?php endif; ?>
             </div>
             <?php 
@@ -380,8 +402,37 @@ if (isset($_POST['reservation_update'])) {
         debounce(eventQueryStudents, 300)
     );
 });
-
     </script>
+    <script>
+function guardarCambiosEstudiantes() {
+    const reservaId = <?php echo intval($reserva['id']); ?>;
+    const inputs = document.querySelectorAll('#selected-students input[name="estudiantes[]"]');
+    const idsEstudiantes = Array.from(inputs).map(input => input.value);
+
+    fetch('update_students_ajax.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            id_reserva: reservaId,
+            estudiantes: idsEstudiantes
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log("Estudiantes actualizados correctamente");
+        } else {
+            alert("Error al actualizar: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error en la solicitud AJAX:", error);
+    });
+}
+</script>
+
     <script src="../../assets/js/button_update.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </body>

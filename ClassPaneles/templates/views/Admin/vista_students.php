@@ -42,14 +42,26 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     if ($id != $_SESSION['id']) {
-        $query_delete = "DELETE FROM estudiantes WHERE id = '$id'";
-        mysqli_query($conexion, $query_delete);
+        // Primero, guarda el estudiante en la tabla de eliminados
+        $guardarEliminado = "INSERT INTO estudiantes_eliminados (nombre_completo)
+                            SELECT nombre_completo FROM estudiantes WHERE id = $id";
+        if (!mysqli_query($conexion, $guardarEliminado)) {
+            die("Error al registrar estudiante eliminado: " . mysqli_error($conexion));
+        }
+
+        // Luego, elimina al estudiante de la tabla original
+        $query_delete = "DELETE FROM estudiantes WHERE id = $id";
+        if (!mysqli_query($conexion, $query_delete)) {
+            die("Error al eliminar estudiante: " . mysqli_error($conexion));
+        }
+
         header("Location: vista_students.php");
         exit();
     } else {
         echo "<script>alert('No puedes eliminar tu propia cuenta.');</script>";
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -109,6 +121,15 @@ if (isset($_GET['id'])) {
                         <li><a href="table_reservation.php"
                                 class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
                                 <ion-icon name="calendar-outline"></ion-icon> Reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Mensajeria</p>
+                    <ul>
+                        <li><a href="messages.php"
+                                class="<?php echo $currentFile == 'messages.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Buzon ayuda
                             </a></li>
                     </ul>
                 </div>

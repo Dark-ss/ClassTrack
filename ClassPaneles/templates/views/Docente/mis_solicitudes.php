@@ -158,7 +158,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     <button type="submit">Buscar</button>
                 </form>
             </div>
-            <div class="table-container">
+    <div class="table-container">
     <table class="user-table">
         <thead>
             <tr>

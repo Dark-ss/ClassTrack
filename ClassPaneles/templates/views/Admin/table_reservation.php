@@ -51,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     }
     exit();
 }
-
 // Variable para saber en qué página nos encontramos (para el sidebar activo)
 $currentFile = basename($_SERVER['PHP_SELF']);
 ?>
@@ -129,6 +128,15 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                 </li>
             </ul>
         </div>
+        <div class="menu-group">
+                    <p class="menu-title">Mensajeria</p>
+                    <ul>
+                        <li><a href="messages.php"
+                                class="<?php echo $currentFile == 'messages.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Buzon ayuda
+                            </a></li>
+                    </ul>
+                </div>
         <div class="menu-group">
             <p class="menu-title">Configuración</p>
             <ul>

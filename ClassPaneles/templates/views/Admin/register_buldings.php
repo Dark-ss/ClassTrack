@@ -9,8 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pisos = mysqli_real_escape_string($conexion, $_POST['pisos']);
     $cupo = mysqli_real_escape_string($conexion, $_POST['cupo']);
     $direccion = mysqli_real_escape_string($conexion, $_POST['direccion']);
+    $latitud = mysqli_real_escape_string($conexion, $_POST['latitud']);
+    $longitud = mysqli_real_escape_string($conexion, $_POST['longitud']);
     $tipo = mysqli_real_escape_string($conexion, $_POST['tipo']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+
 
     $imagen = null;
 
@@ -36,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $query = "INSERT INTO edificios (nombre, codigo, pisos, cupo, direccion, tipo, descripcion, imagen)
-        VALUES ('$nombre', '$codigo', '$pisos', '$cupo', '$direccion', '$tipo', '$descripcion', '$imagen')";
+    $query = "INSERT INTO edificios (nombre, codigo, pisos, cupo, direccion, tipo, descripcion, imagen, latitud, longitud)
+        VALUES ('$nombre', '$codigo', '$pisos', '$cupo', '$direccion', '$tipo', '$descripcion', '$imagen', '$latitud', '$longitud')";
 
     if (mysqli_query($conexion, $query)) {
         echo "<script>alert('Edificio registrado con éxito.'); window.location.href='register_buldings.php';</script>";
@@ -61,6 +64,8 @@ $query_spaces_count = "
         e.nombre, 
         e.imagen, 
         e.direccion,
+        e.latitud,
+        e.longitud,
         COUNT(s.id) AS espacios_asociados
     FROM 
         edificios e
@@ -151,6 +156,15 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <li><a href="./table_reservation.php"
                                 class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
                                 <ion-icon name="calendar-outline"></ion-icon> Reservar Espacio
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Mensajeria</p>
+                    <ul>
+                        <li><a href="messages.php"
+                                class="<?php echo $currentFile == 'messages.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Buzon ayuda
                             </a></li>
                     </ul>
                 </div>
@@ -332,6 +346,15 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <label for="direccion">Dirección</label>
                         <input type="text" id="direccion" name="direccion" required>
                     </div>
+                    <div class="form-group">
+                        <label for="latitud">Latitud</label>
+                        <input type="number" id="latitud" name="latitud" step="0.000001" min="-90" max="90" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="longitud">Longitud</label>
+                        <input type="number" id="longitud" name="longitud" step="0.000001" min="-180" max="180" required>
+                    </div>
+
                     <div class="form-group">
                         <label for="tipo">Tipo</label>
                         <select id="tipo" name="tipo" required>

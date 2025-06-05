@@ -42,6 +42,12 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     if ($id != $_SESSION['id']) {
+        $guardarEliminado = "INSERT INTO usuarios_eliminados (nombre_completo, rol)
+                SELECT nombre_completo, rol FROM usuarios WHERE id = $id";
+        if (!mysqli_query($conexion, $guardarEliminado)) {
+        die("Error al registrar el usuario eliminado: " . mysqli_error($conexion));
+        }
+
         $query_delete = "DELETE FROM usuarios WHERE id = '$id'";
         mysqli_query($conexion, $query_delete);
         header("Location: vista_cuentas.php");

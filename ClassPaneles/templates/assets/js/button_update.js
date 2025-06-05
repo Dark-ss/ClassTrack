@@ -78,7 +78,7 @@ function enableEditingReservation() {
     document.getElementById('tipo_reservacion').disabled = false;
     document.getElementById('descripcion').disabled = false;
     document.getElementById('id_espacio').disabled = false;
-    document.getElementById('button-state-acept').disabled = false;
+    document.getElementById('button-state-acept').disabled = true; 
     document.getElementById('estudiantes').disabled = false;
     document.getElementById('button-state-acept').disabled = false; 
 

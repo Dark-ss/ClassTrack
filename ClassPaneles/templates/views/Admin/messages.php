@@ -36,14 +36,14 @@ $search = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 $row_usuario = $result_usuario->fetch_assoc();
 $id_admin = $row_usuario['id'];
 
-$sql = "SELECT m.id, u.nombre_completo AS remitente, m.mensaje, m.fecha_registro, m.nivel_prioridad, m.tipo 
+$sql = "SELECT m.id, u.nombre_completo AS remitente, m.mensaje, m.fecha_registro, m.nivel_prioridad, m.tipo, m.estado
         FROM mensajes m
         JOIN usuarios u ON m.id_remitente = u.id
         WHERE m.id_destinatario = ?
         AND (m.fecha_registro LIKE '%$search%'
         OR m.nivel_prioridad LIKE '%$search%' 
-        OR m.tipo LIKE '%$search%')
-        AND (m.respuesta IS NULL OR m.respuesta = '')";
+        OR m.tipo LIKE '%$search%')";
+        //AND (m.respuesta IS NULL OR m.respuesta = '')"; condición para mostrar peticiones no resueltas
 $stmt = $conexion->prepare($sql);
 if (!$stmt) {
     die("Error en la preparación de la consulta: " . $conexion->error);
@@ -168,22 +168,27 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <th>Nivel prioridad</th>
                         <th>Tipo</th>
                         <th>Fecha</th>
+                        <th>Estado</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
                 <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
+                    <tr class="<?php echo ($row['estado'] === 'Resuelto') ? 'Resuelto' : ''; ?>">
                         <td><?php echo htmlspecialchars($row['remitente']); ?></td>
                         <td><?php echo htmlspecialchars($row['mensaje']); ?></td>
                         <td><?php echo htmlspecialchars($row['nivel_prioridad']); ?></td>
                         <td><?php echo htmlspecialchars($row['tipo']); ?></td>
                         <td><?php echo htmlspecialchars($row['fecha_registro']); ?></td>
+                        <td><?php echo htmlspecialchars($row['estado']); ?></td>
                         <td>
                             <div class="dropdown">
                                 <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>
                                 <div class="dropdown-content">  
                                     <button type="button" class="btn-reject" onclick="mostrarMotivoRechazo(<?php echo $row['id']; ?>)">
                                         <ion-icon name="chatbox-outline"></ion-icon> Responder
+                                    </button>
+                                    <button type="button" class="btn-reject" onclick="eliminarMensaje(<?php echo $row['id']; ?>)">
+                                        <ion-icon name="trash-outline"></ion-icon> Eliminar
                                     </button>
                                 </div>
                             </div>
@@ -228,7 +233,6 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         </main>
     </div>
 <script>
-   // Función para mostrar el modal
 function mostrarMotivoRechazo(idMensaje) {
     document.getElementById("mensaje-id").value = idMensaje; // Se asigna correctamente el ID
     document.getElementById("motivoModal").style.display = "block";
@@ -244,7 +248,7 @@ document.getElementById("respuestaForm").addEventListener("submit", function(eve
     event.preventDefault();
 
     let motivoInput = document.getElementById("motivo-text").value.trim();
-    let mensajeId = document.getElementById("mensaje-id").value.trim(); // Ahora sí tiene valor
+    let mensajeId = document.getElementById("mensaje-id").value.trim();
 
     if (motivoInput === "" || mensajeId === "") {
         alert("Por favor, ingrese una respuesta válida.");
@@ -256,27 +260,59 @@ document.getElementById("respuestaForm").addEventListener("submit", function(eve
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `mensaje_id=${encodeURIComponent(mensajeId)}&respuesta=${encodeURIComponent(motivoInput)}`
     })
-    .then(response => response.text()) // <-- Cambiar a .text() temporalmente
-    .then(text => {
-        console.log("Respuesta del servidor:", text); // <-- Ver qué está devolviendo PHP
-        return JSON.parse(text); // <-- Convertir manualmente a JSON
-    })
+    .then(response => response.json())
     .then(data => {
         if (data.success) {
             alert("Respuesta enviada correctamente.");
-            window.location.reload();
+            window.location.reload(); // Recargar para actualizar estado
         } else {
             alert("Error al enviar la respuesta: " + data.error);
         }
     })
     .catch(error => {
-        console.error("Error en el fetch:", error);
+        console.error("Error en la solicitud:", error);
         alert("Hubo un problema con la solicitud.");
     });
 
-
     closeModal();
 });
+
+function eliminarMensaje(mensajeId) {
+    if (!mensajeId) {
+        alert("No se pudo obtener el ID del mensaje.");
+        return;
+    }
+
+    if (!confirm("¿Estás seguro de que deseas eliminar este mensaje?")) {
+        return;
+    }
+
+    fetch("delete_messages.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `mensaje_id=${encodeURIComponent(mensajeId)}`
+    })
+    .then(response => response.text()) // <-- Obtener texto en vez de JSON
+    .then(text => {
+        console.log("Respuesta del servidor:", text);
+        return JSON.parse(text); // Intentar parsear JSON manualmente
+    })
+    .then(data => {
+        if (data.success) {
+            alert("Mensaje eliminado correctamente.");
+            window.location.reload(); // Recargar la página para actualizar la lista
+        } else {
+            alert("Error al eliminar el mensaje: " + data.error);
+        }
+    })
+    .catch(error => {
+        console.error("Error en la solicitud:", error);
+        alert("Hubo un problema con la eliminación.");
+    });
+}
+
+
+
     </script>
 </body>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

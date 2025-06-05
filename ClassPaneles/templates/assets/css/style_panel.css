@@ -162,8 +162,6 @@ body {
     margin-bottom: 20px;
 }
 
-
-
 .stats {
     display: flex;
     flex-wrap: wrap; /* Permite que las tarjetas se acomoden en varias filas si es necesario */
@@ -182,17 +180,92 @@ body {
     max-width: 100%; /* Asegura que no se salga del contenedor */
 }
 
-
 .stat-card h3 {
     margin-bottom: 10px;
     font-size: 25px;
 }
 
-
 .stat-card p {
     font-size: 24px;
     font-weight: bold;
     color: #333;
+}
+/* admin dashboard statistic */
+
+.content-stadistic{
+    display: flex;
+    width: 100%;
+    justify-content:space-around;
+}
+.stats-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+.stat-card-admin{
+    width: 400px;
+}
+
+.stat-card-admin, .list-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+}
+
+.stat-item {
+    font-size: 30px;
+    text-align: center;
+    flex: 1;
+}
+
+.stat-card-admin h3, .list-container h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Ajustes para la lista */
+.list-container {
+    width: 400px;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px;
+    padding: 15px;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.list-item:last-child {
+    border-bottom: none; 
+}
+
+/* Estilos para los iconos de agregado/eliminado */
+.icon-added {
+    color: green;
+    font-size: 20px;
+}
+
+.icon-removed {
+    color: red;
+    font-size: 20px;
 }
 
 
@@ -1319,6 +1392,11 @@ h2 {
 .respondida {
     background-color: #d4edda !important;
 }
+/*messages*/
+.Resuelto {
+    background-color: #d4edda; /* Verde claro */
+    color: #155724; /* Texto verde oscuro */
+}
 /*style update_building_docente*/
 .btn-spaces {
     position: absolute;
@@ -1362,4 +1440,82 @@ h2 {
     font-size: 13px;
     color: #000;
     font-family: 'Inter', sans-serif; 
+}
+/*update_spaces equipamientos styles reporte*/
+/*modal motivo rechazo*/
+.modal-reject {
+    display: none; /* Por defecto está oculto */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4); /* Fondo oscuro */
+    padding-top: 60px;
+    backdrop-filter: blur(3px);
+}
+
+.modal-content-reject {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 35%;
+    border-radius: 12px;
+}
+
+.close-reject {
+    position: absolute;
+    padding: 12px 24px; /* Reduce el padding horizontal */
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 12px;
+    margin-left: 13%;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    width: auto; /* Elimina el flex: 1 anterior */
+    min-width: 100px;
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.close-reject:hover,
+.close-reject:focus {
+    background-color: #d1d5db;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content-reject textarea{
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    resize: none;
+    border: 1px solid #ddd;
+    border-radius: 0.70rem;
+}
+.modal-content-reject textarea:focus{
+    outline: none;
+    border-color: #1f8f7c;
+    box-shadow: 0 0 0 3px rgba(31, 143, 124, 0.1);
+}
+/*button ubicacion*/
+.button-ubi{
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0%;
+    padding: 0.75rem 1.5rem;
+    background-color: #1f8f7c;
+    width: 15%;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    justify-content: center;
 }

@@ -103,11 +103,13 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1">
     <link rel="stylesheet" href="../../assets/css/style_building.css?v=1">
     <link rel="shortcut icon" href="../../assets/images/logo2.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <title>Edificios</title>
 </head>
 
 <body>
+
 <div class="container">
 <?php
 $currentFile = basename($_SERVER['PHP_SELF']);
@@ -198,6 +200,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <option value="Auditorio">Auditorio</option>
                     </select>
                 </div>
+                <button class="button-ubi" id="abrirModal">Ver ubicaciones</button>
             </div>
             <div class="buildings-grid">
                 <?php foreach ($edificios as $edificio): ?>
@@ -250,8 +253,17 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     </div>
                 </div>
                 <?php endforeach; ?>
+                <div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; overflow-y: auto;">
+                    <div style="background: #fff;margin: 1% auto;padding: 20px;width: 90%;max-width: 800px;border-radius: 10px;max-height: 90vh; overflow-y: auto;">
+                        <span id="cerrarModal" style="float:right; cursor:pointer; font-weight:bold;">&times;</span>
+                        <h3>Ubicaciones de los Edificios</h3>
+                        <div id="mapa" style="height: 500px;"></div>
+                    </div>
+                </div>
+            </div>
             </div>
         </main>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script>
@@ -362,6 +374,55 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             applyFilters();
         }
         </script>
+        <script>
+            const modal = document.getElementById('modal');
+            const abrirModalBtn = document.getElementById('abrirModal');
+            const cerrarModalBtn = document.getElementById('cerrarModal');
+
+            let mapa = null; // Para evitar duplicar el mapa
+
+            // Función para abrir el modal y cargar el mapa
+            abrirModalBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+
+            // Espera a que el modal se muestre antes de iniciar el mapa
+            setTimeout(() => {
+                if (!mapa) {
+                // Inicializar mapa
+                mapa = L.map('mapa').setView([4.147870, -73.634760], 16);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(mapa);
+
+                // Cargar edificios
+                fetch('obtener_ubicaciones.php')
+                    .then(response => response.json())
+                    .then(data => {
+                    data.forEach(edificio => {
+                        if (edificio.latitud && edificio.longitud) {
+                        L.marker([edificio.latitud, edificio.longitud])
+                            .addTo(mapa)
+                            .bindPopup(`<strong>${edificio.nombre}</strong><br>${edificio.direccion}`);
+                        }
+                    });
+                    })
+                    .catch(error => {
+                    console.error('Error al cargar los edificios:', error);
+                    });
+                } else {
+                // Si el mapa ya existe, solo forzar redibujo
+                mapa.invalidateSize();
+                }
+            }, 200); // Delay para que el modal se vea primero
+            });
+
+            // Cerrar modal
+            cerrarModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            });
+        </script>
+
         <script src="../../assets/js/script.js"></script>
         <script src="../../assets/js/script_menu.js"></script>
     </main>

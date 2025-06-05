@@ -1,7 +1,8 @@
 <?php
 require_once '../../php/conexion_be.php';
 include '../../php/admin_session.php';
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if (!isset($_GET['id'])) {
     echo "<script>alert('No se especificó un espacio válido.'); window.location.href='register_buldings.php';</script>";
@@ -125,6 +126,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('Equipamientos añadidos con éxito.'); window.location.href='register_buldings.php';</script>";
     }
 }
+
+//reportes equipamiento
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $espacio_equipamiento_id = isset($_POST['espacio_equipamiento_id']) ? (int) $_POST['espacio_equipamiento_id'] : 0;
+    $espacio_id = isset($_POST['espacio_id']) ? (int) $_POST['espacio_id'] : 0;
+    $nuevo_estado = isset($_POST['estado']) ? trim($_POST['estado']) : '';
+    $descripcion = isset($_POST['descripcion']) ? trim($_POST['descripcion']) : '';
+    echo "Valores recibidos para validación:<br>";
+    echo "equipamiento_id: $espacio_equipamiento_id <br>";
+    echo "espacio_id: $espacio_id <br>";
+
+
+    $query_lookup = "SELECT id FROM espacios_equipamiento WHERE equipamiento_id = ? AND espacio_id = ?";
+    $stmt_lookup = $conexion->prepare($query_lookup);
+    $stmt_lookup->bind_param("ii", $espacio_equipamiento_id, $espacio_id);
+    $stmt_lookup->execute();
+    $stmt_lookup->bind_result($real_espacio_equipamiento_id);
+    $stmt_lookup->fetch();
+    $stmt_lookup->close();
+    
+    // Verificar si encontramos un resultado válido
+    if (!$real_espacio_equipamiento_id) {
+        die("Error: No se encontró una relación válida en espacios_equipamiento.");
+    }
+
+    $sql = "INSERT INTO reportes_equipamiento (espacio_equipamiento_id, espacio_id, estado, descripcion) 
+            VALUES (?, ?, ?, ?)";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("iiss", $real_espacio_equipamiento_id, $espacio_id, $nuevo_estado, $descripcion);
+
+    if ($stmt->execute()) {
+        // 🔹 Paso 4: Actualizar el estado en espacios_equipamiento
+        $update_sql = "UPDATE espacios_equipamiento SET estado = ? WHERE id = ?";
+        $stmt_update = $conexion->prepare($update_sql);
+        $stmt_update->bind_param("si", $nuevo_estado, $real_espacio_equipamiento_id);
+        
+        if ($stmt_update->execute()) {
+            echo "Reporte guardado y estado actualizado correctamente.";
+        } else {
+            echo "Error al actualizar el estado en espacios_equipamiento: " . $stmt_update->error;
+        }
+    
+        $stmt_update->close();
+    
+        // 🔹 Redireccionar para evitar reenvío de formulario
+        header("Location: update_spaces.php?id=" . urlencode($espacio_id));
+        exit();
+    } else {
+        die("Error en la ejecución de la consulta: " . $stmt->error);
+    }
+
+    $stmt->close();
+    $conexion->close();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -262,57 +319,99 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div id="equipamientos-seleccionados">
     <form id="equipamiento-form" method="POST" enctype="multipart/form-data">
-    <h3>Equipamientos Añadidos al Espacio</h3>
-    <div class="grid-container">
-        <input type="hidden" name="id" value="<?php echo $id['id']; ?>">
-        <input type="hidden" name="equipment_spaces" value="true">
-        <?php   
-        $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
-        // Recuperar los equipamientos asignados al espacio
-        $query_show_equip = "SELECT e.id, e.nombre, e.imagen, ee.cantidad, ee.estado
-            FROM equipamiento e
-            JOIN espacios_equipamiento ee ON e.id = ee.equipamiento_id
-            WHERE ee.espacio_id = '$espacio_id'";
+        <h3>Equipamientos Añadidos al Espacio</h3>
+        <div class="grid-container">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($id['id'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="equipment_spaces" value="true">
+            
+            <?php   
+            $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
+            $query_show_equip = "SELECT e.id, e.nombre, e.imagen, ee.cantidad, ee.estado
+                FROM equipamiento e
+                JOIN espacios_equipamiento ee ON e.id = ee.equipamiento_id
+                WHERE ee.espacio_id = '$espacio_id'";
 
-        $resultado_equip = mysqli_query($conexion, $query_show_equip);
+            $resultado_equip = mysqli_query($conexion, $query_show_equip);
 
-        if ($resultado_equip === false) {
-            echo "Error en la consulta: " . mysqli_error($conexion);
-        } else {
-            while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
-                echo '
-                <div class="grid-item">
-                    <div class="equipamiento-container">
-                        <img src="' . htmlspecialchars($equipamiento['imagen']) . '" alt="' . htmlspecialchars($equipamiento['nombre']) . '" class="equipamiento-img_select">
-                        <div class="equipamiento-info ' . strtolower(str_replace(' ', '-', $equipamiento['estado'])) . '">
-                            <p>' . htmlspecialchars($equipamiento['nombre']) . '</p>
-                            <p class="cantidad">Cantidad: ' . htmlspecialchars($equipamiento['cantidad']) . '</p>
-                            <p>Estado: ' . htmlspecialchars($equipamiento['estado']) . '</p>
+            if ($resultado_equip === false) {
+                echo "Error en la consulta: " . mysqli_error($conexion);
+            } else {
+                while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
+                    echo '                
+                    <div class="grid-item">
+                        <div class="equipamiento-container" onclick="abrirModalReporte(\'' . htmlspecialchars($equipamiento['id'], ENT_QUOTES, 'UTF-8') . '\', \'' . htmlspecialchars($espacio_id, ENT_QUOTES, 'UTF-8') . '\')">
+                            <img src="' . htmlspecialchars($equipamiento['imagen'], ENT_QUOTES, 'UTF-8') . '" alt="' . htmlspecialchars($equipamiento['nombre'], ENT_QUOTES, 'UTF-8') . '" class="equipamiento-img_select">
+                            <div class="equipamiento-info ' . strtolower(str_replace(' ', '-', $equipamiento['estado'])) . '">
+                                <p>' . htmlspecialchars($equipamiento['nombre'], ENT_QUOTES, 'UTF-8') . '</p>
+                                <p class="cantidad">Cantidad: ' . htmlspecialchars($equipamiento['cantidad'], ENT_QUOTES, 'UTF-8') . '</p>
+                                <p>Estado: ' . htmlspecialchars($equipamiento['estado'], ENT_QUOTES, 'UTF-8') . '</p>
+                            </div>
                         </div>
-                    </div>
-                </div>';
+                    </div>';                
+                }
             }
-        }
-        ?>
-    </div>
+            ?>
+        </div>
     </form>
+</div>
+
+<!-- Modal -->
+<div id="modalReporteEquipamiento" class="modal">   
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModalReporte()">&times;</span>
+        <h2>Reporte Equipamiento</h2>
+        <form id="reporteEquipamientoForm" method="POST">
+            <input type="hidden" id="espacio_id" name="espacio_id">
+            <input type="hidden" id="espacio_equipamiento_id" name="espacio_equipamiento_id">
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado">
+                <option value="Disponible">Disponible</option>
+                <option value="En Mantenimiento">En Mantenimiento</option>
+                <option value="No Disponible">No Disponible</option>
+            </select>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+            <button type="submit">Guardar Reporte</button>
+        </form>
     </div>
+</div>
+
 </main>
 
+<!-- Script -->
 <script>
-        function openModal() {
+    function openModal() {
             document.getElementById("modal").style.display = "block";
         }
 
         // Cerrar el modal cuando se haga clic fuera del modal
-        window.onclick = function(event) {
+    window.onclick = function(event) {
             if (event.target === document.getElementById("modal")) {
                 document.getElementById("modal").style.display = "none";
             }
+    }
+    function abrirModalReporte(equipamiento_id, espacioId) {
+        console.log("Abriendo modal para ID:", equipamiento_id); 
+        document.getElementById("espacio_equipamiento_id").value = equipamiento_id;
+        document.getElementById("espacio_id").value = espacioId;
+        document.getElementById("modalReporteEquipamiento").style.display = "block";
+        document.getElementById("modal-reject").style.display = "block";
+    }
+
+    function cerrarModalReporte() {
+        document.getElementById("modalReporteEquipamiento").style.display = "none";
+    }
+
+    // Cerrar el modal cuando se haga clic fuera del contenido
+    window.onclick = function(event) {
+        let modal = document.getElementById("modalReporteEquipamiento");
+        if (event.target === modal) {
+            cerrarModalReporte();
         }
+    }
 </script>
+
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
 </body>
-
 </html>
