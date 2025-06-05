@@ -170,7 +170,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                             </a></li>
                         <li><a href="vista_students.php"
                                 class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="school-outline"></ion-icon> Estudiantes
+                                <ion-icon name="person-outline"></ion-icon> Estudiantes
                             </a></li>
                     </ul>
                 </div>
@@ -179,7 +179,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     <ul>
                         <li><a href="./register_buldings.php"
                                 class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
-                                <ion-icon name="business-outline"></ion-icon> Añadir Edificios
+                                <ion-icon name="home-outline"></ion-icon> Añadir Edificios
                             </a></li>
                         <li><a href="table_build.php"
                                 class="<?php echo $currentFile == 'table_build.php' ? 'active' : ''; ?>">

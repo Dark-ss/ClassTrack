@@ -106,6 +106,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link rel="shortcut icon" href="../../assets/images/logo2.png">
     <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1">
     <link rel="stylesheet" href="../../assets/css/style_building.css?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
 </head>
 
@@ -133,17 +134,16 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </a></li>
                         <li><a href="vista_students.php"
                                 class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="school-outline"></ion-icon> Estudiantes
+                                <ion-icon name="person-outline"></ion-icon> Estudiantes
                             </a></li>
                     </ul>
                 </div>
-                <hr>
                 <div class="menu-group">
                     <p class="menu-title">Gestión de Espacios</p>
                     <ul>
-                        <li><a href="register_buldings.php"
+                        <li><a href="./register_buldings.php"
                                 class="<?php echo $currentFile == 'register_buldings.php' ? 'active' : ''; ?>">
-                                <ion-icon name="business-outline"></ion-icon> Añadir Edificios
+                                <ion-icon name="home-outline"></ion-icon> Añadir Edificios
                             </a></li>
                         <li><a href="table_build.php"
                                 class="<?php echo $currentFile == 'table_build.php' ? 'active' : ''; ?>">
@@ -153,9 +153,18 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 class="<?php echo $currentFile == 'equipment.php' ? 'active' : ''; ?>">
                                 <ion-icon name="construct-outline"></ion-icon> Equipamientos
                             </a></li>
-                        <li><a href="./table_reservation.php"
-                                class="<?php echo $currentFile == 'reservar_espacio.php' ? 'active' : ''; ?>">
-                                <ion-icon name="calendar-outline"></ion-icon> Reservar Espacio
+                        <li><a href="table_reservation.php"
+                                class="<?php echo $currentFile == 'table_reservation.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Mensajeria</p>
+                    <ul>
+                        <li><a href="messages.php"
+                                class="<?php echo $currentFile == 'messages.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Buzon ayuda
                             </a></li>
                     </ul>
                 </div>
@@ -187,7 +196,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
                 <div>
                     <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
-                    <p class="user-email"><?php echo htmlspecialchars($correo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
                 </div>
             </div>
         </aside>
@@ -201,7 +210,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="content_nav">
                 <div class="search-bar">
                     <input type="text" id="search-input" placeholder="Buscar edificio...">
-                    <ion-icon name="search-outline"></ion-icon>
+                    <i class="fas fa-search search-icon"></i>
 
                     <!-- Menú desplegable para filtrar por tipo -->
                     <select id="filter-type" class="filter-select">

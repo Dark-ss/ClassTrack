@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
 include '../../php/conexion_be.php';
 
 // Paginación
-$registros_por_pagina = 6;
+$registros_por_pagina = 7;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
@@ -69,6 +69,7 @@ include '../../php/update_table.php';
     <title>Ver Usuarios</title>
     <link rel="stylesheet" href="../../assets/css/style_panel.css?v=1 ">
     <link rel="shortcut icon" href="../../assets/images/logo1.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -96,7 +97,7 @@ include '../../php/update_table.php';
                             </a></li>
                         <li><a href="vista_students.php"
                                 class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="school-outline"></ion-icon> Estudiantes
+                                <ion-icon name="person-outline"></ion-icon> Estudiantes
                             </a></li>
                     </ul>
                 </div>
@@ -105,7 +106,7 @@ include '../../php/update_table.php';
                     <ul>
                         <li><a href="./register_buldings.php"
                                 class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
-                                <ion-icon name="business-outline"></ion-icon> Añadir Edificios
+                                <ion-icon name="home-outline"></ion-icon> Añadir Edificios
                             </a></li>
                         <li><a href="table_build.php"
                                 class="<?php echo $currentFile == 'table_build.php' ? 'active' : ''; ?>">
@@ -161,7 +162,7 @@ include '../../php/update_table.php';
             <!-- Contenedor para la barra de búsqueda y el botón -->
             <div class="search-and-create">
                 <form method="GET" action="vista_cuentas.php" class="search-form">
-                    <ion-icon name="search-outline" class="search-icon"></ion-icon>
+                    <i class="fas fa-search search-icon"></i>
                     <input type="text" name="buscar" placeholder="Buscar cuenta..."
                         value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
                     <button type="submit">Buscar</button>
@@ -202,7 +203,7 @@ include '../../php/update_table.php';
                             </td>
                             <td>
                                 <div class="dropdown">
-                                    <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>
+                                <i class="fa-solid fa-ellipsis dropdown-toggle"></i>
                                     <div class="dropdown-content">
                                         <a href="update_user.php?id=<?php echo $fila['id']; ?>" class="update-button">
                                             <ion-icon name="create-outline"></ion-icon>
@@ -294,6 +295,7 @@ include '../../php/update_table.php';
                         <div class="modal-buttons">
                             <button type="button" class="cancel-button">Cancelar</button>
                             <button type="submit" class="submit-button">Crear</button>
+
                         </div>
                     </form>
                 </div>

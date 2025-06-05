@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
 include '../../php/conexion_be.php';
 
 //paginación
-$registros_por_pagina = 6;
+$registros_por_pagina = 7;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
@@ -72,6 +72,7 @@ if (isset($_GET['id'])) {
     <title>Ver Estudiantes</title>
     <link rel="stylesheet" href="../../assets/css/style_panel.css">
     <link rel="shortcut icon" href="../../assets/images/logo1.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -99,7 +100,7 @@ if (isset($_GET['id'])) {
                             </a></li>
                         <li><a href="vista_students.php"
                                 class="<?php echo $currentFile == 'vista_students.php' ? 'active' : ''; ?>">
-                                <ion-icon name="school-outline"></ion-icon> Estudiantes
+                                <ion-icon name="person-outline"></ion-icon> Estudiantes
                             </a></li>
                     </ul>
                 </div>
@@ -108,7 +109,7 @@ if (isset($_GET['id'])) {
                     <ul>
                         <li><a href="./register_buldings.php"
                                 class="<?php echo $currentFile == 'register_buildings.php' ? 'active' : ''; ?>">
-                                <ion-icon name="business-outline"></ion-icon> Añadir Edificios
+                                <ion-icon name="home-outline"></ion-icon> Añadir Edificios
                             </a></li>
                         <li><a href="table_build.php"
                                 class="<?php echo $currentFile == 'table_build.php' ? 'active' : ''; ?>">
@@ -164,7 +165,7 @@ if (isset($_GET['id'])) {
             <!-- Contenedor para la barra de búsqueda -->
             <div class="search-and-create">
                 <form method="GET" action="vista_students.php" class="search-form">
-                    <ion-icon name="search-outline" class="search-icon"></ion-icon>
+                    <i class="fas fa-search search-icon"></i>
                     <input type="text" name="buscar" placeholder="Buscar estudiante..."
                         value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
                     <button type="submit">Buscar</button>
@@ -194,15 +195,28 @@ if (isset($_GET['id'])) {
                         <tr>
                             <td><?php echo htmlspecialchars($fila['id']); ?></td>
                             <td>
-                                <img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../assets/images/photo.jpg'; ?>" alt="Imagen de Estudiante" class="user-image">
+                                <img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../assets/images/photo.jpg'; ?>"
+                                    class="user-image">
                             </td>
                             <td><?php echo htmlspecialchars($fila['nombre_completo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['correo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['identificacion']); ?></td>
-                            <td><?php echo htmlspecialchars($fila['fecha_registro']); ?></td>
+                            <td class="fecha-contenedor">
+                                <?php $fechaRegistro = new DateTime($fila['fecha_registro']);?>
+                                <div class="fecha-estilo">
+                                    <div class="fecha-linea">
+                                        <i class="fas fa-calendar-day icono-fecha"></i>
+                                        <span class="fecha-dia"><?= $fechaRegistro->format('d/m/Y') ?></span>
+                                    </div>
+                                    <div class="fecha-linea">
+                                        <i class="fas fa-clock icono-hora"></i>
+                                        <span class="fecha-hora"><?= $fechaRegistro->format('h:i A') ?></span>
+                                    </div>
+                                </div>
+                            </td>
                             <td>
                                 <div class="dropdown">
-                                    <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>
+                                    <i class="fa-solid fa-ellipsis dropdown-toggle"></i>
                                     <div class="dropdown-content">
                                         <a href="update_students.php?id=<?php echo $fila['id']; ?>"
                                             class="update-button">
