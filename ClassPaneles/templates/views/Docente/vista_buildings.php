@@ -228,7 +228,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                             <span>Espacios: <?php echo htmlspecialchars($edificio['espacios_asociados']); ?></span>
                         </div>
                         <div class="space-count">
-                            <i class="ti ti-map-pin"></i> <!-- Reemplaza ion-icon name="location-outline" -->
+                            <i class="ti ti-map-pin"></i>
                             <span><?php echo htmlspecialchars($edificio['direccion']); ?></span>
                         </div>
 
@@ -261,7 +261,44 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     </div>
                 </div>
             </div>
-            </div>
+            <div class="pagination">
+                <?php if ($pagina_actual > 1): ?>
+                    <a href="?pagina=<?php echo $pagina_actual - 1; ?>" class="pagination-button">Anterior</a>
+                <?php endif; ?>
+        
+            <?php
+            // Mostrar solo un rango de páginas si hay muchas
+            $rango = 2;
+            $inicio_rango = max(1, $pagina_actual - $rango);
+            $fin_rango = min($total_paginas, $pagina_actual + $rango);
+        
+            if ($inicio_rango > 1) {
+                echo '<a href="?pagina=1" class="pagination-button">1</a>';
+                if ($inicio_rango > 2) {
+                    echo '<span class="pagination-ellipsis">...</span>';
+                }
+            }
+        
+            for ($i = $inicio_rango; $i <= $fin_rango; $i++): ?>
+                        <a href="?pagina=<?php echo $i; ?>"
+                            class="pagination-button <?php echo $i === $pagina_actual ? 'active' : ''; ?>">
+                            <?php echo $i; ?>
+                        </a>
+                        <?php endfor; 
+        
+            if ($fin_rango < $total_paginas) {
+                if ($fin_rango < $total_paginas - 1) {
+                    echo '<span class="pagination-ellipsis">...</span>';
+                }
+                echo '<a href="?pagina=' . $total_paginas . '" class="pagination-button">' . $total_paginas . '</a>';
+            }
+            ?>
+        
+                        <?php if ($pagina_actual < $total_paginas): ?>
+                        <a href="?pagina=<?php echo $pagina_actual + 1; ?>" class="pagination-button">Siguiente</a>
+                        <?php endif; ?>
+                </div>
+</div>
         </main>
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 

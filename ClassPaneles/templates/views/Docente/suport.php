@@ -11,11 +11,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nivel_prioridad = trim($_POST['nivel_prioridad']);
     $tipo = trim($_POST['tipo']);
 
+    $dias_limite = 0;   
+    switch (strtolower($tipo)) {
+        case 'soporte':
+            $dias_limite = 2;
+            break;
+        case 'desarrollo':
+            $dias_limite = 15;
+            break;
+        case 'capacitación':
+            $dias_limite = 3;
+            break;
+    }
+
+    $fecha_limite = date('Y-m-d', strtotime("+$dias_limite days"));
+
     if (!empty($mensaje)) {
-        $sql = "INSERT INTO mensajes (id_remitente, id_destinatario, mensaje, nivel_prioridad, tipo) 
-        VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO mensajes (id_remitente, id_destinatario, mensaje, nivel_prioridad, tipo, tiempo_limite) 
+        VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("iisss", $id_remitente, $id_destinatario, $mensaje,$nivel_prioridad, $tipo,);
+        if (!$stmt) {
+            die("Error en prepare: " . $conexion->error);
+        }
+        $stmt->bind_param("iissss", $id_remitente, $id_destinatario, $mensaje,$nivel_prioridad, $tipo,$fecha_limite);
         if ($stmt->execute()) {
             echo "Mensaje enviado con éxito";
             header("Location: suport.php?msg=success");

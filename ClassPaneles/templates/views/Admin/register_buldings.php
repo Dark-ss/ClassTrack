@@ -289,9 +289,9 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="pagination">
                 <?php if ($pagina_actual > 1): ?>
                 <a href="?pagina=<?php echo $pagina_actual - 1; ?>" class="pagination-button">Anterior</a>
-                <?php endif; ?>
+            <?php endif; ?>
 
-                <?php
+    <?php
     // Mostrar solo un rango de páginas si hay muchas
     $rango = 2;
     $inicio_rango = max(1, $pagina_actual - $rango);
