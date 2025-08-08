@@ -6,7 +6,7 @@ $id_usuario = $_SESSION['id_usuario'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_remitente = $_POST['id_remitente'];
-    $id_destinatario = $_POST['id_destinatario'];
+    $destinatario = trim($_POST['destinatario']);
     $mensaje = trim($_POST['mensaje']);
     $nivel_prioridad = trim($_POST['nivel_prioridad']);
     $tipo = trim($_POST['tipo']);
@@ -14,26 +14,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dias_limite = 0;   
     switch (strtolower($tipo)) {
         case 'soporte':
-            $dias_limite = 2;
+            $dias_limite = 72;
             break;
         case 'desarrollo':
-            $dias_limite = 15;
+            $dias_limite = 360;
             break;
         case 'capacitación':
-            $dias_limite = 3;
+            $dias_limite = 48;
             break;
     }
 
-    $fecha_limite = date('Y-m-d', strtotime("+$dias_limite days"));
+    $fecha_limite = date('Y-m-d H:i:s', strtotime("+$dias_limite hours"));
 
     if (!empty($mensaje)) {
-        $sql = "INSERT INTO mensajes (id_remitente, id_destinatario, mensaje, nivel_prioridad, tipo, tiempo_limite) 
+        $sql = "INSERT INTO mensajes (id_remitente, destinatario, mensaje, nivel_prioridad, tipo, tiempo_limite) 
         VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conexion->prepare($sql);
         if (!$stmt) {
             die("Error en prepare: " . $conexion->error);
         }
-        $stmt->bind_param("iissss", $id_remitente, $id_destinatario, $mensaje,$nivel_prioridad, $tipo,$fecha_limite);
+        $stmt->bind_param("isssss", $id_remitente, $destinatario, $mensaje,$nivel_prioridad, $tipo,$fecha_limite);
         if ($stmt->execute()) {
             echo "Mensaje enviado con éxito";
             header("Location: suport.php?msg=success");
@@ -141,8 +141,9 @@ $currentFile = basename($_SERVER['PHP_SELF']);
     <form action="suport.php" method="POST">
         <input type="hidden" name="mensaje_update" value="true">
         <input type="hidden" name="id_remitente" value="<?php echo $_SESSION['id_usuario']; ?>">
-        <input type="hidden" name="id_destinatario" value="15">
+        <input type="hidden" name="destinatario" value="admin">
         <input type="hidden" name="fecha_registro" value="<?php echo date('Y-m-d H:i:s'); ?>">
+        <input type="hidden" name="tiempo_limite" value="<?php echo date('Y-m-d H:i:s'); ?>">
 
         <div class="form-group-container">
             <div class="form-group">

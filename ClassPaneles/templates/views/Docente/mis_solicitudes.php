@@ -28,7 +28,7 @@ $total_paginas = ceil($total_reservas / $registros_por_pagina);
 // Búsqueda de reservas
 $search = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 
-$query = "SELECT id, mensaje, fecha_registro, nivel_prioridad, tipo, respuesta 
+$query = "SELECT id, mensaje, fecha_registro, nivel_prioridad, tipo, respuesta, tiempo_limite 
         FROM mensajes 
         WHERE id_remitente = $id_usuario
         AND (fecha_registro LIKE '%$search%'
@@ -167,6 +167,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                 <th>Prioridad</th>
                 <th>Tipo</th>
                 <th>Fecha Registro</th>
+                <th>Tiempo Limite</th>
                 <th>Acción</th>
             </tr>
         </thead>
@@ -178,6 +179,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                     <td><?php echo htmlspecialchars($fila['nivel_prioridad']); ?></td>
                     <td><?php echo htmlspecialchars($fila['tipo']); ?></td>
                     <td><?php echo htmlspecialchars(date('d/m/Y h:i A', strtotime($fila['fecha_registro']))); ?></td>
+                    <td><?php echo htmlspecialchars(date('d/m/Y h:i A', strtotime($fila['tiempo_limite']))); ?></td>
                     <td>
                     <div class="dropdown">
                             <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>

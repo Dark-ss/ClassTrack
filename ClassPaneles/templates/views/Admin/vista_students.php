@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'admin') {
 include '../../php/conexion_be.php';
 
 //paginación
-$registros_por_pagina = 7;
+$registros_por_pagina = 6;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
@@ -42,14 +42,12 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     if ($id != $_SESSION['id']) {
-        // Primero, guarda el estudiante en la tabla de eliminados
         $guardarEliminado = "INSERT INTO estudiantes_eliminados (nombre_completo)
                             SELECT nombre_completo FROM estudiantes WHERE id = $id";
         if (!mysqli_query($conexion, $guardarEliminado)) {
             die("Error al registrar estudiante eliminado: " . mysqli_error($conexion));
         }
 
-        // Luego, elimina al estudiante de la tabla original
         $query_delete = "DELETE FROM estudiantes WHERE id = $id";
         if (!mysqli_query($conexion, $query_delete)) {
             die("Error al eliminar estudiante: " . mysqli_error($conexion));
@@ -261,7 +259,7 @@ if (isset($_GET['id'])) {
                     <div class="title_modal">
                         <h2>Crear Nuevo Estudiante</h2>
                     </div>
-                    <form action="../../php/registro_estudiante_be.php" method="POST" enctype="multipart/form-data"
+                    <form action="register_students.php" method="POST" enctype="multipart/form-data"
                         class="formulario_register">
 
                         <div class="form-group">

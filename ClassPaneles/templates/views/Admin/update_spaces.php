@@ -127,12 +127,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$id_usuario = $_SESSION['id_usuario'];
+echo "id_usuario: $id_usuario <br>";
+// Validar si el ID corresponde a un edificio existente
+$query_usuario = "SELECT id, nombre_completo FROM usuarios WHERE id = $id_usuario";
+$result_usuario = mysqli_query($conexion, $query_usuario);
+
+if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
+    $espacio_usuario = mysqli_fetch_assoc($result_usuario);
+}   else {
+    echo "<script>alert('Usuario no encontrado. ID: $id_usuario'); window.location.href='update_spaces_docente.php';</script>";
+    exit;
+}
+
 //reportes equipamiento
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id_usuario = $_SESSION['id_usuario'];
     $espacio_equipamiento_id = isset($_POST['espacio_equipamiento_id']) ? (int) $_POST['espacio_equipamiento_id'] : 0;
     $espacio_id = isset($_POST['espacio_id']) ? (int) $_POST['espacio_id'] : 0;
     $nuevo_estado = isset($_POST['estado']) ? trim($_POST['estado']) : '';
     $descripcion = isset($_POST['descripcion']) ? trim($_POST['descripcion']) : '';
+    echo "id_usuario: $id_usuario <br>";
     echo "Valores recibidos para validación:<br>";
     echo "equipamiento_id: $espacio_equipamiento_id <br>";
     echo "espacio_id: $espacio_id <br>";
@@ -151,11 +166,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die("Error: No se encontró una relación válida en espacios_equipamiento.");
     }
 
-    $sql = "INSERT INTO reportes_equipamiento (espacio_equipamiento_id, espacio_id, estado, descripcion) 
-            VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO reportes_equipamiento (id_usuario, espacio_equipamiento_id, espacio_id, estado, descripcion) 
+            VALUES (?, ?, ?, ?, ?)";
 
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("iiss", $real_espacio_equipamiento_id, $espacio_id, $nuevo_estado, $descripcion);
+    $stmt->bind_param("iiiss", $id_usuario, $real_espacio_equipamiento_id, $espacio_id, $nuevo_estado, $descripcion);
 
     if ($stmt->execute()) {
         // 🔹 Paso 4: Actualizar el estado en espacios_equipamiento
@@ -361,6 +376,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <span class="close" onclick="cerrarModalReporte()">&times;</span>
         <h2>Reporte Equipamiento</h2>
         <form id="reporteEquipamientoForm" method="POST">
+            <input type="hidden" id="id_usuario" name="id_usuario">
             <input type="hidden" id="espacio_id" name="espacio_id">
             <input type="hidden" id="espacio_equipamiento_id" name="espacio_equipamiento_id">
             <label for="estado">Estado:</label>

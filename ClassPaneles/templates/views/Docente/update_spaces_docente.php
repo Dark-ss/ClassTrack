@@ -102,7 +102,6 @@ if ($result && mysqli_num_rows($result) > 0) {
     exit;
 }
 
-// Add this at the very top of your PHP file, right after the session and connection includes
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -193,6 +192,51 @@ if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
 }   else {
     echo "<script>alert('Usuario no encontrado. ID: $id_usuario'); window.location.href='update_spaces_docente.php';</script>";
     exit;
+}
+
+//reportes equipamiento
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id_usuario = $_SESSION['id_usuario'];
+    $espacio_equipamiento_id = isset($_POST['espacio_equipamiento_id']) ? (int) $_POST['espacio_equipamiento_id'] : 0;
+    $espacio_id = isset($_POST['espacio_id']) ? (int) $_POST['espacio_id'] : 0;
+    $nuevo_estado = isset($_POST['estado']) ? trim($_POST['estado']) : '';
+    $descripcion = isset($_POST['descripcion']) ? trim($_POST['descripcion']) : '';
+    echo "id_usuario: $id_usuario <br>";
+    echo "Valores recibidos para validación:<br>";
+    echo "equipamiento_id: $espacio_equipamiento_id <br>";
+    echo "espacio_id: $espacio_id <br>";
+
+
+    $query_lookup = "SELECT id FROM espacios_equipamiento WHERE equipamiento_id = ? AND espacio_id = ?";
+    $stmt_lookup = $conexion->prepare($query_lookup);
+    $stmt_lookup->bind_param("ii", $espacio_equipamiento_id, $espacio_id);
+    $stmt_lookup->execute();
+    $stmt_lookup->bind_result($real_espacio_equipamiento_id);
+    $stmt_lookup->fetch();
+    $stmt_lookup->close();
+    
+    // Verificar si encontramos un resultado válido
+    if (!$real_espacio_equipamiento_id) {
+        die("Error: No se encontró una relación válida en espacios_equipamiento.");
+    }
+
+    $sql = "INSERT INTO solicitudes_reporte_docente (id_usuario, espacio_equipamiento_id, espacio_id, estado, descripcion) 
+            VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conexion->prepare($sql);
+    if (!$stmt) {
+    die("Error al preparar la sentencia: " . $conexion->error);
+}
+    $stmt->bind_param("iiiss", $id_usuario, $real_espacio_equipamiento_id, $espacio_id, $nuevo_estado, $descripcion);
+
+    if ($stmt->execute()) {
+        echo "Solicitud enviada correctamente.";
+        header("Location: update_spaces_docente.php?id=" . urlencode($espacio_id) . "&reporte=enviado");
+        exit();
+    } else {
+        die("Error en la ejecución de la consulta: " . $stmt->error);
+    }
+
+    $stmt->close();
 }
 ?>
 
@@ -299,7 +343,7 @@ if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
             while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
                 echo '
                 <div class="grid-item">
-                    <div class="equipamiento-container">
+                    <div class="equipamiento-container" onclick="abrirModalReporte(\'' . htmlspecialchars($equipamiento['id'], ENT_QUOTES, 'UTF-8') . '\', \'' . htmlspecialchars($espacio_id, ENT_QUOTES, 'UTF-8') . '\')">
                         <img src="' . htmlspecialchars($equipamiento['imagen']) . '" alt="' . htmlspecialchars($equipamiento['nombre']) . '" class="equipamiento-img_select">
                         <div class="equipamiento-info ' . strtolower(str_replace(' ', '-', $equipamiento['estado'])) . '">
                             <p>' . htmlspecialchars($equipamiento['nombre']) . '</p>
@@ -376,7 +420,52 @@ if ($result_usuario && mysqli_num_rows($result_usuario) > 0) {
         </form>
     </div>
     </div>
+
+<div id="modalReporteEquipamiento" class="modal">   
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModalReporte()">&times;</span>
+        <h2>Reporte Equipamiento</h2>
+        <form id="reporteEquipamientoForm" method="POST">
+            <input type="hidden" id="id_usuario" name="id_usuario">
+            <input type="hidden" id="espacio_id" name="espacio_id">
+            <input type="hidden" id="espacio_equipamiento_id" name="espacio_equipamiento_id">
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado">
+                <option value="Disponible">Disponible</option>
+                <option value="En Mantenimiento">En Mantenimiento</option>
+                <option value="No Disponible">No Disponible</option>
+            </select>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+            <button type="submit">Guardar Reporte</button>
+        </form>
+    </div>
+</div>
 </main>
+<?php
+    $conexion->close();
+?>
+<script>
+    function abrirModalReporte(equipamiento_id, espacioId) {
+        console.log("Abriendo modal para ID:", equipamiento_id); 
+        document.getElementById("espacio_equipamiento_id").value = equipamiento_id;
+        document.getElementById("espacio_id").value = espacioId;
+        document.getElementById("modalReporteEquipamiento").style.display = "block";
+        document.getElementById("modal-reject").style.display = "block";
+    }
+
+    function cerrarModalReporte() {
+        document.getElementById("modalReporteEquipamiento").style.display = "none";
+    }
+
+    // Cerrar el modal cuando se haga clic fuera del contenido
+    window.onclick = function(event) {
+        let modal = document.getElementById("modalReporteEquipamiento");
+        if (event.target === modal) {
+            cerrarModalReporte();
+        }
+    }
+</script>
 <script>
         function openModal() {
             document.getElementById("modal").style.display = "block";
@@ -533,6 +622,7 @@ function agregarEstudianteSeleccionado(item) {
         debounce(eventQueryStudents, 300)
     );
 });
+
 </script>
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>

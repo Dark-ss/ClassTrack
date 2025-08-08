@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<script>alert('Error al subir la imagen.');</script>";
         }
     }
-
     // Insertar estudiante
     $query = "INSERT INTO estudiantes (nombre_completo, correo, identificacion, imagen)
         VALUES ('$nombre_completo', '$correo', '$identificacion', '$imagen')";

@@ -34,12 +34,11 @@ $total_paginas = ceil($total_mensajes / $registros_por_pagina);
 $search = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 
 $row_usuario = $result_usuario->fetch_assoc();
-$id_admin = $row_usuario['id'];
 
 $sql = "SELECT m.id, u.nombre_completo AS remitente, m.mensaje, m.fecha_registro, m.nivel_prioridad, m.tipo, m.estado
         FROM mensajes m
         JOIN usuarios u ON m.id_remitente = u.id
-        WHERE m.id_destinatario = ?
+        WHERE m.destinatario = 'admin'
         AND (m.fecha_registro LIKE '%$search%'
         OR m.nivel_prioridad LIKE '%$search%' 
         OR m.tipo LIKE '%$search%')";
@@ -48,8 +47,6 @@ $stmt = $conexion->prepare($sql);
 if (!$stmt) {
     die("Error en la preparación de la consulta: " . $conexion->error);
 }
-
-$stmt->bind_param("i", $id_admin);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>

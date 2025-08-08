@@ -174,13 +174,12 @@ if (isset($_POST['export']) && isset($_POST['format'])) {
         $pdf = new TCPDF();
         $pdf->AddPage();
         $pdf->SetFont('Helvetica', '', 10);
-    
         $logo = '../../templates/assets/images/logo2.png';
-        $nombreAplicativo = "UniSpace";
+        //$nombreAplicativo = "UniSpace";
         date_default_timezone_set('America/Bogota');
         $fechaReporte = date("d/m/Y h:i A");
     
-        $pdf->Image($logo, 10, 10, 25);
+        $pdf->Image($logo, 10, 10, 40);
         $pdf->SetXY(40, 15);
         $pdf->SetFont('Helvetica', 'B', 14);
         $pdf->Cell(0, 10, $nombreAplicativo, 0, 1, 'L');
@@ -256,9 +255,13 @@ if (isset($_POST['export']) && isset($_POST['format'])) {
         $pdf->writeHTML($html);
         
         $remainingHeight = $pdf->getPageHeight() - $pdf->GetY();
-        
-        if ($remainingHeight < 50 && count($rows) > 12) { 
-            $pdf->AddPage();
+        //if ($remainingHeight < 50 && count($rows) > 12) { 
+        if (count($rows)> 12) { 
+            $remainingHeight = $pdf->getPageHeight() - $pdf->GetY();
+
+            if ($remainingHeight < 60) {
+                $pdf->AddPage();
+            }
         
             $html = '<table border="1" cellpadding="5">';
             $html .= '<tr style="background-color: #28a745; color: white; text-align: center; font-weight: bold;">
@@ -336,7 +339,9 @@ if (isset($_POST['export']) && isset($_POST['format'])) {
         </table>';
 
         $pdf->writeHTMLCell(90, '', $xInicio + 100, $yInicio, $htmlEstadisticas, 0, 1, false, true, 'R');
-    
+        if (ob_get_length()) {
+            ob_end_clean();
+        }
         $pdf->Output('reservas.pdf', 'D');
     } elseif ($format === 'png') {
         require '../../templates/vendor/autoload.php';

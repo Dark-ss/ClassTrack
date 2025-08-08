@@ -201,7 +201,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <i class="fa-solid fa-pen"></i> Modo Edición
                     </button>
 
-                    <!-- Los botones de acción ahora están aquí -->
                     <div class="action-buttons">
                         <button type="button" id="cancel-edit-btn" class="cancel-btn"><i class="fas fa-times"></i>
                             Cancelar</button>
@@ -219,8 +218,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <div class="half">
                         <div class="building-showcase">
                             <div class="image-container">
-                                <img src="<?php echo htmlspecialchars($usuario['imagen']); ?>" alt="Edificio"
-                                    class="building-image">
+                                <a href="vista_spaces.php?edificio_id=<?php echo $id; ?>">
+                                    <img src="<?php echo htmlspecialchars($usuario['imagen']); ?>" alt="Edificio" class="building-image">
+                                </a>
                                 <label for="imagen" class="change-image-btn">
                                     <i class="fa-solid fa-camera camera-icon"></i>
                                     <div class="change-image-text">Cambiar imagen</div>
