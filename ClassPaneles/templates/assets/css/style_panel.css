@@ -29,6 +29,7 @@ body {
     justify-content: space-between;
     padding-top: 10px;
     padding-right: 20px;
+    min-height: 105vh;
 }
 
 .logo {

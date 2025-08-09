@@ -155,7 +155,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         </aside>
 
     <!-- Main Content -->
-    <main class="main-content-cuenta">
+<main class="main-content-cuenta">
     <h1 class="title-table">Lista de Reservas</h1>
     <div class="search-and-export">
         <form method="GET" action="table_reservation.php" class="search-form">

@@ -126,15 +126,6 @@ if (isset($_GET['id'])) {
                     </ul>
                 </div>
                 <div class="menu-group">
-                    <p class="menu-title">Mensajeria</p>
-                    <ul>
-                        <li><a href="messages.php"
-                                class="<?php echo $currentFile == 'messages.php' ? 'active' : ''; ?>">
-                                <ion-icon name="calendar-outline"></ion-icon> Buzon ayuda
-                            </a></li>
-                    </ul>
-                </div>
-                <div class="menu-group">
                     <p class="menu-title">Configuración</p>
                     <ul>
                         <li><a href="../../php/config.php"
