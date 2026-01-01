@@ -69,7 +69,7 @@ if (isset($_GET['id'])) {
             <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
             <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
             <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
-            <a href="../../php/cerrar_sesion.php" class="logout">
+            <a href="../../php/cerrar_sesion_admin.php" class="logout">
                 <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
             </a>
             <a href="../../php/config_docente.php" class="config">

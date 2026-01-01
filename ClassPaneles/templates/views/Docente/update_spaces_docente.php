@@ -115,6 +115,11 @@ if (isset($_POST['reserve_space'])) {
     $id_espacio = $_POST['id_espacio'];
     $estudiantes = $_POST['estudiantes'];
 
+    if (empty($estudiantes) || count($estudiantes) < 1) {
+    echo "<script>alert('Debe añadir al menos un estudiante para realizar la reserva.'); window.history.back();</script>";
+    exit;
+    }
+
     date_default_timezone_set('America/Bogota');
     $fecha_actual = date('Y-m-d H:i:s');
 
@@ -445,6 +450,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <?php
     $conexion->close();
 ?>
+<script>
+document.getElementById("reserve-form").addEventListener("submit", function(e) {
+    const selectedStudents = document.querySelectorAll("#selected-students input[name='estudiantes[]']");
+    if (selectedStudents.length === 0) {
+        e.preventDefault(); // detener el envío
+        alert("Debe añadir al menos un estudiante antes de reservar.");
+    }
+});
+</script>
+
 <script>
     function abrirModalReporte(equipamiento_id, espacioId) {
         console.log("Abriendo modal para ID:", equipamiento_id); 

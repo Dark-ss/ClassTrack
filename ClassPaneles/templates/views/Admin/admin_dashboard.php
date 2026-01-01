@@ -23,6 +23,82 @@ $queryTotalEstudiantes = "SELECT COUNT(*) AS total_estudiantes FROM estudiantes"
 $resultTotalEstudiantes = mysqli_query($conexion, $queryTotalEstudiantes);
 $totalEstudiantes = mysqli_fetch_assoc($resultTotalEstudiantes)['total_estudiantes'];
 
+//REPORTES EQUIPAMIENTOS
+$query = "
+SELECT 
+    re.id,
+    us.nombre_completo,
+    eq.nombre AS nombre_equipamiento,
+    ea.codigo AS codigo_espacio,
+    ed.nombre AS Edificio,
+    re.estado,
+    re.descripcion,
+    re.fecha_reporte
+FROM reportes_equipamiento re
+LEFT JOIN usuarios us ON re.id_usuario = us.id
+LEFT JOIN espacios_equipamiento ee ON re.espacio_equipamiento_id = ee.id
+LEFT JOIN equipamiento eq ON ee.equipamiento_id = eq.id
+LEFT JOIN espacios_academicos ea ON ee.espacio_id = ea.id
+LEFT JOIN edificios ed ON ea.edificio_id = ed.id
+WHERE DATE(re.fecha_reporte) >= CURDATE() - INTERVAL 1 DAY
+ORDER BY re.fecha_reporte DESC
+";
+
+$result = $conexion->query($query);
+
+
+//GRAFICA DE RESUMEN DE ESTADOS DE RESERVAS
+// ====== TOTALES DE RESERVAS POR ESTADO ======
+$queryTotalesReservas = "
+    SELECT 
+        COUNT(*) AS total,
+        SUM(CASE WHEN estado = 'aceptada' THEN 1 ELSE 0 END) AS aceptadas,
+        SUM(CASE WHEN estado = 'rechazada' THEN 1 ELSE 0 END) AS rechazadas,
+        SUM(CASE WHEN estado = 'pendiente' THEN 1 ELSE 0 END) AS pendientes
+    FROM reservaciones
+";
+
+$resultTotales = mysqli_query($conexion, $queryTotalesReservas);
+$totales = mysqli_fetch_assoc($resultTotales);
+
+$totalReservas     = (int)$totales['total'];
+$totalAceptadas    = (int)$totales['aceptadas'];
+$totalRechazadas   = (int)$totales['rechazadas'];
+$totalPendientes   = (int)$totales['pendientes'];
+
+//PORCENTAJES
+$porcAceptadas  = $totalReservas ? round(($totalAceptadas / $totalReservas) * 100, 1) : 0;
+$porcRechazadas = $totalReservas ? round(($totalRechazadas / $totalReservas) * 100, 1) : 0;
+$porcPendientes = $totalReservas ? round(($totalPendientes / $totalReservas) * 100, 1) : 0;
+
+//COMPARACIÓN AÑO ANTERIOR Y ACTUAL
+$queryComparacion = "
+    SELECT 
+        YEAR(registro_reserva) AS anio,
+        SUM(CASE WHEN estado = 'aceptada' THEN 1 ELSE 0 END) AS aceptadas,
+        SUM(CASE WHEN estado = 'rechazada' THEN 1 ELSE 0 END) AS rechazadas,
+        SUM(CASE WHEN estado = 'pendiente' THEN 1 ELSE 0 END) AS pendientes
+    FROM reservaciones
+    WHERE YEAR(registro_reserva) IN (YEAR(CURDATE()), YEAR(CURDATE()) - 1)
+    GROUP BY YEAR(registro_reserva)
+";
+
+$resultComparacion = mysqli_query($conexion, $queryComparacion);
+
+$comparacion = [
+    'actual' => ['aceptadas' => 0, 'rechazadas' => 0,'pendientes' => 0],
+    'anterior' => ['aceptadas' => 0, 'rechazadas' => 0,'pendientes' => 0]
+];
+
+while ($row = mysqli_fetch_assoc($resultComparacion)) {
+    if ($row['anio'] == date('Y')) {
+        $comparacion['actual'] = $row;
+    } else {
+        $comparacion['anterior'] = $row;
+    }
+}
+
+
 // DETERMINAR TENDENCIA
 if ($totalDocentes > $totalDocentesAnterior) {
     $tendenciaDocentes = 'up';
@@ -215,8 +291,8 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                 class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
                                 <ion-icon name="settings-outline"></ion-icon> Ajustes
                             </a></li>
-                        <li><a href="../../php/cerrar_sesion.php"
-                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                        <li><a href="../../php/cerrar_sesion_admin.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion_admin.php' ? 'active' : ''; ?>">
                                 <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
                             </a></li>
                     </ul>
@@ -273,7 +349,97 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
             </div>
         </div>
+    <div class="dashboard-graficas">
+        <div class="chart-box-reserv">
+        <h3 class='tit-reserv'>Reservas Registradas</h3>
 
+        <!-- Totales -->
+        <div class="stats-row">
+            <div class="stat-item-porc">Total: <strong><?= $totalReservas ?></strong></div>
+            <div class="stat-item-porc">Aceptadas: <strong><?= $totalAceptadas ?></strong></div>
+            <div class="stat-item-porc">Rechazadas: <strong><?= $totalRechazadas ?></strong></div>
+            <div class="stat-item-porc">Pendientes: <strong><?= $totalPendientes ?></strong></div>
+        </div>
+
+        <!-- Porcentajes -->
+        <div class="stats-row">
+            <div class="stat-item-porc"><?= $porcAceptadas ?>% Aceptadas</div>
+            <div class="stat-item-porc"><?= $porcRechazadas ?>% Rechazadas</div>
+            <div class="stat-item-porc"><?= $porcPendientes ?>% Pendientes</div>
+        </div>
+
+        <!-- Gráfica pastel-->
+        <div class="charts-pie-container">
+
+            <div class="chart-box">
+                <h4><?= date('Y') ?></h4>
+                <div class="chart-wrapper">
+                    <canvas id="chartActual"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <h4><?= date('Y') - 1 ?></h4>
+                <div class="chart-wrapper">
+                    <canvas id="chartAnterior"></canvas>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+<div class="reportes-box">
+
+    <h3 class="titulo-box">Reportes de Equipamiento</h3>
+
+    <div class="reportes-lista">
+
+        <?php while ($row = $result->fetch_assoc()): ?>
+
+            <?php
+                $colorEstado = match ($row['estado']) {
+                    'Disponible'     => 'estado-verde',
+                    'En Mantenimiento'  => 'estado-naranja',
+                    'No Disponible'  => 'estado-rojo',
+                    default          => 'estado-gris'
+                };
+            ?>
+
+            <div class="reporte-item">
+
+                <!-- Indicador de estado -->
+                <span class="estado-color <?= $colorEstado ?>"></span>
+
+                <!-- Información -->
+                <div class="reporte-info">
+                    <div class="reporte-linea">
+                        <strong>Edificio:</strong> <?= $row['Edificio'] ?>
+                    </div>
+                    <div class="reporte-linea">
+                        <strong>Espacio:</strong> <?= $row['codigo_espacio'] ?>
+                    </div>
+
+                    <div class="reporte-linea">
+                        <strong>Equipamiento:</strong> <?= $row['nombre_equipamiento'] ?>
+                    </div>
+
+                    <div class="reporte-linea estado-texto">
+                        <?= $row['estado'] ?>
+                    </div>
+
+                    <div class="reporte-fecha">
+                        <?= date('Y-m-d', strtotime($row['fecha_reporte'])) ?>
+                    </div>
+                </div>
+
+            </div>
+
+        <?php endwhile; ?>
+
+    </div>
+
+</div>
+</div>
         <div class="chart-big">
             <h3>Reservas por Mes (Último Año)</h3>
             <canvas id="chartReservas"></canvas>
@@ -299,6 +465,49 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         }
     });
 </script>
+
+<script>
+new Chart(document.getElementById('chartActual'), {
+    type: 'pie',
+    data: {
+        labels: ['Aceptadas', 'Rechazadas','Pendientes'],
+        datasets: [{
+            data: [
+                <?= $comparacion['actual']['aceptadas'] ?>,
+                <?= $comparacion['actual']['rechazadas'] ?>,
+                <?= $comparacion['actual']['pendientes'] ?>
+            ],
+            backgroundColor: ['#2ecc71', '#e74c3c','#6c757d']
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+new Chart(document.getElementById('chartAnterior'), {
+    type: 'pie',
+    data: {
+        labels: ['Aceptadas', 'Rechazadas','Pendientes'],
+        datasets: [{
+            data: [
+                <?= $comparacion['anterior']['aceptadas'] ?>,
+                <?= $comparacion['anterior']['rechazadas'] ?>,
+                <?= $comparacion['anterior']['pendientes'] ?>
+            ],
+            backgroundColor: ['#27ae60', '#c0392b', '#6c757d']
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+</script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     console.log(<?php echo json_encode(array_values($reservasPorMes)); ?>);

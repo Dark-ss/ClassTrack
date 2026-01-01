@@ -139,8 +139,8 @@ if (isset($_GET['id'])) {
                                 class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
                                 <ion-icon name="settings-outline"></ion-icon> Ajustes
                             </a></li>
-                        <li><a href="../../php/cerrar_sesion.php"
-                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                        <li><a href="../../php/cerrar_sesion_admin.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion_admin.php' ? 'active' : ''; ?>">
                                 <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
                             </a></li>
                     </ul>

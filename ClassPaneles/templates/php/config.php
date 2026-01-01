@@ -94,7 +94,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                                 <ion-icon name="settings-outline"></ion-icon> Ajustes
                             </a></li>
                         <li><a href="cerrar_sesion.php"
-                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                                class="<?php echo $currentFile == 'cerrar_sesion_admin.php' ? 'active' : ''; ?>">
                                 <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
                             </a></li>
                     </ul>

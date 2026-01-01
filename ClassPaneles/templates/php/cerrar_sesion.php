@@ -1,9 +1,5 @@
 <?php
-    /*session_start();
-    session_destroy();
-    header("location: ../index.php");    
-?>*/
-// Revisar si existe la sesión de admin
+
 if (isset($_COOKIE['admin_session'])) {
     session_name("admin_session");
     session_start();

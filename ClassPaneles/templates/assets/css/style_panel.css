@@ -29,7 +29,7 @@ body {
     justify-content: space-between;
     padding-top: 10px;
     padding-right: 20px;
-    min-height: 105vh;
+    min-height: 110vh; 
 }
 
 .logo {
@@ -225,10 +225,172 @@ body {
     align-items: center;
 }
 
+/*Grafica pastel*/
+/*contenedor graficas*/
+.charts-pie-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    margin-top: 30px;
+    justify-items: center;
+}
+
+.chart-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.chart-box-reserv{
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin: 0 auto;
+}
+
+.chart-wrapper {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+.chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/*EQUIPAMIENTOS REPORT*/
+/* Contenedor principal */
+.reportes-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 200px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin: 0 auto;
+}
+
+/* Título */
+.titulo-box {
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* Lista */
+/* Lista con scroll */
+.reportes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    max-height: 330px;       /* ≈ altura de 3 items */
+    overflow-y: auto;
+    padding-right: 6px;     /* espacio para scrollbar */
+}
+
+/* Scroll elegante (Chrome, Edge) */
+.reportes-lista::-webkit-scrollbar {
+    width: 6px;
+}
+
+.reportes-lista::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border-radius: 10px;
+}
+
+.reportes-lista::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/*CONTENEDOR GRAFICAS DE PASTEL Y EQUIPAMIENTOS*/
+.dashboard-graficas {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* gráficas más grandes */
+    gap: 24px;
+    align-items: start;
+    margin-top: 30px;
+}
+
+
+/* Cada item */
+.reporte-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    align-items: flex-start;
+}
+
+/* Cuadro de color */
+.estado-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    margin-top: 6px;
+}
+
+/* Colores por estado */
+.estado-verde {
+    background-color: #28a745;
+}
+
+.estado-naranja {
+    background-color: #fd7e14;
+}
+
+.estado-rojo {
+    background-color: #dc3545;
+}
+
+.estado-gris {
+    background-color: #6c757d;
+}
+
+/* Texto */
+.reporte-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.reporte-linea {
+    font-size: 14px;
+}
+
+.estado-texto {
+    font-weight: 600;
+}
+
+.reporte-fecha {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+
 .stat-item {
     font-size: 30px;
     text-align: center;
     flex: 1;
+}
+/*porcentajes*/
+.stat-item-porc{
+    font-size: 18px;
+    text-align: center;
+    flex: 1;
+}
+.tit-reserv{
+    text-align: center;
 }
 
 .stat-card-admin h3, .list-container h3 {
@@ -704,6 +866,21 @@ tr:hover .fecha-hora {
 .update-button:hover {
     background-color: #f3f4f6;
 }
+
+/*boton eliminar equipamiento global*/
+.delete-button-equip {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 8px;
+}
+
+.delete-button-equip:hover {
+    color: darkred;
+}
+
 
 .icons-image {
     width: 20px;
@@ -1587,3 +1764,26 @@ h2 {
     transition: background-color 0.3s;
     justify-content: center;
 }
+/*loader*/
+
+/* Contenedor centrado del spinner */
+#loader {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+#loader img {
+  width: 100px;
+  height: 100px;
+}
+
+
+
+

@@ -65,6 +65,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
     <link rel="shortcut icon" href="../../assets/images/logo2.png">
 </head>
 <body>
+
     <style>
         .conflict-row {
         background-color: #f8d7da;
@@ -76,6 +77,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         }
         /* Si se requiere ajustar márgenes, paddings u otros detalles, se pueden agregar aquí */
     </style>
+
 <div class="container">
     <!-- Sidebar (estructura igual a la de la tabla de usuarios de referencia) -->
     <aside class="sidebar">
@@ -137,8 +139,8 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                 class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
                                 <ion-icon name="settings-outline"></ion-icon> Ajustes
                             </a></li>
-                        <li><a href="../../php/cerrar_sesion.php"
-                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                        <li><a href="../../php/cerrar_sesion_admin.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion_admin.php' ? 'active' : ''; ?>">
                                 <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
                             </a></li>
                     </ul>
@@ -298,6 +300,32 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             <a href="?pagina=<?php echo $pagina_actual + 1; ?>&buscar=<?php echo htmlspecialchars($search); ?>" class="pagination-button">Siguiente</a>
         <?php endif; ?>
     </div>
+    <!-- Loader global -->
+<style>
+    #loader {
+        display: none;  
+        position: fixed; 
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.7);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999; 
+    }
+
+    #loader img {
+    width: 100px;
+    height: 100px;
+    }
+</style>
+
+    <div id="loader" class="loader">
+  <img src="../../assets/images/loader.gif" alt="Cargando..." />
+</div>   
+    </div>
+    </div>
     </main>
 </div>
 
@@ -369,8 +397,26 @@ function rechazarReserva() {
         closeModal();
 }
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const approveForms = document.querySelectorAll(".btn-container");
+
+  approveForms.forEach(form => {
+    form.addEventListener("submit", function() {
+      const loader = document.getElementById("loader");
+      if (loader) {
+        loader.style.display = "flex"; // Mostrar el gif
+      }
+    });
+  });
+});
+</script>
+
+
+
 <script src="../../assets/js/button_update.js"></script>
 <script src="../../assets/js/script_menu.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </body>
+
 </html>

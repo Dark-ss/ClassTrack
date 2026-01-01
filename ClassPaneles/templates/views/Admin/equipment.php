@@ -1,6 +1,18 @@
 <?php
 include '../../php/admin_session.php';
 include '../../php/conexion_be.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_id'])) {
+    $eliminar_id = intval($_POST['eliminar_id']);
+    $delete_query = "DELETE FROM equipamiento WHERE id = $eliminar_id";
+
+    if (mysqli_query($conexion, $delete_query)) {
+        echo "<script>alert('Equipamiento eliminado con éxito.'); window.location.href='equipment.php';</script>";
+        exit;
+    } else {
+        echo "<script>alert('Error al eliminar el equipamiento: " . mysqli_error($conexion) . "');</script>";
+    }
+}
 //formulario envio
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codigo = mysqli_real_escape_string($conexion, $_POST['codigo']);
@@ -130,8 +142,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
                                 <ion-icon name="settings-outline"></ion-icon> Ajustes
                             </a></li>
-                        <li><a href="../../php/cerrar_sesion.php"
-                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                        <li><a href="../../php/cerrar_sesion_admin.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion_admin.php' ? 'active' : ''; ?>">
                                 <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
                             </a></li>
                     </ul>
@@ -147,22 +159,43 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </aside>
 <main class="content">
-    <div class="content-header">
-        <h2>Gestión de Equipamientos</h2>
+<div class="content-header">
+    <h2>Gestión de Equipamientos</h2>
+    <div style="display: flex; gap: 10px;">
+        <!-- Botón añadir -->
         <button class="add-button" onclick="openModal()">
             <ion-icon name="add-outline"></ion-icon>
-            Añadir Equipamiento 
+            Añadir Equipamiento
         </button>
-    </div>        
+
+        <!-- Botón redirección a tabla de equipamiento espacios -->
+        <a href="table_equipament_spaces.php" class="add-button" style="text-decoration: none; display: flex; align-items: center;">
+            <ion-icon name="construct-outline"></ion-icon>
+            Equipamientos Espacios
+        </a>
+    </div>
+</div>     
     <div class="buildings-grid">
         <?php foreach ($equipamientos as $equipamiento): ?>
         <div class="building-card">
             <img src="<?php echo htmlspecialchars($equipamiento['imagen']); ?>" alt="Equipamiento" class="building-image">
             <div class="building-info">
                 <h3><?php echo htmlspecialchars($equipamiento['nombre']); ?></h3>
+            <div class="actions">
+                <!-- Botón editar -->
                 <a href="update_equipment.php?id=<?php echo htmlspecialchars($equipamiento['id']); ?>" class="edit-button">
                     <i class="ti ti-edit"></i>
                 </a>
+
+                <!-- Botón eliminar -->
+                <form action="equipment.php" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este equipamiento?');">
+                    <input type="hidden" name="eliminar_id" value="<?php echo htmlspecialchars($equipamiento['id']); ?>">
+                    <button type="submit" class="delete-button-equip">
+                        <i class="ti ti-trash"></i>
+                    </button>
+                </form>
+            </div>
+
             </div>
         </div>
         <?php endforeach; ?>

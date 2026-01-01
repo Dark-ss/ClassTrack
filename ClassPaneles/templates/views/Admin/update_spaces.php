@@ -214,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <img src="<?php echo htmlspecialchars($imagen); ?>" alt="Foto de perfil" class="profile-img">
         <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
         <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
-        <a href="../../php/cerrar_sesion.php" class="logout">
+        <a href="../../php/cerrar_sesion_admin.php" class="logout">
             <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
         </a>
         <a href="../../php/config.php" class="config">
@@ -247,6 +247,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <h1 class="title_build"><?php echo htmlspecialchars($id['codigo']); ?></h1>
             <img src="<?php echo htmlspecialchars($id['imagen']); ?>" alt="Espacio" class="profile-img-build">
             <button type="button" class="button-space" onclick="openModal()">Añadir equipamiento</button>
+            <a href="disponibilidad_spaces.php?id_espacio=<?php echo urlencode($id['id']); ?>" class="button-avail">Disponibilidad</a>
         </div>
 
         <form method="POST" enctype="multipart/form-data" class="description-form" sytle="flex-direction: column">

@@ -1,6 +1,23 @@
 <?php
 include '../../php/admin_session.php';
 include '../../php/conexion_be.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_id'])) {
+    $eliminar_id = intval($_POST['eliminar_id']);
+
+    $delete_query = "DELETE FROM espacios_academicos WHERE id = $eliminar_id"; 
+    if (mysqli_query($conexion, $delete_query)) {
+        if (mysqli_affected_rows($conexion) > 0) {
+            echo "<script>alert('Espacio eliminado con éxito.'); window.location.href='vista_spaces.php?edificio_id=" . intval($_GET['edificio_id']) . "';</script>";
+        } else {
+            echo "<script>alert('No se eliminó nada. Revisa si el ID existe en la tabla.');</script>";
+        }
+        exit;
+    } else {
+        echo "<script>alert('Error al eliminar el espacio: " . mysqli_error($conexion) . "');</script>";
+    }
+}
+
 //formulario envio
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = mysqli_real_escape_string($conexion, $_POST['id']);
@@ -166,8 +183,8 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                 class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
                                 <ion-icon name="settings-outline"></ion-icon> Ajustes
                             </a></li>
-                        <li><a href="../../php/cerrar_sesion.php"
-                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                        <li><a href="../../php/cerrar_sesion_admin.php"
+                                class="<?php echo $currentFile == 'cerrar_sesion_admin.php' ? 'active' : ''; ?>">
                                 <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
                             </a></li>
                     </ul>
@@ -197,7 +214,16 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <option value="auditorio">Auditorio</option>
                     </select>
                 </div>
+                <div>
+                    <div class="add-button-container">
+                        <button class="add-button" onclick="openModal('modal-espacio')">
+                            <ion-icon name="add-circle"></ion-icon>
+                            Añadir Espacio
+                        </button>
+                    </div>
+                </div>
             </div>
+            
             <div class="buildings-grid">
                 <?php
                 foreach ($espacios as $espacio) {
@@ -218,6 +244,10 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                         echo htmlspecialchars(($espacio['tipo_espacio'] ?? 'Desconocido') === 'Espacio Academico' ? 'academico' : $espacio['tipo_espacio']);
                                     ?>
                                 </span>
+                            <form method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este espacio?');">
+                                <input type="hidden" name="eliminar_id" value="<?php echo $espacio['id']; ?>">
+                                <button type="submit" style="background:red; color:white; border:none; border-radius:6px; ">Eliminar espacio</button>
+                            </form>
                             </div>
                         </div>
                     </div>
@@ -226,17 +256,69 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                 ?>
             </div>
         </main>
-        <script>
-            function openModal() {
-                document.getElementById('modal').classList.add('active');
-            }
 
-            window.onclick = function(event) {
-                const modal = document.getElementById('modal');
-                if (event.target === modal) {
-                    modal.classList.remove('active');
-                }
-            };
+        <!-- Modal Añadir Espacio -->
+<div class="modal" id="modal-espacio" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header1">
+            <h3>Añadir Nuevo Espacio</h3>
+            <button class="close-button" onclick="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+            </button>
+        </div>
+
+        <form action="" method="POST" enctype="multipart/form-data" class="form-grid">
+            <!-- ocultos para la relación -->
+            <input type="hidden" name="edificio_id" value="<?php echo htmlspecialchars($building_id); ?>">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
+
+                <div class="form-group">
+                    <label for="codigo">Código:</label>
+                    <input type="text" id="codigo" name="codigo" required>
+                </div>
+                <div class="form-group">
+                    <label for="capacidad">Capacidad:</label>
+                    <input type="number" id="capacidad" name="capacidad" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="tipo_espacio">Tipo:</label>
+                    <select id="tipo_espacio" name="tipo_espacio" required>
+                        <option value="">Seleccione un tipo</option>
+                        <option value="Espacio Academico">Espacio Académico</option>
+                        <option value="Sala computo">Sala cómputo</option>
+                        <option value="Auditorio">Auditorio</option>
+                    </select>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="descripcion_general">Descripción General:</label>
+                    <textarea id="descripcion_general" name="descripcion_general" class="description-register" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="imagen">Imagen:</label>
+                    <input type="file" id="imagen" name="imagen" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>Edificio seleccionado:</label>
+                    <input type="text" value="<?php echo htmlspecialchars($edificio['nombre']); ?>" readonly>
+                </div>
+
+            <div class="form-actions" style="display:flex; gap:.5rem; justify-content:flex-end; margin-top:1rem;">
+                <button type="button" class="cancel-button" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="submit-button">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function openModal(id) {
+        document.getElementById('modal-espacio').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+        document.getElementById('modal-espacio').style.display = 'none';
+    }
+</script>
+        <script>
             document.getElementById('search-input').addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase(); // Obtén el término de búsqueda en minúsculas
             const buildings = document.querySelectorAll('.building-card'); // Selecciona todas las tarjetas

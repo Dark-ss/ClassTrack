@@ -92,8 +92,8 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                                 class="<?php echo $currentFile == 'config_docente.php' ? 'active' : ''; ?>">
                                 <ion-icon name="settings-outline"></ion-icon> Ajustes
                             </a></li>
-                        <li><a href="cerrar_sesion.php"
-                                class="<?php echo $currentFile == 'cerrar_sesion.php' ? 'active' : ''; ?>">
+                        <li><a href="cerrar_session_docente.php"
+                                class="<?php echo $currentFile == 'cerrar_session_docente.php' ? 'active' : ''; ?>">
                                 <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
                             </a></li>
                     </ul>
