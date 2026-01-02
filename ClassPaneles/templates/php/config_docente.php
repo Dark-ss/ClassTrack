@@ -10,11 +10,17 @@ include 'update_table.php';
 
 // Obtener los datos del usuario
 $correo = $_SESSION['usuario']; // Correo desde la sesión
-$query = "SELECT imagen, nombre_completo, correo, usuario, rol FROM usuarios WHERE correo='$correo'";
+/*$query = "SELECT imagen, nombre_completo, correo, usuario, rol FROM usuarios WHERE correo='$correo'";*/
+
+$query = "SELECT imagen, nombre_completo, correo, usuario, rol, notificaciones_email 
+          FROM usuarios 
+          WHERE correo='$correo'";
+
 $resultado = mysqli_query($conexion, $query);
 
 if ($resultado && mysqli_num_rows($resultado) > 0) {
     $usuario_data = mysqli_fetch_assoc($resultado);
+    $notificaciones_email = $usuario_data['notificaciones_email'];
     $imagen = $usuario_data['imagen'] ? "../uploads/" . $usuario_data['imagen'] : "../uploads/usuario.png";
     $nombre_completo = $usuario_data['nombre_completo'];
     $correo = $usuario_data['correo'];
@@ -137,6 +143,21 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                         <option value="docente" <?php if ($rol == 'docente') echo 'selected'; ?>>Docente</option>
                     </select>
                 </div>
+                <div class="form-group-config">
+                    <label>Notificaciones por correo</label>
+
+                    <label class="switch">
+                        <input 
+                            type="checkbox"
+                            name="notificaciones_email"
+                            id="notificaciones_email"
+                            value="1"
+                            <?= $notificaciones_email ? 'checked' : '' ?>
+                        >
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
                 <button type="button" id="edit-button-users" class="update-button-config" onclick="enableEditingUsers()">Actualizar</button>
                 <button type=" submit" id="save-button-users" class="save-button" style="display: none;">Guardar Cambios</button>
             </form>

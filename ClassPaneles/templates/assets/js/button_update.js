@@ -164,3 +164,12 @@ window.onclick = function(event) {
     }
 };
 
+/*CONFIGURACION NOTIFICACIONES*/ 
+function enableEditingUsers() {
+    document.querySelectorAll('#update-form input, #update-form select')
+        .forEach(el => el.disabled = false);
+
+    document.getElementById('edit-button-users').style.display = 'none';
+    document.getElementById('save-button-users').style.display = 'inline-block';
+}
+
