@@ -24,8 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['usuario'] = $correo;
         }
 
-        echo "<script>alert('Información actualizada con éxito.');</script>";
-        header("Refresh:0");
+        echo "<script>alert('Información actualizada con éxito.');</script>;";
+        header("Refresh:0");        
+        exit;
+
 
     } else {
         echo "<script>alert('Error: " . mysqli_error($conexion) . "');</script>";

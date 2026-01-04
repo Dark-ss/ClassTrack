@@ -205,10 +205,11 @@ include '../../php/update_table.php';
                                 <div class="dropdown">
                                 <i class="fa-solid fa-ellipsis dropdown-toggle"></i>
                                     <div class="dropdown-content">
-                                        <a href="update_user.php?id=<?php echo $fila['id']; ?>" class="update-button">
+                                        <a href="#" class="update-button openUpdateUserModal" 
+                                            data-id="<?php echo $fila['id']; ?>">
                                             <ion-icon name="create-outline"></ion-icon>
                                             Actualizar
-                                        </a>
+                                            </a>
                                         <a href="?id=<?php echo $fila['id']; ?>" class="delete-button"
                                             onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                             <ion-icon name="trash-outline"></ion-icon>
@@ -282,7 +283,6 @@ include '../../php/update_table.php';
                             </select>
                         </div>
 
-                        <!-- Foto de perfil -->
                         <div class="profile-photo">
                             <div class="photo-circle">
                                 <img src="../../assets/images/photo.jpg" alt="Foto de perfil" id="profileImage">
@@ -291,7 +291,6 @@ include '../../php/update_table.php';
                             <input type="file" id="photoInput" name="imagen" hidden accept="image/*">
                         </div>
 
-                        <!-- Botones -->
                         <div class="modal-buttons">
                             <button type="button" class="cancel-button">Cancelar</button>
                             <button type="submit" class="submit-button">Crear</button>
@@ -300,18 +299,57 @@ include '../../php/update_table.php';
                     </form>
                 </div>
             </div>
-        </main>
+
+<div id="updateUserModal" class="modal">
+    <div class="modal-content">
+        <div class="title_modal">
+            <h2>Actualizar Usuario</h2>
+        </div>
+
+        <form id="updateUserForm" class="formulario_register" action="update_user.php?id=<?php echo $fila['id']; ?>" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" id="update_id">
+            <input type="hidden" name="correo_original" id="correo_original">
+            <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" name="nombre_completo" id="update_nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label>Correo</label>
+                <input type="email" name="correo" id="update_correo" required>
+            </div>
+
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" name="usuario" id="update_usuario" required>
+            </div>
+
+            <div class="form-group">
+                <label>Rol</label>
+                <select name="rol" id="update_rol">
+                    <option value="admin">Administrador</option>
+                    <option value="docente">Docente</option>
+                </select>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="cancel-button" id="closeUpdateModal">Cancelar</button>
+                <button type="submit" class="submit-button">Guardar</button>
+            </div>
+        </form>
     </div>
-    <script src="../../assets/js/script_modal.js"></script>
-    <script src="../../assets/js/script.js"></script>
-    <script src="../../assets/js/script_menu.js"></script>
+</div>
+</main>
+    </div>
+<script src="../../assets/js/script_modal.js"></script>
+<script src="../../assets/js/script.js"></script>
+<script src="../../assets/js/script_menu.js"></script>
+<script src="../../assets/js/update_user_modal.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 
 
 </body>
-
 </html>
-
 <?php
 // Liberar resultados y cerrar conexión
 mysqli_free_result($resultado);
