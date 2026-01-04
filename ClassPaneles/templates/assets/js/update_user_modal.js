@@ -14,6 +14,11 @@ document.querySelectorAll('.openUpdateUserModal').forEach(btn => {
                 document.getElementById('update_rol').value = data.rol;
                 document.getElementById('correo_original').value = data.correo;
 
+                const img = document.getElementById('updateProfileImage');
+                img.src = data.imagen
+                    ? `../../uploads/${data.imagen}`
+                    : '../../assets/images/photo.jpg';
+
                 // actualizar ACTION del form con el ID
                 document.getElementById('updateUserForm').action =
                     `update_user.php?id=${id}`;
@@ -26,3 +31,18 @@ document.querySelectorAll('.openUpdateUserModal').forEach(btn => {
 document.getElementById('closeUpdateModal').onclick = () => {
     document.getElementById('updateUserModal').style.display = 'none';
 };
+
+document.getElementById('uploadPhotoBtnUpdate').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('photoInputUpdate').click();
+});
+document.getElementById('photoInputUpdate').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        document.getElementById('updateProfileImage').src = reader.result;
+    };
+    reader.readAsDataURL(file);
+});

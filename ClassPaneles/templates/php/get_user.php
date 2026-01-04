@@ -9,7 +9,7 @@ if (!isset($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-$query = "SELECT id, nombre_completo, correo, usuario, rol
+$query = "SELECT id, nombre_completo, correo, usuario, rol, imagen
           FROM usuarios
           WHERE id = $id";
 
