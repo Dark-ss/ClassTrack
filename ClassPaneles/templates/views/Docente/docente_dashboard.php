@@ -79,6 +79,7 @@ while ($row = mysqli_fetch_assoc($resultHorasAulas)) {
     $horasAulas[$row['codigo_completo']] = $row['horas_totales'];
 }
 
+
 ?>
 
 <!DOCTYPE html>
@@ -198,6 +199,31 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                 </div>
             </div>
         </main>
+        <!-- Chatbot -->
+<!-- BOTÓN FLOTANTE -->
+<div id="chatbot-float-btn">
+    <img src="../../assets/images/chatbot.png" alt="Asistente">
+</div>
+
+<div id="chatbot-modal">
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <span>Asistente Virtual</span>
+            <button id="chatbot-close">&times;</button>
+        </div>
+
+        <div id="chat-body">
+            <div class="bot-msg">
+                👋 Hola, soy tu asistente virtual.<br>
+                Puedo ayudarte con reservas, aulas y fechas.
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." />
+        </div>
+    </div>
+</div>
     </div>
     <script>
         var ctx1 = document.getElementById('chartEstudiantes').getContext('2d');
@@ -248,6 +274,43 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             }
         });
     </script>
+    <script>
+const btn = document.getElementById("chatbot-float-btn");
+const modal = document.getElementById("chatbot-modal");
+const closeBtn = document.getElementById("chatbot-close");
+const input = document.getElementById("chat-input");
+const body = document.getElementById("chat-body");
+
+btn.onclick = () => modal.style.display = "block";
+closeBtn.onclick = () => modal.style.display = "none";
+
+modal.onclick = e => {
+    if (e.target === modal) modal.style.display = "none";
+};
+
+input.addEventListener("keypress", function(e) {
+    if (e.key === "Enter" && this.value.trim()) {
+        const msg = this.value;
+        this.value = "";
+
+        body.innerHTML += `<div class="user-msg">${msg}</div>`;
+
+        fetch("../../php/chatbot.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "mensaje=" + encodeURIComponent(msg)
+        })
+        .then(r => r.text())
+        .then(resp => {
+            body.innerHTML += `<div class="bot-msg">${resp}</div>`;
+            body.scrollTop = body.scrollHeight;
+        });
+    }
+});
+</script>
+
+
+
 </body>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </html>

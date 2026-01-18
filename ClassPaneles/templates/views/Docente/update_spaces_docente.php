@@ -246,125 +246,225 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Información espacio</title>
-    <link rel="stylesheet" href="../../assets/css/style_paneles.css">
-    <link rel="stylesheet" href="../../assets/css/style_building.css?v=1.0">
-    <link rel="stylesheet" href="../../assets/css/style_teacher.css?v=1.0">
-</head>
-<body>
-    <main>
-        <div class="profile-container">
-            <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
-            <h3 class="profile-name_user"><?php echo htmlspecialchars($nombre_completo); ?></h3>
-            <h3 class="profile-name"><?php echo htmlspecialchars($rol); ?></h3>
-            <a href="../../php/cerrar_sesion.php" class="logout">
-                <img src="../../assets/images/cerrar-sesion.png" alt="Cerrar sesión" class="icons-image">
-            </a>
-            
-            <a href="../../php/config_docente.php" class="config">                    
-                <img src="../../assets/images/config.png" alt="Configuracion" class="icons-image">
-            </a>
-            <a href="docente_dashboard.php" class="home-admin">
-                <img src="../../assets/images/inicio.png" alt="inicio" class="icons-image">
-            </a>
+    <title>Información del Espacio</title>
 
-            <div class="menu-container" id="menu-container">
-                <div class="menu-link" onclick="toggleDropdown()">
-                    Espacios<span>▼</span>
-                </div>  
-                <div class="submenu" id="submenu">
-                    <a href="vista_buildings.php">Edificios</a>
-                    <a href="table_disponibilidad.php">Disponibilidad</a>
+    <link rel="shortcut icon" href="../../assets/images/logo2.png">
+    <link rel="stylesheet" href="../../assets/css/style_panel.css">
+    <link rel="stylesheet" href="../../assets/css/update_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+</head>
+
+<body class="docente">
+
+<div class="container-docente">
+<?php
+$currentFile = basename($_SERVER['PHP_SELF']);
+?>
+<aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
+            </div>
+            <nav class="menu">
+                <div class="menu-group">
+                    <p class="menu-title">Menú Principal</p>
+                    <ul>
+                        <li><a href="docente_dashboard.php"
+                                class="<?php echo $currentFile == 'docente_dashboard.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Inicio
+                            </a></li>
+                        <li><a href="vista_buildings.php"
+                                class="<?php echo $currentFile == 'vista_buildings.php' ? 'active' : ''; ?>">
+                                <ion-icon name="business-outline"></ion-icon> Edificios
+                            </a></li>
+                        <li><a href="table_disponibilidad.php"
+                                class="<?php echo $currentFile == 'table_disponibilidad.php' ? 'active' : ''; ?>">
+                                <ion-icon name="list-outline"></ion-icon> Disponibilidad
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Gestión de reservas</p>
+                    <ul>
+                        <li><a href="mis_reservas.php"
+                                class="<?php echo $currentFile == 'mis_reservas.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Ayuda</p>
+                    <ul>
+                        <li><a href="suport.php"
+                                class="<?php echo $currentFile == 'suport.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Soporte técnico
+                            </a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="mis_solicitudes.php"
+                                class="<?php echo $currentFile == 'mis_solicitudes.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis solicitudes
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Configuración</p>
+                    <ul>
+                        <li><a href="../../php/config_docente.php"
+                                class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
+                                <ion-icon name="settings-outline"></ion-icon> Ajustes
+                            </a></li>
+                        <li><a href="../../php/cerrar_session_docente.php"
+                                class="<?php echo $currentFile == 'cerrar_session_docente.php' ? 'active' : ''; ?>">
+                                <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+                            </a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="divider"></div>
+            <div class="profile">
+                <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
+                <div>
+                    <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
+                </div>
+            </div>
+</aside>
+
+<div id="main-content">
+<div class="header-container">
+    <button class="back-button" onclick="window.history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Volver
+    </button>
+</div>
+<div class="rectangle">
+    <div class="half">
+        <div class="building-showcase">
+            <div class="image-container space-image">
+                <img src="<?php echo htmlspecialchars($id['imagen']); ?>" class="building-image">
+                <div class="image-overlay-buttons">
+                    <button type="button" class="button-space" onclick="openModal()">
+                    <span class="icon-circle reservar">
+                        <i class="ti ti-calendar-plus"></i>
+                    </span>
+                    <span>Reservar</span>
+                </button>
+                    <a href="ver_disponibilidad.php?id_espacio=<?php echo $id['id']; ?>"class="button-avail"> <span class="icon-circle disponible">
+                <i class="ti ti-list-check"></i>
+            </span>
+                    <span>Disponibilidad</span></a>
+                </div>
+
+            </div>
+        </div>
+</div>
+
+
+<div class="half">
+    <div class="tabs-container">
+
+    <h1 class="building-title">
+        Espacio <?php echo htmlspecialchars($id['codigo']); ?>
+    </h1>
+
+    <div class="tabs">
+        <button class="tab-button active" data-tab="info">
+            <i class="fa-solid fa-circle-info"></i> Información
+        </button>
+        <button class="tab-button" data-tab="equipamiento">
+            <i class="ti ti-tool"></i> Equipamiento
+        </button>
+    </div>
+
+
+    <div class="tab-content" id="info">
+        <div class="details-grid-descrip">
+            <div class="detail-item-descript">
+                <p><?php echo htmlspecialchars($id['descripcion_general']); ?></p>
+            </div>
+        </div>
+        <div class="details-grid">
+            <div class="detail-item">
+                <i class="ti ti-users"></i>
+                <div>
+                    <span class="detail-label">Capacidad</span>
+                    <span class="detail-value"><?php echo $id['capacidad']; ?></span>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <i class="ti ti-building"></i>
+                <div>
+                    <span class="detail-label">Edificio</span>
+                    <span class="detail-value"><?php echo htmlspecialchars($edificio['nombre']); ?></span>
                 </div>
             </div>
         </div>
-
-        <div class="container-description-image" style="display: flex">
-            <div class="image-container">
-                <h1 class="title_build"><?php echo htmlspecialchars($id['codigo']); ?></h1>
-                <img src="<?php echo htmlspecialchars($id['imagen']); ?>" alt="Edificio" class="profile-img-build">
-                <button type="button" class="button-space" onclick="openModal()">Reservar</button>
-                <a href="ver_disponibilidad.php?id_espacio=<?php echo urlencode($id['id']); ?>" class="button-avail">Disponibilidad</a>
-            </div>
-
-        <form method="POST" enctype="multipart/form-data" class="description-form">
-            <input type="hidden" name="update_description_space" value="true">
-            <div class="build-description">
-                <label for="descripcion_general" class="title_description">Descripción General</label>
-                <textarea id="descripcion_general" name="descripcion_general" class="description-textarea" rows="10" cols="5" disabled><?php echo htmlspecialchars($id['descripcion_general']); ?></textarea>
-            </div>
-        </form>
-    </div>
-
-    <div class="container-form_register_build">
-        <h2>Información de espacio</h2>
-        <form id="update-form-spaces_teacher" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="update_spaces" value="true">
-            <input type="hidden" name="id" value="<?php echo $id['id']; ?>">
-            <input type="hidden" name="edificio_id" value="<?php echo htmlspecialchars($building_id)?>">
-            <div class="container-group-build">
-                <div class="form-group-build">
-                    <label for="codigo">Código:</label>
-                    <input type="text" id="codigo" name="codigo" value="<?php echo htmlspecialchars($id['codigo']); ?>" disabled>
-                </div>
-                <div class="form-group-build">
-                    <label for="capacidad">Capacidad:</label>
-                    <input type="number" id="capacidad" name="capacidad" value="<?php echo htmlspecialchars($id['capacidad']); ?>" disabled>
+        <div class="details-grid">
+            <div class="detail-item">
+            <i class="ti ti-qrcode"></i>
+                <div>
+                    <span class="detail-label">Codigo</span>
+                    <span class="detail-value"><?php echo htmlspecialchars($id['codigo']); ?></span>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="container-group-build">
-                <div class="form-group-build">
-                    <label>Edificio seleccionado:</label>
-                    <input type="text" value="<?php echo htmlspecialchars($edificio['nombre']); ?>" disabled>
-                </div>
+<!-- TAB EQUIPAMIENTO -->
+<div class="tab-content" id="equipamiento" style="display:none">
+
+<h3 class="section-title">Equipamientos del espacio</h3>
+
+<div class="grid-container equipamientos-grid">
+
+    <?php
+    $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
+    $query_show_equip = "
+    SELECT e.id, e.nombre, e.imagen, ee.cantidad, ee.estado
+    FROM equipamiento e
+    JOIN espacios_equipamiento ee ON e.id = ee.equipamiento_id
+    WHERE ee.espacio_id = '$espacio_id'
+    ";
+
+    $resultado_equip = mysqli_query($conexion, $query_show_equip);
+
+    while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
+    ?>
+    <div class="grid-item">
+        <div class="equipamiento-container"
+            onclick="abrirModalReporte(
+                '<?php echo $equipamiento['id']; ?>',
+                '<?php echo $espacio_id; ?>'
+            )">
+
+            <img src="<?php echo $equipamiento['imagen']; ?>"
+                class="equipamiento-img_select">
+
+            <div class="equipamiento-info
+                <?php echo strtolower(str_replace(' ', '-', $equipamiento['estado'])); ?>">
+
+                <p><?php echo $equipamiento['nombre']; ?></p>
+                <p class="cantidad">Cantidad: <?php echo $equipamiento['cantidad']; ?></p>
+                <p>Estado: <?php echo $equipamiento['estado']; ?></p>
             </div>
-        </form>
+        </div>
     </div>
+    <?php } ?>
 
-    <div id="equipamientos-seleccionados">
-    <form id="equipamiento-form" method="POST" enctype="multipart/form-data">
-    <h3>Equipamientos Añadidos al Espacio</h3>
-    <div class="grid-container">
-        <input type="hidden" name="id" value="<?php echo $id['id']; ?>">
-        <input type="hidden" name="equipment_spaces" value="true">
-        <?php   
-        $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
-        // Recuperar los equipamientos asignados al espacio
-        $query_show_equip = "SELECT e.id, e.nombre, e.imagen, ee.cantidad, ee.estado
-            FROM equipamiento e
-            JOIN espacios_equipamiento ee ON e.id = ee.equipamiento_id
-            WHERE ee.espacio_id = '$espacio_id'";
-
-        $resultado_equip = mysqli_query($conexion, $query_show_equip);
-
-        if ($resultado_equip === false) {
-            echo "Error en la consulta: " . mysqli_error($conexion);
-        } else {
-            while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
-                echo '
-                <div class="grid-item">
-                    <div class="equipamiento-container" onclick="abrirModalReporte(\'' . htmlspecialchars($equipamiento['id'], ENT_QUOTES, 'UTF-8') . '\', \'' . htmlspecialchars($espacio_id, ENT_QUOTES, 'UTF-8') . '\')">
-                        <img src="' . htmlspecialchars($equipamiento['imagen']) . '" alt="' . htmlspecialchars($equipamiento['nombre']) . '" class="equipamiento-img_select">
-                        <div class="equipamiento-info ' . strtolower(str_replace(' ', '-', $equipamiento['estado'])) . '">
-                            <p>' . htmlspecialchars($equipamiento['nombre']) . '</p>
-                            <p class="cantidad">Cantidad: ' . htmlspecialchars($equipamiento['cantidad']) . '</p>
-                            <p>Estado: ' . htmlspecialchars($equipamiento['estado']) . '</p>
-                        </div>
-                    </div>
-                </div>';
-            }
-        }
-        ?>
     </div>
-    </form>
-    </div>
+</div>
 
-    <div class="modal" id="modal">
+</div>
+</div>
+
+</div>
+</div>
+</div>
+<div class="modal" id="modal">
     <div class="modal-content">
     <h2>Formulario de Reserva</h2>
         <form id="reserve-form" method="POST">
@@ -419,13 +519,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="number" value="<?php echo htmlspecialchars($espacio_reserva['codigo']); ?>">
                 </div>
             </div>
-            <div class="form-group">
-                <button type="submit">Reservar espacio</button>
-            </div>
+                <button class="tab-button active-reserv" type="submit">Reservar espacio</button>
         </form>
     </div>
     </div>
-
 <div id="modalReporteEquipamiento" class="modal">   
     <div class="modal-content">
         <span class="close" onclick="cerrarModalReporte()">&times;</span>
@@ -435,52 +532,87 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <input type="hidden" id="espacio_id" name="espacio_id">
             <input type="hidden" id="espacio_equipamiento_id" name="espacio_equipamiento_id">
             <label for="estado">Estado:</label>
-            <select id="estado" name="estado">
-                <option value="Disponible">Disponible</option>
-                <option value="En Mantenimiento">En Mantenimiento</option>
-                <option value="No Disponible">No Disponible</option>
-            </select>
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="4"></textarea>
-            <button type="submit">Guardar Reporte</button>
+            <div class="form-group-container">
+                <div class="form-group">
+                <select id="estado" name="estado">
+                    <option value="Disponible">Disponible</option>
+                    <option value="En Mantenimiento">En Mantenimiento</option>
+                    <option value="No Disponible">No Disponible</option>
+                </select>
+                </div>
+            </div>
+            <div class="form-group-container">
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+                </div>
+            </div>
+            <button class="tab-button active-reserv" type="submit">Guardar Reporte</button>
         </form>
     </div>
 </div>
-</main>
-<?php
-    $conexion->close();
-?>
 <script>
-document.getElementById("reserve-form").addEventListener("submit", function(e) {
-    const selectedStudents = document.querySelectorAll("#selected-students input[name='estudiantes[]']");
-    if (selectedStudents.length === 0) {
-        e.preventDefault(); // detener el envío
-        alert("Debe añadir al menos un estudiante antes de reservar.");
+function openModal() {
+    document.getElementById("modal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+window.onclick = function (event) {
+    const modalReserva = document.getElementById("modal");
+    const modalReporte = document.getElementById("modalReporteEquipamiento");
+
+    if (event.target === modalReserva) {
+        closeModal();
     }
+
+    if (event.target === modalReporte) {
+        modalReporte.style.display = "none";
+    }
+};
+</script>
+
+<script>
+function abrirModalReporte(equipamiento_id, espacioId) {
+    console.log("Abriendo modal para ID:", equipamiento_id);
+
+    document.getElementById("espacio_equipamiento_id").value = equipamiento_id;
+    document.getElementById("espacio_id").value = espacioId;
+
+    document.getElementById("modalReporteEquipamiento").style.display = "block";
+    
+}
+function cerrarModalReporte() {
+    document.getElementById("modalReporteEquipamiento").style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modalReserva = document.getElementById("modal");
+    const modalReporte = document.getElementById("modalReporteEquipamiento");
+
+    if (event.target === modalReserva) {
+        modalReserva.style.display = "none";
+    }
+
+    if (event.target === modalReporte) {
+        modalReporte.style.display = "none";
+    }
+}
+</script>
+
+<script>
+document.querySelectorAll('.tab-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).style.display = 'block';
+    });
 });
 </script>
 
-<script>
-    function abrirModalReporte(equipamiento_id, espacioId) {
-        console.log("Abriendo modal para ID:", equipamiento_id); 
-        document.getElementById("espacio_equipamiento_id").value = equipamiento_id;
-        document.getElementById("espacio_id").value = espacioId;
-        document.getElementById("modalReporteEquipamiento").style.display = "block";
-        document.getElementById("modal-reject").style.display = "block";
-    }
-
-    function cerrarModalReporte() {
-        document.getElementById("modalReporteEquipamiento").style.display = "none";
-    }
-
-    // Cerrar el modal cuando se haga clic fuera del contenido
-    window.onclick = function(event) {
-        let modal = document.getElementById("modalReporteEquipamiento");
-        if (event.target === modal) {
-            cerrarModalReporte();
-        }
-    }
-</script>
 <script>
         function openModal() {
             document.getElementById("modal").style.display = "block";
@@ -637,9 +769,8 @@ function agregarEstudianteSeleccionado(item) {
         debounce(eventQueryStudents, 300)
     );
 });
-
 </script>
-<script src="../../assets/js/button_update.js"></script>
-<script src="../../assets/js/script_menu.js"></script>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </body>
 </html>

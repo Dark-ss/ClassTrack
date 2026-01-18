@@ -5,7 +5,8 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'docente') {
     header("Location: ../templates/index.php"); // Redirige al login si no es docente
     exit();
 }
-include '../../php/conexion_be.php';
+//include '../../php/conexion_be.php';
+include 'conexion_be.php';
 
 // Obtener los datos del usuario
 $correo = $_SESSION['usuario']; // Usamos el correo de la sesión para obtener los datos del usuario
