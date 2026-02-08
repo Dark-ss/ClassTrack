@@ -278,6 +278,8 @@
 }
 
 .edit-mode .hidden-in-edit-mode {
+    overflow-y: auto;         
+    overflow-x: hidden;
     display: none;
 }
 
@@ -311,6 +313,16 @@
     white-space: pre-wrap;      /* Respeta saltos de línea */
     word-break: break-word;
     overflow-wrap: anywhere;    /* Evita desbordamiento horizontal */
+}
+
+.detail-item-descript-spaces{
+    max-width: 100%;
+}
+
+.detail-item-descript-spaces p {
+    margin: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;  
 }
 
 /* Estilo para cada tarjeta de detalle */
@@ -600,6 +612,9 @@ h1 .editable-field {
 }
 
 .description-section {
+    height: 80px;             
+    overflow-y: auto;         
+    overflow-x: hidden;
     margin-top: 20px; /* Margen superior solicitado */
     width: 100%; /* Asegura que ocupe todo el ancho disponible */
 }
@@ -610,7 +625,9 @@ h1 .editable-field {
     box-sizing: border-box; /* Incluye padding y border en el ancho total */
 }
 
-.description-section .collapsible-content p.hidden-in-edit-mode {
+.description-section .collapsible-content p.collapsible-content {
+    overflow-y: auto;         
+    overflow-x: hidden;
     width: 100%;
     margin: 0;
     border-radius: 6px;

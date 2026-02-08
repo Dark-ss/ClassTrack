@@ -271,7 +271,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                             </div>
 
                             <div class="tab-content" id="informacion">
-                                <div class="description-section">
+                                <div class="details-grid-descrip">
                                     <div class="collapsible-content">
                                         <p class="hidden-in-edit-mode">
                                             <?php echo htmlspecialchars($usuario['descripcion']); ?></p>

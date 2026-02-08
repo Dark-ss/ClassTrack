@@ -335,128 +335,128 @@ $currentFile = basename($_SERVER['PHP_SELF']);
 </aside>
 
 <div id="main-content">
-<div class="header-container">
-    <button class="back-button" onclick="window.history.back()">
-        <i class="fa-solid fa-arrow-left"></i> Volver
-    </button>
-</div>
-<div class="rectangle">
+    <div class="header-container">
+        <button class="back-button" onclick="window.history.back()">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </button>
+    </div>
+    <div class="rectangle">
+        <div class="half">
+            <div class="building-showcase">
+                <div class="image-container space-image">
+                    <img src="<?php echo htmlspecialchars($id['imagen']); ?>" class="building-image">
+                    <div class="image-overlay-buttons">
+                            <button type="button" class="button-space" onclick="openModal()">
+                            <span class="icon-circle reservar">
+                                <i class="ti ti-calendar-plus"></i>
+                            </span>
+                            <span>Reservar</span>
+                        </button>
+                            <a href="ver_disponibilidad.php?id_espacio=<?php echo $id['id']; ?>"class="button-avail"> <span class="icon-circle disponible">
+                        <i class="ti ti-list-check"></i>
+                            </span>
+                            <span>Disponibilidad</span></a>
+                    </div>
+
+                </div>
+            </div>
+    </div>
+
+
     <div class="half">
-        <div class="building-showcase">
-            <div class="image-container space-image">
-                <img src="<?php echo htmlspecialchars($id['imagen']); ?>" class="building-image">
-                <div class="image-overlay-buttons">
-                    <button type="button" class="button-space" onclick="openModal()">
-                    <span class="icon-circle reservar">
-                        <i class="ti ti-calendar-plus"></i>
-                    </span>
-                    <span>Reservar</span>
-                </button>
-                    <a href="ver_disponibilidad.php?id_espacio=<?php echo $id['id']; ?>"class="button-avail"> <span class="icon-circle disponible">
-                <i class="ti ti-list-check"></i>
-            </span>
-                    <span>Disponibilidad</span></a>
-                </div>
+        <div class="tabs-container">
 
-            </div>
+        <h1 class="building-title">
+            Espacio <?php echo htmlspecialchars($id['codigo']); ?>
+        </h1>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="info">
+                <i class="fa-solid fa-circle-info"></i> Información
+            </button>
+            <button class="tab-button" data-tab="equipamiento">
+                <i class="ti ti-tool"></i> Equipamiento
+            </button>
         </div>
-</div>
 
 
-<div class="half">
-    <div class="tabs-container">
-
-    <h1 class="building-title">
-        Espacio <?php echo htmlspecialchars($id['codigo']); ?>
-    </h1>
-
-    <div class="tabs">
-        <button class="tab-button active" data-tab="info">
-            <i class="fa-solid fa-circle-info"></i> Información
-        </button>
-        <button class="tab-button" data-tab="equipamiento">
-            <i class="ti ti-tool"></i> Equipamiento
-        </button>
-    </div>
-
-
-    <div class="tab-content" id="info">
-        <div class="details-grid-descrip">
-            <div class="detail-item-descript">
-                <p><?php echo htmlspecialchars($id['descripcion_general']); ?></p>
-            </div>
-        </div>
-        <div class="details-grid">
-            <div class="detail-item">
-                <i class="ti ti-users"></i>
-                <div>
-                    <span class="detail-label">Capacidad</span>
-                    <span class="detail-value"><?php echo $id['capacidad']; ?></span>
+        <div class="tab-content" id="info">
+            <div class="details-grid-descrip">
+                <div class="detail-item-descript">
+                    <p><?php echo htmlspecialchars($id['descripcion_general']); ?></p>
                 </div>
             </div>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <i class="ti ti-users"></i>
+                    <div>
+                        <span class="detail-label">Capacidad</span>
+                        <span class="detail-value"><?php echo $id['capacidad']; ?></span>
+                    </div>
+                </div>
 
-            <div class="detail-item">
-                <i class="ti ti-building"></i>
-                <div>
-                    <span class="detail-label">Edificio</span>
-                    <span class="detail-value"><?php echo htmlspecialchars($edificio['nombre']); ?></span>
+                <div class="detail-item">
+                    <i class="ti ti-building"></i>
+                    <div>
+                        <span class="detail-label">Edificio</span>
+                        <span class="detail-value"><?php echo htmlspecialchars($edificio['nombre']); ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="details-grid">
+                <div class="detail-item">
+                <i class="ti ti-qrcode"></i>
+                    <div>
+                        <span class="detail-label">Codigo</span>
+                        <span class="detail-value"><?php echo htmlspecialchars($id['codigo']); ?></span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="details-grid">
-            <div class="detail-item">
-            <i class="ti ti-qrcode"></i>
-                <div>
-                    <span class="detail-label">Codigo</span>
-                    <span class="detail-value"><?php echo htmlspecialchars($id['codigo']); ?></span>
+
+        <!-- TAB EQUIPAMIENTO -->
+        <div class="tab-content" id="equipamiento" style="display:none">
+
+        <h3 class="section-title">Equipamientos del espacio</h3>
+
+        <div class="grid-container equipamientos-grid">
+
+        <?php
+        $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
+        $query_show_equip = "
+        SELECT e.id, e.nombre, e.imagen, ee.cantidad, ee.estado
+        FROM equipamiento e
+        JOIN espacios_equipamiento ee ON e.id = ee.equipamiento_id
+        WHERE ee.espacio_id = '$espacio_id'
+        ";
+
+        $resultado_equip = mysqli_query($conexion, $query_show_equip);
+
+        while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
+        ?>
+        <div class="grid-item">
+            <div class="equipamiento-container"
+                onclick="abrirModalReporte(
+                    '<?php echo $equipamiento['id']; ?>',
+                    '<?php echo $espacio_id; ?>'
+                )">
+
+                <img src="<?php echo $equipamiento['imagen']; ?>"
+                    class="equipamiento-img_select">
+
+                <div class="equipamiento-info
+                    <?php echo strtolower(str_replace(' ', '-', $equipamiento['estado'])); ?>">
+
+                    <p><?php echo $equipamiento['nombre']; ?></p>
+                    <p class="cantidad">Cantidad: <?php echo $equipamiento['cantidad']; ?></p>
+                    <p>Estado: <?php echo $equipamiento['estado']; ?></p>
                 </div>
             </div>
         </div>
-    </div>
+        <?php } ?>
 
-<!-- TAB EQUIPAMIENTO -->
-<div class="tab-content" id="equipamiento" style="display:none">
-
-<h3 class="section-title">Equipamientos del espacio</h3>
-
-<div class="grid-container equipamientos-grid">
-
-    <?php
-    $espacio_id = mysqli_real_escape_string($conexion, $_GET['id']);
-    $query_show_equip = "
-    SELECT e.id, e.nombre, e.imagen, ee.cantidad, ee.estado
-    FROM equipamiento e
-    JOIN espacios_equipamiento ee ON e.id = ee.equipamiento_id
-    WHERE ee.espacio_id = '$espacio_id'
-    ";
-
-    $resultado_equip = mysqli_query($conexion, $query_show_equip);
-
-    while ($equipamiento = mysqli_fetch_assoc($resultado_equip)) {
-    ?>
-    <div class="grid-item">
-        <div class="equipamiento-container"
-            onclick="abrirModalReporte(
-                '<?php echo $equipamiento['id']; ?>',
-                '<?php echo $espacio_id; ?>'
-            )">
-
-            <img src="<?php echo $equipamiento['imagen']; ?>"
-                class="equipamiento-img_select">
-
-            <div class="equipamiento-info
-                <?php echo strtolower(str_replace(' ', '-', $equipamiento['estado'])); ?>">
-
-                <p><?php echo $equipamiento['nombre']; ?></p>
-                <p class="cantidad">Cantidad: <?php echo $equipamiento['cantidad']; ?></p>
-                <p>Estado: <?php echo $equipamiento['estado']; ?></p>
-            </div>
         </div>
     </div>
-    <?php } ?>
-
-    </div>
-</div>
 
 </div>
 </div>
