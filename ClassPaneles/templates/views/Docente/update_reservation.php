@@ -152,6 +152,14 @@ if (isset($_POST['reservation_update'])) {
                     </ul>
                 </div>
                 <div class="menu-group">
+                    <ul>
+                        <li><a href="asistencias.php"
+                                class="<?php echo $currentFile == 'asistencias.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Asistencias
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
                     <p class="menu-title">Configuración</p>
                     <ul>
                         <li><a href="../../php/config_docente.php"
@@ -248,7 +256,7 @@ if (isset($_POST['reservation_update'])) {
             <?php endif; ?>
             </div>
             <div class="buttons-form-container">
-            <?php if ($reserva['estado'] !== "aceptada"): ?>
+            <?php if (!in_array($reserva['estado'], ['aceptada','asistencia','finalizado'])): ?>
                 <button type="button" id="edit-button-reservation" class="update-button-reservation" onclick="enableEditingReservation()">Actualizar</button>
             <?php else: ?>
                 <p style="color: red;">No puedes actualizar la reserva porque ya ha sido aceptada.</p>
@@ -257,6 +265,18 @@ if (isset($_POST['reservation_update'])) {
             </div>
         </form>
     </div> 
+
+    <div class="buttons-form-container">
+    <?php if (in_array($reserva['estado'], ['asistencia','finalizado'])): ?>
+    <a href="reporte_reserva_pdf.php?id=<?= $id_reservacion ?>"
+        class="update-button-reservation"
+        target="_blank"
+        style="background:#0d6efd;color:white;padding:10px 15px;
+                border-radius:6px;text-decoration:none;margin-left:10px;">
+                Descargar reporte
+    </a>
+    <?php endif; ?>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

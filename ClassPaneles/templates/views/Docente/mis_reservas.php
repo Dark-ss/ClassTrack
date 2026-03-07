@@ -25,6 +25,18 @@ if (!$resultado_total) {
 $total_reservas = mysqli_fetch_assoc($resultado_total)['total'];
 $total_paginas = ceil($total_reservas / $registros_por_pagina);
 
+date_default_timezone_set('America/Bogota');
+
+$queryUpdateEstado = "
+UPDATE reservaciones 
+SET estado = 'asistencia'
+WHERE estado = 'aceptada'
+AND NOW() BETWEEN fecha_inicio AND fecha_final
+";
+
+mysqli_query($conexion, $queryUpdateEstado);
+
+
 // Obtener las reservas del usuario
 $query = "SELECT r.id, r.fecha_inicio, r.fecha_final, r.tipo_reservacion, r.estado,e.codigo AS espacio, ed.nombre AS nombre_edificio
         FROM reservaciones r 
@@ -104,6 +116,14 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <li><a href="mis_reservas.php"
                                 class="<?php echo $currentFile == 'mis_reservas.php' ? 'active' : ''; ?>">
                                 <ion-icon name="calendar-outline"></ion-icon> Mis reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <ul>
+                        <li><a href="asistencias.php"
+                                class="<?php echo $currentFile == 'asistencias.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Asistencias
                             </a></li>
                     </ul>
                 </div>
@@ -189,6 +209,12 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                                 <div class="dropdown">
                                     <ion-icon name="ellipsis-horizontal-sharp" class="dropdown-toggle"></ion-icon>
                                     <div class="dropdown-content">
+                                        <?php if ($fila['estado'] === 'asistencia'): ?>
+                                        <a href="tomar_asistencia.php?id=<?php echo $fila['id']; ?>" class="update-button">
+                                            <ion-icon name="checkbox-outline"></ion-icon>
+                                            Tomar asistencia
+                                        </a>
+                                        <?php endif; ?>
                                         <a href="update_reservation.php?id=<?php echo $fila['id']; ?>" class="update-button">
                                             <ion-icon name="create-outline"></ion-icon>
                                             Actualizar

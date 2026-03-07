@@ -613,6 +613,50 @@ body {
     font-size: 0.875rem;
     border-bottom: 1px solid #e5e7eb;
 }
+
+
+/*ASISTENCIA TABLA*/
+.user-table-asis {
+    width: 65%;             
+    margin: 20px auto;     
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Encabezado */
+.user-table-asis thead th {
+    background-color: #f9fafb;
+    color: #8e9da5;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 8px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Celdas */
+.user-table-asis tbody td {
+    padding: 7px 24px;
+    color: #000000;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Columna asistencia más compacta */
+.user-table-asis th:last-child,
+.user-table-asis td:last-child {
+    width: 120px;
+    text-align: center;
+}
+.title-asis{
+    text-align: center;
+}
+
 /* Contenedor principal */
 .fecha-contenedor {
     text-align: left;
@@ -845,6 +889,16 @@ tr:hover .fecha-hora {
     color: #2d4a5e;
 }
 
+.finalizado-stat{
+    background-color: #f5f837ad;
+    color: #8e9111;
+}
+
+.asistencia-stat{
+    background-color: #6fb5e3c5;
+    color: #0d80ad;
+}
+
 .action-buttons {
     display: flex;
     gap: 8px;
@@ -862,9 +916,49 @@ tr:hover .fecha-hora {
     transition: background-color 0.2s;
 }
 
+.btn-container-asistencia {
+    width: 50%;            /* igual que la tabla */
+    margin: auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.btn-danger-asis {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: auto;
+}
+
 .delete-button:hover,
 .update-button:hover {
     background-color: #f3f4f6;
+}
+
+.update-button-asistencia{
+    background: #28a745;   /* verde tipo confirmar */
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s ease;
+    margin: auto;
+}
+
+.update-button-asistencia:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+/* Click */
+.update-button-asistencia:active {
+    transform: translateY(0);
 }
 
 /*boton eliminar equipamiento global*/
@@ -1595,6 +1689,9 @@ h2 {
 #estudiantes{
     width: 90%;
 }
+#estudiante{
+    width: 50%;
+}
 /*button udpate_reservation*/
 .update-button-reservation{
     display: flex;
@@ -2012,4 +2109,3 @@ input:checked + .slider::before {
     text-align: center;
     font-weight: 500;
 }
-

@@ -58,50 +58,87 @@ $espacios_count = mysqli_num_rows($rEspacios);
 
 <body class="docente">
 
-<div class="container">
-
-<!-- SIDEBAR DOCENTE -->
-<aside class="sidebar">
-    <div class="logo">
-        <img src="../../assets/images/logo2.png" width="150">
-    </div>
-
-    <nav class="menu">
-        <div class="menu-group">
-            <p class="menu-title">Menú Principal</p>
-            <ul>
-                <li><a href="docente_dashboard.php"><ion-icon name="home-outline"></ion-icon> Inicio</a></li>
-                <li><a href="vista_buildings.php" class="active"><ion-icon name="business-outline"></ion-icon> Edificios</a></li>
-                <li><a href="table_disponibilidad.php"><ion-icon name="calendar-outline"></ion-icon> Disponibilidad</a></li>
-            </ul>
-        </div>
-
-        <div class="menu-group">
-            <p class="menu-title">Reservas</p>
-            <ul>
-                <li><a href="mis_reservas.php"><ion-icon name="book-outline"></ion-icon> Mis reservas</a></li>
-            </ul>
-        </div>
-
-        <div class="menu-group">
-            <p class="menu-title">Configuración</p>
-            <ul>
-                <li><a href="../../php/config_docente.php"><ion-icon name="settings-outline"></ion-icon> Ajustes</a></li>
-                <li><a href="../../php/cerrar_sesion.php"><ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="divider"></div>
-
-    <div class="profile">
-        <img src="<?php echo $imagen; ?>" class="profile-img">
-        <div>
-            <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
-            <p class="user-email"><?php echo htmlspecialchars($correo); ?></p>
-        </div>
-    </div>
-</aside>
+<div class="container-docente">
+<?php
+$currentFile = basename($_SERVER['PHP_SELF']);
+?>
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../../assets/images/logo2.png" alt="Logo" class="logo-img" width="150" height="auto">
+            </div>
+            <nav class="menu">
+                <div class="menu-group">
+                    <p class="menu-title">Menú Principal</p>
+                    <ul>
+                        <li><a href="docente_dashboard.php"
+                                class="<?php echo $currentFile == 'docente_dashboard.php' ? 'active' : ''; ?>">
+                                <ion-icon name="home-outline"></ion-icon> Inicio
+                            </a></li>
+                        <li><a href="vista_buildings.php"
+                                class="<?php echo $currentFile == 'vista_buildings.php' ? 'active' : ''; ?>">
+                                <ion-icon name="business-outline"></ion-icon> Edificios
+                            </a></li>
+                        <li><a href="table_disponibilidad.php"
+                                class="<?php echo $currentFile == 'table_disponibilidad.php' ? 'active' : ''; ?>">
+                                <ion-icon name="list-outline"></ion-icon> Disponibilidad
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Gestión de reservas</p>
+                    <ul>
+                        <li><a href="mis_reservas.php"
+                                class="<?php echo $currentFile == 'mis_reservas.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis reservas
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <ul>
+                        <li><a href="asistencias.php"
+                                class="<?php echo $currentFile == 'asistencias.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Asistencias
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Ayuda</p>
+                    <ul>
+                        <li><a href="suport.php"
+                                class="<?php echo $currentFile == 'suport.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Soporte técnico
+                            </a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="mis_solicitudes.php"
+                                class="<?php echo $currentFile == 'mis_solicitudes.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Mis solicitudes
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
+                    <p class="menu-title">Configuración</p>
+                    <ul>
+                        <li><a href="../../php/config_docente.php"
+                                class="<?php echo $currentFile == 'config.php' ? 'active' : ''; ?>">
+                                <ion-icon name="settings-outline"></ion-icon> Ajustes
+                            </a></li>
+                        <li><a href="../../php/cerrar_session_docente.php"
+                                class="<?php echo $currentFile == 'cerrar_session_docente.php' ? 'active' : ''; ?>">
+                                <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+                            </a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="divider"></div>
+            <div class="profile">
+                <img src="<?php echo $imagen; ?>" alt="Foto de perfil" class="profile-img">
+                <div>
+                    <p class="user-name"><?php echo htmlspecialchars($nombre_completo); ?></p>
+                    <p class="user-email"> <?php echo htmlspecialchars($correo); ?></p>
+                </div>
+            </div>
+        </aside>
 
 <div id="main-content">
     <div class="header-container">

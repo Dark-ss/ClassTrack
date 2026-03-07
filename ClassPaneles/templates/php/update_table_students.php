@@ -1,26 +1,45 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $correo_original = mysqli_real_escape_string($conexion, $_POST['correo_original']);
+
+    $id = mysqli_real_escape_string($conexion, $_POST['id']);
     $nombre_completo = mysqli_real_escape_string($conexion, $_POST['nombre_completo']);
     $correo = mysqli_real_escape_string($conexion, $_POST['correo']);
     $identificacion = mysqli_real_escape_string($conexion, $_POST['identificacion']);
 
-    $query_update = "UPDATE estudiantes SET
-        nombre_completo='$nombre_completo',
-        correo='$correo',
-        identificacion='$identificacion',
-        WHERE correo='$correo_original'";
+   $ruta = "../../uploads/estudiantes/";
 
-    if (mysqli_query($conexion, $query_update)) {
-        // Actualización exitosa: Refrescar datos de la sesión
-        $_SESSION['usuario'] = $correo;
-        echo "<script>
-    alert('Información actualizada con éxito.');
-</script>";
-        header("Refresh:0"); // Recarga la página para reflejar los cambios
+if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+
+    $nombre_imagen = time() . "_" . basename($_FILES["imagen"]["name"]);
+    $destino = $ruta . $nombre_imagen;
+
+    if(move_uploaded_file($_FILES["imagen"]["tmp_name"], $destino)){
+        echo "Imagen subida correctamente";
     } else {
-        echo "<script>
-    alert('Error al actualizar la información: " . mysqli_error($conexion) . "');
-</script>";
+        echo "Error al subir imagen";
     }
 }
+
+    if ($nombre_imagen) {
+
+        $query_update = "UPDATE estudiantes SET
+            nombre_completo='$nombre_completo',
+            correo='$correo',
+            identificacion='$identificacion',
+            imagen='$nombre_imagen'
+        WHERE id='$id'";
+
+    } else {
+
+        $query_update = "UPDATE estudiantes SET
+            nombre_completo='$nombre_completo',
+            correo='$correo',
+            identificacion='$identificacion'
+        WHERE id='$id'";
+    }
+
+    if (!mysqli_query($conexion, $query_update)) {
+        die("Error al actualizar: " . mysqli_error($conexion));
+    }
+}
+?>

@@ -193,8 +193,7 @@ if (isset($_GET['id'])) {
                         <tr>
                             <td><?php echo htmlspecialchars($fila['id']); ?></td>
                             <td>
-                                <img src="<?php echo $fila['imagen'] ? $fila['imagen'] : '../../assets/images/photo.jpg'; ?>"
-                                    class="user-image">
+                                <img src="<?php echo $fila['imagen'] ? '../../uploads/estudiantes/' . $fila['imagen'] : '../../assets/images/photo.jpg'; ?>" class="user-image">
                             </td>
                             <td><?php echo htmlspecialchars($fila['nombre_completo']); ?></td>
                             <td><?php echo htmlspecialchars($fila['correo']); ?></td>
@@ -216,11 +215,11 @@ if (isset($_GET['id'])) {
                                 <div class="dropdown">
                                     <i class="fa-solid fa-ellipsis dropdown-toggle"></i>
                                     <div class="dropdown-content">
-                                        <a href="update_students.php?id=<?php echo $fila['id']; ?>"
-                                            class="update-button">
-                                            <ion-icon name="create-outline"></ion-icon>
-                                            Actualizar
-                                        </a>
+                                        <a href="#" class="update-button openUpdateStudentsModal" 
+                                                data-id="<?php echo $fila['id']; ?>">
+                                                <ion-icon name="create-outline"></ion-icon>
+                                                Actualizar
+                                                </a>
                                         <a href="?id=<?php echo $fila['id']; ?>" class="delete-button"
                                             onclick="return confirm('¿Estás seguro de que deseas eliminar este estudiante?');">
                                             <ion-icon name="trash-outline"></ion-icon>
@@ -298,11 +297,70 @@ if (isset($_GET['id'])) {
             </div>
         </main>
     </div>
+    <div id="updateStudentsModal" class="modal">
+        <div class="modal-content">
+            <div class="title_modal">
+                <h2>Actualizar Estudiante</h2>
+            </div>
+
+            <form id="updateStudentsForm" class="formulario_register" action="update_students.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="update_id">
+                <input type="hidden" name="correo_original" id="correo_original">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" name="nombre_completo" id="update_nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input type="email" name="correo" id="update_correo" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input type="text" name="identificacion" id="update_usuario" required>
+                </div>
+
+                <div class="profile-photo">
+                    <div class="photo-circle">
+                        <img id="updateProfileImage"
+                            src="../../assets/images/photo.jpg"
+                            alt="Foto de perfil">
+                    </div>
+
+                    <a href="#" class="photo-upload-link" id="uploadPhotoBtnUpdate">
+                        Seleccionar foto
+                    </a>
+
+                    <input type="file" id="photoInputUpdate" name="imagen" hidden accept="image/*">
+                </div>
+
+
+                <div class="modal-buttons">
+                    <button type="button" class="cancel-button" id="closeUpdateModal">Cancelar</button>
+                    <button type="submit" class="submit-button">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="../../assets/js/script_modal.js"></script>
     <script src="../../assets/js/script.js"></script>
     <script src="../../assets/js/script_menu.js"></script>
+    <script src="../../assets/js/update_students_modal.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php if(isset($_GET['update']) && $_GET['update'] == 'success'): ?>
+        <script>
+        Swal.fire({
+            title: "¡Actualizado!",
+            text: "El estudiante se actualizó correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#3085d6"
+        });
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>

@@ -360,8 +360,19 @@
     <script src="../../assets/js/script.js"></script>
     <script src="../../assets/js/script_menu.js"></script>
     <script src="../../assets/js/update_user_modal.js"></script>
-        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php if(isset($_GET['update']) && $_GET['update'] == 'success'): ?>
+        <script>
+        Swal.fire({
+            title: "¡Actualizado!",
+            text: "El usuario se actualizó correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#3085d6"
+        });
+        </script>
+    <?php endif; ?>                    
 
     </body>
     </html>

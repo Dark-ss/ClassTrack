@@ -24,5 +24,5 @@ if (mysqli_num_rows($resultado_usuario) === 0) {
 
 include '../../php/update_table.php';
 
-header('Location: vista_cuentas.php');
+header('Location: vista_cuentas.php?update=success');
 exit;

@@ -180,7 +180,7 @@
             </button>
         </form>
         
-        <a href="http://localhost/ClassTrack-master/ClassPaneles/templates/index.php" class="back-link">
+        <a href="http://localhost/ClassTrack/ClassPaneles/templates/index.php" class="back-link">
             <i class="fas fa-arrow-left"></i> Volver al inicio de sesión
         </a>
     </div>

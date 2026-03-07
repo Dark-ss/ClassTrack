@@ -153,6 +153,14 @@ function formatearHora($hora) {
                     </ul>
                 </div>
                 <div class="menu-group">
+                    <ul>
+                        <li><a href="asistencias.php"
+                                class="<?php echo $currentFile == 'asistencias.php' ? 'active' : ''; ?>">
+                                <ion-icon name="calendar-outline"></ion-icon> Asistencias
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="menu-group">
                     <p class="menu-title">Ayuda</p>
                     <ul>
                         <li><a href="suport.php"
